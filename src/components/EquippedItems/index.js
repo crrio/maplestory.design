@@ -16,7 +16,7 @@ class EquippedItems extends Component {
               <div className='equipped-items-item' key={item.Id}>
                 <img src={`https://labs.maplestory.io/api/item/${item.Id}/icon`} alt={item.Name} />
                 <div className='equipped-items-item-meta'>
-                  <div className='equipped-items-item-meta-name'>{item.Name}</div>
+                  <div className='equipped-items-item-meta-name'><a href={'https://maplestory.wiki/item/' + item.Id} target='_blank'>{item.Name}</a></div>
                   <div className='equipped-items-item-meta-category'>{item.TypeInfo.SubCategory}</div>
                 </div>
                 <span onClick={this.removeItem.bind(this, item)} className="btn bg-red text-white right"><i className="fa fa-times"></i></span>
