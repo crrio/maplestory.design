@@ -28,3 +28,16 @@
   flex-direction: column;
   margin: 0 16px;
 }
+
+.flex {
+  display: flex;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.zoom, .merc-ears {
+  display: flex;
+  align-items: center;
+}

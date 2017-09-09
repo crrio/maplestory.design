@@ -14,7 +14,7 @@ class EquippedItems extends Component {
           {
             _.map(equippedItems, item => (
               <div className='equipped-items-item' key={item.Id}>
-                <img src={`https://labs.maplestory.io/api/item/${item.Id}/icon`} alt={item.Name} />
+                <img src={`https://labs.maplestory.io/api/gms/latest/item/${item.Id}/icon`} alt={item.Name} />
                 <div className='equipped-items-item-meta'>
                   <div className='equipped-items-item-meta-name'><a href={'https://maplestory.wiki/item/' + item.Id} target='_blank'>{item.Name}</a></div>
                   <div className='equipped-items-item-meta-category'>{item.TypeInfo.SubCategory}</div>
@@ -23,7 +23,7 @@ class EquippedItems extends Component {
               </div>
             ))
           }
-          <a href={`https://labs.maplestory.io/api/character/download/${skinId}/${_.map(equippedItems, i => i.Id).join(',')}`} target='_blank'  rel="noopener noreferrer">
+          <a href={`https://labs.maplestory.io/api/gms/latest/character/download/${skinId}/${_.map(equippedItems, i => i.Id).join(',')}`} target='_blank'  rel="noopener noreferrer">
             <div className='download-bar bg-blue'>
               <div className='equipped-items-item-meta'>
                 <div className='equipped-items-item-meta-name text-white'>Download Spritesheet</div>

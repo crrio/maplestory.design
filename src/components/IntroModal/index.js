@@ -48,7 +48,7 @@ class IntroModal extends Component {
 
     const chosenAvatar = knownAvatars[Math.floor(Math.random() * knownAvatars.length)]
 
-    return (<img src={`https://labs.maplestory.io/api/character/center/${chosenAvatar}/sit/0`} alt={`avatar`} />)
+    return (<img src={`https://labs.maplestory.io/api/gms/latest/character/center/${chosenAvatar}/sit/0`} alt={`avatar`} />)
   }
 }
 

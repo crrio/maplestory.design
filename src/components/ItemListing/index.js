@@ -27,7 +27,7 @@ const cellMeasurerCache = new CellMeasurerCache({
   fixedWidth: true
 })
 
-const itemListPromise = axios.get('https://labs.maplestory.io/api/item/category/equip');
+const itemListPromise = axios.get('https://labs.maplestory.io/api/gms/latest/item/category/equip');
 
 class ItemListing extends Component {
   constructor(props) {
@@ -292,7 +292,7 @@ class ItemListing extends Component {
 
   itemIcon(item, hideSimilar) {
     return (<img
-      src={`https://labs.maplestory.io/api/item/${item.Id}/icon`}
+      src={`https://labs.maplestory.io/api/gms/latest/item/${item.Id}/icon`}
       onClick={this.selectItem.bind(this, item)}
       alt={item.Name}
       title={item.Name}
