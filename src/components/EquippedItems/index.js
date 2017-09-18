@@ -5,6 +5,11 @@ import _ from 'lodash'
 class EquippedItems extends Component {
   render() {
     const { equippedItems, skinId } = this.props
+
+    const ad = document.querySelector(".adsbygoogle")
+    if (ad.offsetParent === null)
+      document.querySelector('.anti-ad').className = 'anti-ad show'
+
     return (
       <div className='equipped-items'>
         <div className='equipped-items-header'>

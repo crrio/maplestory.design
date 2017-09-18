@@ -23,6 +23,15 @@
     -->
     <title>MapleStory: Design – The unofficial MapleStory simulator</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+      .anti-ad {
+        display: none;
+      }
+
+      #top-banner-ad[hidden] + .anti-ad, .anti-ad.show {
+        display: block;
+      }
+    </style>
   </head>
   <body>
     <noscript>
@@ -39,6 +48,10 @@
 <script>
 (adsbygoogle = window.adsbygoogle || []).push({});
 </script>
+    </div>
+    <div class='anti-ad'>
+      <div>We get it, we don't like ads either. How about donating to our <a href='https://www.patreon.com/Crrio'>Patreon</a> instead?</div>
+      <div>If you can't donate, please consider white listing us.</div>
     </div>
     <div id="root"></div>
     <!--
