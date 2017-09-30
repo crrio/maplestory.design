@@ -4,7 +4,7 @@
   top: 64px;
   bottom: 64px;
   width: 25%;
-  min-width: 400px;
+  min-width: 420px;
   background: #FFF;
   display: flex;
   flex-direction: column;
@@ -89,10 +89,15 @@
 }
 
 .similar-items div {
-  display: inline-flex;
+  display: inline-block;
   width: 32px;
+  height: 32px;
+  min-width: 32px;
+  min-height: 32px;
+  max-width: 32px;
+  max-height: 32px;
+  overflow: hidden;
   margin: 0 2px;
-  justify-content: center;
 }
 
 .item-img-container {
@@ -108,7 +113,6 @@
 
 .item-img-container img, .similar-items img {
   max-width: 32px;
-  max-height: 32px;
   overflow: hidden;
 }
 
