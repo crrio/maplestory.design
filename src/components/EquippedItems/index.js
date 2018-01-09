@@ -25,6 +25,7 @@ class EquippedItems extends Component {
                   <div className='equipped-items-item-meta-category'>{item.TypeInfo.SubCategory}</div>
                 </div>
                 <span onClick={this.removeItem.bind(this, item)} className="btn bg-red text-white right"><i className="fa fa-times"></i></span>
+                <input className='hue-picker' type="range" value={item.hue || 0} min="0" max="360" onChange={this.updateItemHue.bind(this, item)} />
               </div>
             ))
           }
@@ -63,6 +64,10 @@ class EquippedItems extends Component {
 
   removeItems() {
     this.props.onRemoveItems();
+  }
+
+  updateItemHue(item, e) {
+    this.props.onUpdateItemHue(item, e.target.value);
   }
 }
 

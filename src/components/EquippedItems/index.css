@@ -57,6 +57,23 @@
   display: flex;
   padding: 8px;
   border-bottom: 1px solid rgba(0,0,0,0.2);
+  position: relative;
+}
+
+.equipped-items-item .hue-picker {
+  position: absolute!important;
+  bottom: -9px;
+  left: -2px;
+  right: 2px;
+  width: 100%;
+}
+
+.equipped-items-item .hue-picker:not(:focus) {
+  display: none;
+}
+
+.equipped-items-item:hover .hue-picker {
+  display: block;
 }
 
 .equipped-items-item:hover {

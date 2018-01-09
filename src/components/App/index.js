@@ -52,7 +52,7 @@ class App extends Component {
           </ul>
         </div>
         <PlayerCanvas
-          selectedItems={_.values(selectedItems).map(item => item.Id)}
+          selectedItems={_.values(selectedItems)}
           action={action}
           emotion={emotion}
           skin={skin}
@@ -67,7 +67,8 @@ class App extends Component {
           onRemoveItem={this.userRemovedItem.bind(this)}
           mercEars={mercEars}
           illiumEars={illiumEars}
-          onRemoveItems={this.userRemovedItems.bind(this)} />
+          onRemoveItems={this.userRemovedItems.bind(this)}
+          onUpdateItemHue={this.updateItemHue.bind(this)} />
         <CharacterProperties
           equippedItems={selectedItems}
           action={action}
@@ -159,6 +160,17 @@ class App extends Component {
 
   userRemovedItems () {
     let selectedItems = {}
+    this.updateItems(selectedItems);
+  }
+
+  updateItemHue (item, newHue) {
+    let selectedItems = {
+      ...this.state.selectedItems,
+    }
+    selectedItems[item.TypeInfo.SubCategory] = {
+      ...item,
+      hue: newHue
+    }
     this.updateItems(selectedItems);
   }
 
