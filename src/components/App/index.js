@@ -22,7 +22,8 @@ class App extends Component {
       skin: Number(localStorage['skin']) || 2000,
       isModalOpen: isOpen,
       zoom: Number(localStorage['zoom']) || 1,
-      mercEars: localStorage['mercEars'] == "true" || localStorage['mercEars'] === true
+      mercEars: localStorage['mercEars'] == "true" || localStorage['mercEars'] === true,
+      illiumEars: localStorage['illiumEars'] == "true" || localStorage['illiumEars'] === true
     }
 
     this.updateBannerAdBlur()
@@ -34,7 +35,7 @@ class App extends Component {
   }
 
   render() {
-    const { selectedItems, action, emotion, skin, isModalOpen, mercEars, zoom } = this.state
+    const { selectedItems, action, emotion, skin, isModalOpen, mercEars, illiumEars, zoom } = this.state
     this.updateBannerAdBlur()
 
     return (
@@ -55,12 +56,15 @@ class App extends Component {
           emotion={emotion}
           skin={skin}
           mercEars={mercEars}
+          illiumEars={illiumEars}
           zoom={zoom} />
         <ItemListing onItemSelected={this.userSelectedItem.bind(this)} />
         <EquippedItems
           equippedItems={selectedItems}
           skinId={skin}
           onRemoveItem={this.userRemovedItem.bind(this)}
+          mercEars={mercEars}
+          illiumEars={illiumEars}
           onRemoveItems={this.userRemovedItems.bind(this)} />
         <CharacterProperties
           equippedItems={selectedItems}
@@ -68,11 +72,13 @@ class App extends Component {
           emotion={emotion}
           skin={skin}
           mercEars={mercEars}
+          illiumEars={illiumEars}
           zoom={zoom}
           onChangeAction={this.userChangedAction.bind(this)}
           onChangeEmotion={this.userChangedEmotion.bind(this)}
           onChangeSkin={this.userChangedSkin.bind(this)}
           onChangeMercEars={this.userChangedMercEars.bind(this)}
+          onChangeIlliumEars={this.userChangesIlliumEars.bind(this)}
           onChangeZoom={this.userChangedZoom.bind(this)} />
         <IntroModal
           isOpen={isModalOpen}
@@ -83,6 +89,11 @@ class App extends Component {
 
   setModalOpen (isModalOpen) {
     this.setState({ isModalOpen })
+  }
+
+  userChangesIlliumEars(illiumEars) {
+    this.setState({ illiumEars });
+    localStorage['illiumEars'] = illiumEars;
   }
 
   userChangedMercEars(mercEars) {

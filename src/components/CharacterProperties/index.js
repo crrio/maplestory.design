@@ -53,7 +53,7 @@ class CharacterProperties extends Component {
 
   render() {
     const { actions, emotions } = this.state
-    const { equippedItems, emotion, action, skin, mercEars, zoom } = this.props
+    const { equippedItems, emotion, action, skin, mercEars, illiumEars, zoom } = this.props
 
     return (
       <div className='character-properties'>
@@ -90,23 +90,32 @@ class CharacterProperties extends Component {
             <option value='2013'>Ghostly</option>
             <option value='2002'>Dark</option>
             <option value='2011'>Clay</option>
+            <option value='2009'>White</option>
+            <option value='2012'>Mercedes</option>
           </select>
         </div>
         <div className="flex flex-column">
+          <div className="merc-ears">
+            <span>Mercedes Ears</span>
+            <input
+              type="checkbox"
+              checked={mercEars}
+              onChange={this.changeMercEars.bind(this)} />
+          </div>
+          <div className="zoom">
+            <span>Zoom</span>
+            <input type="range" min="1" max="10" defaultValue="0"
+            onChange={this.changeZoom.bind(this)}
+            value={zoom}
+            />
+          </div>
+        </div>
         <div className="merc-ears">
-          <span>Mercedes Ears</span>
+          <span>Illium Ears</span>
           <input
             type="checkbox"
-            checked={mercEars}
-            onChange={this.changeMercEars.bind(this)} />
-        </div>
-        <div className="zoom">
-          <span>Zoom</span>
-          <input type="range" min="1" max="10" defaultValue="0"
-          onChange={this.changeZoom.bind(this)}
-          value={zoom}
-          />
-        </div>
+            checked={illiumEars}
+            onChange={this.changeIlliumEars.bind(this)} />
         </div>
         <div className="disclaimer">
           <p>This project is actively being developed and considered a <b>prototype</b>.</p>
@@ -129,6 +138,10 @@ class CharacterProperties extends Component {
 
   changeMercEars(e) {
     this.props.onChangeMercEars(e.target.checked);
+  }
+
+  changeIlliumEars(e) {
+    this.props.onChangeIlliumEars(e.target.checked);
   }
 
   changeZoom(e) {

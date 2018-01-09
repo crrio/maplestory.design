@@ -43,9 +43,14 @@
   padding: 8px;
 }
 
-.download-bar:hover {
+.download-bar.bg-blue:hover {
   opacity: 0.8;
   background: #42a5f5;
+}
+
+.download-bar.bg-red:hover {
+  opacity: 0.8;
+  background: ##fb6d6d;
 }
 
 .equipped-items-item {
@@ -73,4 +78,11 @@
 
 .equipped-items-item-meta-category {
   font-size: 12px;
+}
+
+.pdn-button .download-bar, .pdn-button {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  justify-content: center;
 }
