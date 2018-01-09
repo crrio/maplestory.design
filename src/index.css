@@ -7,7 +7,7 @@ body {
 }
 
 .anti-ad {
-  position: absolute;
+  position: fixed;
   top: 50px;
   z-index: 10;
   padding: 8px;
@@ -18,7 +18,7 @@ body {
 }
 
 #top-banner-ad {
-  position: absolute;
+  position: fixed;
   top: 64px;
   z-index: 1;
   width: 100%;

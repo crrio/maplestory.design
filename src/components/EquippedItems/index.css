@@ -1,5 +1,5 @@
 .equipped-items {
-  position: absolute;
+  position: fixed;
   right: 24px;
   top: 165px;
   width: 15%;

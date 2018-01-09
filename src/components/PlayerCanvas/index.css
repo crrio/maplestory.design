@@ -1,5 +1,5 @@
 .canvas {
-  position: absolute;
+  position: fixed;
   top: 64px;
   bottom: 64px;
   left: 0;
