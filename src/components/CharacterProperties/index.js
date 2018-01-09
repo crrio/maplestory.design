@@ -53,7 +53,7 @@ class CharacterProperties extends Component {
 
   render() {
     const { actions, emotions } = this.state
-    const { equippedItems, emotion, action, skin, mercEars, illiumEars, zoom } = this.props
+    const { equippedItems, emotion, action, skin, mercEars, illiumEars, zoom, frame } = this.props
 
     return (
       <div className='character-properties'>
@@ -102,6 +102,22 @@ class CharacterProperties extends Component {
               checked={mercEars}
               onChange={this.changeMercEars.bind(this)} />
           </div>
+          <div className="frame">
+            <span>Frame</span>
+            <input type="range" min="0" max="10" defaultValue="0"
+            onChange={this.changeFrame.bind(this)}
+            value={frame}
+            />
+          </div>
+        </div>
+        <div className="flex flex-column">
+          <div className="merc-ears">
+            <span>Illium Ears</span>
+            <input
+              type="checkbox"
+              checked={illiumEars}
+              onChange={this.changeIlliumEars.bind(this)} />
+          </div>
           <div className="zoom">
             <span>Zoom</span>
             <input type="range" min="1" max="10" defaultValue="0"
@@ -109,13 +125,6 @@ class CharacterProperties extends Component {
             value={zoom}
             />
           </div>
-        </div>
-        <div className="merc-ears">
-          <span>Illium Ears</span>
-          <input
-            type="checkbox"
-            checked={illiumEars}
-            onChange={this.changeIlliumEars.bind(this)} />
         </div>
         <div className="disclaimer">
           <p>This project is actively being developed and considered a <b>prototype</b>.</p>
@@ -146,6 +155,10 @@ class CharacterProperties extends Component {
 
   changeZoom(e) {
     this.props.onChangeZoom(e.target.value);
+  }
+
+  changeFrame(e) {
+    this.props.onChangeFrame(e.target.value);
   }
 }
 

@@ -22,6 +22,7 @@ class App extends Component {
       skin: Number(localStorage['skin']) || 2000,
       isModalOpen: isOpen,
       zoom: Number(localStorage['zoom']) || 1,
+      frame: Number(localStorage['frame']) || 0,
       mercEars: localStorage['mercEars'] == "true" || localStorage['mercEars'] === true,
       illiumEars: localStorage['illiumEars'] == "true" || localStorage['illiumEars'] === true
     }
@@ -35,7 +36,7 @@ class App extends Component {
   }
 
   render() {
-    const { selectedItems, action, emotion, skin, isModalOpen, mercEars, illiumEars, zoom } = this.state
+    const { selectedItems, action, emotion, skin, isModalOpen, mercEars, illiumEars, zoom, frame } = this.state
     this.updateBannerAdBlur()
 
     return (
@@ -57,7 +58,8 @@ class App extends Component {
           skin={skin}
           mercEars={mercEars}
           illiumEars={illiumEars}
-          zoom={zoom} />
+          zoom={zoom}
+          frame={frame} />
         <ItemListing onItemSelected={this.userSelectedItem.bind(this)} />
         <EquippedItems
           equippedItems={selectedItems}
@@ -74,12 +76,14 @@ class App extends Component {
           mercEars={mercEars}
           illiumEars={illiumEars}
           zoom={zoom}
+          frame={frame}
           onChangeAction={this.userChangedAction.bind(this)}
           onChangeEmotion={this.userChangedEmotion.bind(this)}
           onChangeSkin={this.userChangedSkin.bind(this)}
           onChangeMercEars={this.userChangedMercEars.bind(this)}
           onChangeIlliumEars={this.userChangesIlliumEars.bind(this)}
-          onChangeZoom={this.userChangedZoom.bind(this)} />
+          onChangeZoom={this.userChangedZoom.bind(this)}
+          onChangeFrame={this.userChangedFrame.bind(this)} />
         <IntroModal
           isOpen={isModalOpen}
           onSetModalOpen={this.setModalOpen.bind(this)} />
@@ -119,6 +123,11 @@ class App extends Component {
   userChangedZoom (zoom) {
     this.setState({ zoom });
     console.log('Set zoom: ', zoom);
+  }
+
+  userChangedFrame(frame) {
+    this.setState({ frame });
+    console.log('Set frame: ', frame);
   }
 
   userSelectedItem (item) {
