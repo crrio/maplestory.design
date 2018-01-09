@@ -29,7 +29,7 @@ class EquippedItems extends Component {
               </div>
             ))
           }
-          <a href={`https://labs.maplestory.io/api/gms/latest/character/download/${skinId}/${_.map(equippedItems, i => i.Id).join(',')}?showears=${mercEars}&showLefEars=${illiumEars}`} target='_blank'  rel="noopener noreferrer">
+          <a href={`https://labs.maplestory.io/api/gms/latest/character/download/${skinId}/${_.map(equippedItems, i => i.hue ? `${i.Id};${i.hue}` : i.Id).join(',')}?showears=${mercEars}&showLefEars=${illiumEars}`} target='_blank'  rel="noopener noreferrer">
             <div className='download-bar bg-blue'>
               <div className='equipped-items-item-meta'>
                 <div className='equipped-items-item-meta-name text-white'>Download Spritesheet</div>
@@ -38,7 +38,7 @@ class EquippedItems extends Component {
             </div>
           </a>
           <div className="flex">
-            <a href={`https://labs.maplestory.io/api/gms/latest/character/download/${skinId}/${_.map(equippedItems, i => i.Id).join(',')}?showears=${mercEars}&showLefEars=${illiumEars}&format=1`} target='_blank'  rel="noopener noreferrer">
+            <a href={`https://labs.maplestory.io/api/gms/latest/character/download/${skinId}/${_.map(equippedItems, i => i.hue ? `${i.Id};${i.hue}` : i.Id).join(',')}?showears=${mercEars}&showLefEars=${illiumEars}&format=1`} target='_blank'  rel="noopener noreferrer">
               <div className='download-bar bg-blue'>
                 <div className='equipped-items-item-meta'>
                   <div className='equipped-items-item-meta-name text-white'>Download Layered Spritesheet</div>
