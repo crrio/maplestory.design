@@ -53,12 +53,24 @@ class ItemListing extends Component {
         const categories = _.mapValues(
           _.groupBy(
             response.data
-              .filter(item => item.Id < 30000 || item.Id > 50000)
+              .filter(item => item.Id < 10000 || item.Id > 50000)
               .concat(
                 _.map(
                   _.groupBy(
-                    response.data.filter(item => item.Id >= 30000 && item.Id <= 50000),
+                    response.data.filter(item => item.Id >= 30000 && item.Id <= 60000),
                     item => Math.floor(item.Id / 10)
+                  ), itemGrouping => {
+                    const firstItem = itemGrouping[0]
+                    firstItem.similar = itemGrouping
+                    return firstItem
+                  }
+                )
+              )
+              .concat(
+                _.map(
+                  _.groupBy(
+                    response.data.filter(item => item.Id >= 10000 && item.Id < 30000),
+                    item => (item.Id % 100) + (item.Id - (item.Id % 1000))
                   ), itemGrouping => {
                     const firstItem = itemGrouping[0]
                     firstItem.similar = itemGrouping
