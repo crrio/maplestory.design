@@ -83,18 +83,21 @@ class ItemListing extends Component {
         );
 
         const categoryNames = _.mapValues(categories, _.keys);
+        const categoryNamesKeys = _.keys(categoryNames).filter((categoryName) => categoryName != 'Character');
+        categoryNamesKeys.unshift('Character');
 
         this.setState({
           items: response.data,
           categories,
-          categoryNames
+          categoryNames,
+          categoryNamesKeys
         })
       }
     })
   }
 
   render() {
-    const { categoryNames, selectedCategory, items, categoryNameSelected, cashItemsOnly, selectedGender, similarItems } = this.state
+    const { categoryNames, categoryNamesKeys, selectedCategory, items, categoryNameSelected, cashItemsOnly, selectedGender, similarItems } = this.state
     const search = this.state.search.toLowerCase()
 
     if (search) console.log(`Searching for ${search}`)
@@ -133,7 +136,8 @@ class ItemListing extends Component {
           <div className='item-listing-categories'>
           <ul>
           {
-            _.map(categoryNames, (subCategories, category) => {
+            _.map(categoryNamesKeys, category => {
+              const subCategories = categoryNames[category];
               return (<li key={category} onClick={this.selectPrimaryCategory.bind(this, category)}>
               <span className={'category' + (category === categoryNameSelected ? ' active' : '')}>{category}</span>
               <ul>
