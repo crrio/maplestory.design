@@ -81,7 +81,7 @@ class EquippedItems extends Component {
 
   customizeItem(item) {
     return (<div className='customizing-item'>
-      <label>
+      <span>
         <span className='flex'>Hue<input type='number' className='hue-picker-value' value={item.hue || 0} onChange={this.updateItemHue.bind(this, item)} /></span>
         <Slider
           className='hue-picker'
@@ -90,7 +90,7 @@ class EquippedItems extends Component {
           max={360}
           handle={handle}
           onChange={this.updateItemHue.bind(this, item)} />
-      </label>
+      </span>
     </div>);
   }
 }
