@@ -6,6 +6,9 @@ import EquippedItems from '../EquippedItems'
 import CharacterProperties from '../CharacterProperties'
 import _ from 'lodash'
 import IntroModal from '../IntroModal'
+import CharacterList from '../CharacterList'
+
+var creatingId = null;
 
 class App extends Component {
   constructor(props) {
@@ -24,7 +27,17 @@ class App extends Component {
       zoom: Number(localStorage['zoom']) || 1,
       frame: Number(localStorage['frame']) || 0,
       mercEars: localStorage['mercEars'] == "true" || localStorage['mercEars'] === true,
-      illiumEars: localStorage['illiumEars'] == "true" || localStorage['illiumEars'] === true
+      illiumEars: localStorage['illiumEars'] == "true" || localStorage['illiumEars'] === true,
+    }
+
+    if (localStorage['currentCharacter']) {
+      this.state = JSON.parse(localStorage['currentCharacter'])
+    }
+
+    this.state = {
+      ...this.state,
+      characterSummaries: (JSON.parse(localStorage['characters'] || 'false') || []).map(character => character.summary),
+      allCharacters: (JSON.parse(localStorage['characters'] || 'false') || [])
     }
 
     this.updateBannerAdBlur()
@@ -36,7 +49,7 @@ class App extends Component {
   }
 
   render() {
-    const { selectedItems, action, emotion, skin, isModalOpen, mercEars, illiumEars, zoom, frame } = this.state
+    const { allCharacters, selectedItems, action, emotion, skin, isModalOpen, mercEars, illiumEars, zoom, frame, summary } = this.state
     this.updateBannerAdBlur()
 
     return (
@@ -52,14 +65,7 @@ class App extends Component {
           </ul>
         </div>
         <PlayerCanvas
-          selectedItems={_.values(selectedItems)}
-          action={action}
-          emotion={emotion}
-          skin={skin}
-          mercEars={mercEars}
-          illiumEars={illiumEars}
-          zoom={zoom}
-          frame={frame} />
+          summary={summary} />
         <ItemListing onItemSelected={this.userSelectedItem.bind(this)} />
         <EquippedItems
           equippedItems={selectedItems}
@@ -92,42 +98,115 @@ class App extends Component {
     )
   }
 
+  changeCharacter({ id, create }) {
+    throw new Error('Not ready yet :D')
+    if (create && id !== creatingId) {
+      creatingId = id;
+      const currentCharacter = { ...this.state }
+      delete currentCharacter.allCharacters
+      delete currentCharacter.isModalOpen
+      delete currentCharacter.characterSummaries
+
+      const allCharacters = { ...this.state.allCharacters }
+      allCharacters[id] = currentCharacter
+
+      this.setState({
+        ...this.state,
+        id: id,
+        allCharacters,
+        action: 'stand1',
+        emotion: 'default',
+        skin: 2000,
+        zoom: 1,
+        frame: 0,
+        mercEars: false,
+        illiumEars: false,
+        selectedItems: [],
+        summary: `https://labs.maplestory.io/api/gms/latest/character/center/2000/1102039/stand1/0?showears=false&showLefEars=false&resize=1`
+      })
+    }
+
+    if (id !== creatingId) {
+      creatingId = id;
+      const currentCharacter = { ...this.state }
+      delete currentCharacter.allCharacters
+      delete currentCharacter.isModalOpen
+      delete currentCharacter.characterSummaries
+
+      creatingId = id;
+      const allCharacters = { ...this.state.allCharacters }
+      allCharacters[id] = currentCharacter
+      this.setState({
+        ...this.state.allCharacters.find(character => character.id == id),
+        allCharacters
+      })
+    }
+
+    console.log(arguments, id, create);
+  }
+
+  updateCurrentCharacter(props) {
+    var newState = {
+      ...this.state,
+      ...props
+    }
+    const itemsWithEmotion = _.values(newState.selectedItems)
+    .filter(item => item.Id)
+    .map(item => {
+      var itemEntry = item.Id >= 20000 && item.Id <= 29999 ? `${item.Id}:${newState.emotion}` : item.Id
+      if (item.hue) itemEntry = itemEntry + ';' + item.hue
+      return itemEntry
+    });
+
+    this.setState({
+      ...props,
+      summary: `https://labs.maplestory.io/api/gms/latest/character/center/${newState.skin}/${(itemsWithEmotion.join(',') || 1102039)}/${newState.action}/${newState.frame}?showears=${newState.mercEars}&showLefEars=${newState.illiumEars}&resize=${newState.zoom}`
+    })
+
+    const currentCharacter = {
+      ...newState
+    }
+
+    if (currentCharacter.allCharacters) delete currentCharacter.allCharacters
+    delete currentCharacter.isModalOpen
+    delete currentCharacter.characterSummaries
+
+    localStorage['currentCharacter'] = JSON.stringify(currentCharacter);
+  }
+
   setModalOpen (isModalOpen) {
-    this.setState({ isModalOpen })
+    this.updateCurrentCharacter({ isModalOpen })
   }
 
   userChangesIlliumEars(illiumEars) {
-    this.setState({ illiumEars });
-    localStorage['illiumEars'] = illiumEars;
+    this.updateCurrentCharacter({ illiumEars });
   }
 
   userChangedMercEars(mercEars) {
-    this.setState({ mercEars });
-    localStorage['mercEars'] = mercEars;
+    this.updateCurrentCharacter({ mercEars });
   }
 
   userChangedSkin (skin) {
-    this.setState({ skin })
-    localStorage['skin'] = skin
+    this.updateCurrentCharacter({ skin })
   }
 
   userChangedEmotion (emotion) {
-    this.setState({ emotion })
+    this.updateCurrentCharacter({ emotion })
     console.log('Changed emotion: ', emotion)
   }
 
   userChangedAction (action) {
-    this.setState({ action })
+    this.updateCurrentCharacter({ action })
     console.log('Changed action: ', action)
   }
 
   userChangedZoom (zoom) {
-    this.setState({ zoom });
+    this.updateCurrentCharacter({ zoom });
     console.log('Set zoom: ', zoom);
   }
 
   userChangedFrame(frame) {
-    this.setState({ frame });
+    this.updateCurrentCharacter({ frame });
     console.log('Set frame: ', frame);
   }
 
@@ -176,11 +255,9 @@ class App extends Component {
 
   updateItems (selectedItems) {
     console.log('New Items: ', selectedItems)
-    this.setState({
+    this.updateCurrentCharacter({
       selectedItems
     })
-
-    localStorage['selectedItems'] = JSON.stringify(selectedItems)
   }
 }
 

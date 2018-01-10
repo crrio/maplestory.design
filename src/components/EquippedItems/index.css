@@ -1,7 +1,7 @@
 .equipped-items {
   position: fixed;
   right: 24px;
-  top: 165px;
+  top: 200px;
   width: 15%;
   background: rgba(255,255,255,0.75);
   min-width: 255px;
@@ -58,14 +58,14 @@
   padding: 8px;
   border-bottom: 1px solid rgba(0,0,0,0.2);
   position: relative;
+  overflow: visible;
 }
 
 .equipped-items-item .hue-picker {
   position: absolute!important;
-  bottom: -9px;
-  left: -2px;
-  right: 2px;
-  width: 100%;
+  bottom: -6px;
+  left: 0;
+  right: 0;
 }
 
 .equipped-items-item .hue-picker:not(:focus) {
@@ -102,4 +102,32 @@
   flex-direction: column;
   flex: 1;
   justify-content: center;
+}
+
+.customizing-item {
+  width: 200px;
+  position: relative;
+}
+
+.customizing-item label {
+  text-align: left;
+  display: inline-block;
+  width: 100%;
+  line-height: 24px;
+}
+
+.customizing-item > label > span {
+  margin-left: 4px;
+  font-size: 16px;
+}
+
+.customizing-item > label > span.flex {
+  justify-content: space-between;
+}
+
+.customizing-item > label > span > input {
+  margin-left: 32px;
+  display: flex;
+  max-width: 50%;
+  text-align: right;
 }

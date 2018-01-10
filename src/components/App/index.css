@@ -124,3 +124,16 @@ a {
 .text-white {
   color: #FFF;
 }
+
+body > div:not(.tippy-popper){ /* kms, this freaking rule. :< */
+  z-index: 10000;
+}
+
+.tippy-popper input {
+  border: 0px none transparent;
+  font-size: 18px;
+  display: -ms-flexbox;
+  display: flex;
+  color: #3F3F3F;
+  font-family: Muli,sans-serif;
+}

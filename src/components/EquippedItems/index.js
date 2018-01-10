@@ -2,6 +2,13 @@ import React, { Component } from 'react'
 import './index.css'
 import _ from 'lodash'
 
+import 'rc-slider/assets/index.css'
+import 'rc-tooltip/assets/bootstrap.css'
+import 'react-tippy/dist/tippy.css';
+import RcTooltip from 'rc-tooltip'
+import Slider from 'rc-slider'
+import { Tooltip } from 'react-tippy'
+
 class EquippedItems extends Component {
   render() {
     const { equippedItems, skinId, mercEars, illiumEars } = this.props
@@ -18,15 +25,16 @@ class EquippedItems extends Component {
         <div className='equipped-items-listing'>
           {
             _.map(equippedItems, item => (
-              <div className='equipped-items-item' key={item.Id}>
-                <img src={`https://labs.maplestory.io/api/gms/latest/item/${item.Id}/icon`} alt={item.Name} />
-                <div className='equipped-items-item-meta'>
-                  <div className='equipped-items-item-meta-name'><a href={'https://maplestory.wiki/item/' + item.Id} target='_blank'>{item.Name}</a></div>
-                  <div className='equipped-items-item-meta-category'>{item.TypeInfo.SubCategory}</div>
+              <Tooltip html={this.customizeItem(item)} position='right' interactive={true} theme='light' distance={250} arrow={true}>
+                <div className='equipped-items-item' key={item.Id}>
+                  <img src={`https://labs.maplestory.io/api/gms/latest/item/${item.Id}/icon`} alt={item.Name} />
+                  <div className='equipped-items-item-meta'>
+                    <div className='equipped-items-item-meta-name'><a href={'https://maplestory.wiki/item/' + item.Id} target='_blank'>{item.Name}</a></div>
+                    <div className='equipped-items-item-meta-category'>{item.TypeInfo.SubCategory}</div>
+                  </div>
+                  <span onClick={this.removeItem.bind(this, item)} className="btn bg-red text-white right"><i className="fa fa-times"></i></span>
                 </div>
-                <span onClick={this.removeItem.bind(this, item)} className="btn bg-red text-white right"><i className="fa fa-times"></i></span>
-                <input className='hue-picker' type="range" value={item.hue || 0} min="0" max="360" onChange={this.updateItemHue.bind(this, item)} />
-              </div>
+              </Tooltip>
             ))
           }
           <a href={`https://labs.maplestory.io/api/gms/latest/character/download/${skinId}/${_.map(equippedItems, i => i.hue ? `${i.Id};${i.hue}` : i.Id).join(',')}?showears=${mercEars}&showLefEars=${illiumEars}`} target='_blank'  rel="noopener noreferrer">
@@ -66,9 +74,45 @@ class EquippedItems extends Component {
     this.props.onRemoveItems();
   }
 
-  updateItemHue(item, e) {
-    this.props.onUpdateItemHue(item, e.target.value);
+  updateItemHue(item, newHue) {
+    if (newHue.target) newHue = newHue.target.value
+    this.props.onUpdateItemHue(item, newHue);
+  }
+
+  customizeItem(item) {
+    return (<div className='customizing-item'>
+      <label>
+        <span className='flex'>Hue<input type='number' className='hue-picker-value' value={item.hue || 0} onChange={this.updateItemHue.bind(this, item)} /></span>
+        <Slider
+          className='hue-picker'
+          value={item.hue || 0}
+          min={0}
+          max={360}
+          handle={handle}
+          onChange={this.updateItemHue.bind(this, item)} />
+      </label>
+    </div>);
   }
 }
+
+const createSliderWithTooltip = Slider.createSliderWithTooltip;
+const Range = createSliderWithTooltip(Slider.Range);
+const Handle = Slider.Handle;
+
+const handle = (props) => {
+  const { value, dragging, index, ...restProps } = props;
+  return (
+    <RcTooltip
+      prefixCls="rc-slider-tooltip"
+      overlay={value}
+      visible={dragging}
+      placement="top"
+      style={{border: "solid 2px hsl("+value+", 53%, 53%)"}}
+      key={index}
+    >
+      <Handle value={value} {...restProps} />
+    </RcTooltip>
+  );
+};
 
 export default EquippedItems
