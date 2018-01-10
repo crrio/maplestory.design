@@ -19,7 +19,7 @@ class CharacterList extends Component {
               onUpdateCharacter={this.props.onUpdateCharacter}
               onDeleteCharacter={this.props.onDeleteCharacter} />
           )}
-          <div onClick={this.addCharacter.bind(this)} className='add-character'><span>+</span></div>
+          <Tooltip title="Add Character" position='bottom' theme='light'><div onClick={this.addCharacter.bind(this)} className='add-character'><span>+</span></div></Tooltip>
         </div>
       </div>
     )

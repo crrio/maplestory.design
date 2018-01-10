@@ -72,7 +72,7 @@ class CharacterEntry extends Component {
   customizeCharacter(character) {
     return (<div className='character-customizeable-options'>
       <div>
-        <a href="#" onClick={this.deleteCharacter.bind(this)}>Delete Character</a>
+        <a href="#" className='btn bg-red text-white right' onClick={this.deleteCharacter.bind(this)}>Delete Character</a>
       </div>
       <label>
         <span>Facial Expression</span>

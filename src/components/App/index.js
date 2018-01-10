@@ -68,6 +68,9 @@ class App extends Component {
       delete character.allCharacters
     })
 
+    if (this.state.selectedCharacterIndex > this.state.characters.length || !this.state.characters.length)
+      this.state.selectedCharacterIndex = false;
+
     this.updateBannerAdBlur()
   }
 
@@ -136,13 +139,13 @@ class App extends Component {
 
   addCharacter() {
     var characters = [ ...this.state.characters, this.getNewCharacter() ]
-    this.setState({ characters })
+    this.setState({ characters, selectedCharacterIndex: this.state.characters.length })
     localStorage['characters'] = JSON.stringify(characters)
   }
 
   removeCharacter(character) {
     var characters = this.state.characters.filter(c => c != character)
-    this.setState({ characters, selectedCharacterIndex: 0 })
+    this.setState({ characters, selectedCharacterIndex: false }) // Unselect any character in case we delete the last character
     localStorage['characters'] = JSON.stringify(characters)
   }
 
