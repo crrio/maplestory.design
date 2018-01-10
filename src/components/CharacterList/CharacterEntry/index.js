@@ -61,10 +61,8 @@ class CharacterEntry extends Component {
   render() {
     const { character, isSelectedCharacter, canvasMode, ...otherProps } = this.props
     return (
-      <Tooltip html={this.customizeCharacter(character)} position={canvasMode ? undefined : 'bottom'} interactive={true} theme='light' distance={canvasMode ? 0 : 350} arrow={true}>
-        <div className={'character ' + (character.visible ? 'disabled ' : 'enabled ') + (isSelectedCharacter ? 'active' : 'inactive')} style={{backgroundImage: 'url('+character.summary+')'}} {...otherProps}>
-            { !canvasMode ? <Toggle onChange={this.toggleVisibility.bind(this)} checked={character.visible} /> : '' }
-        </div>
+      <Tooltip html={this.customizeCharacter(character)} position={canvasMode ? undefined : 'bottom'} interactive={true} theme='light' distance={400} arrow={true}>
+        <div className={'character ' + (character.visible ? 'disabled ' : 'enabled ') + (isSelectedCharacter ? 'active' : 'inactive')} style={{backgroundImage: 'url('+character.summary+')'}} {...otherProps}>&nbsp;</div>
       </Tooltip>
     )
   }
@@ -139,6 +137,10 @@ class CharacterEntry extends Component {
           max={10}
           handle={handle}
           onChange={this.changeZoom.bind(this)} />
+      </label>
+      <label>
+        <span>Visible</span>
+        <Toggle onChange={this.toggleVisibility.bind(this)} checked={character.visible} />
       </label>
       <br />
       <a href={`https://labs.maplestory.io/api/gms/latest/character/download/${character.skin}/${_.map(character.selectedItems, i => i.hue ? `${i.Id};${i.hue}` : i.Id).join(',')}?showears=${character.mercEars}&showLefEars=${character.illiumEars}`} target='_blank'  rel="noopener noreferrer">

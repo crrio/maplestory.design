@@ -8,10 +8,11 @@ import 'react-tippy/dist/tippy.css';
 import RcTooltip from 'rc-tooltip'
 import Slider from 'rc-slider'
 import { Tooltip } from 'react-tippy'
+import Toggle from 'react-toggle'
 
 class EquippedItems extends Component {
   render() {
-    const { equippedItems, skinId, mercEars, illiumEars } = this.props
+    const { equippedItems } = this.props
 
     const ad = document.querySelector(".adsbygoogle")
     if (ad.offsetParent === null)
@@ -46,13 +47,17 @@ class EquippedItems extends Component {
     this.props.onRemoveItem(item);
   }
 
+  toggleVisibility(item) {
+    this.props.onUpdateItem(item, { visible: !(item.visible === undefined ? true : item.visible) })
+  }
+
   removeItems() {
     this.props.onRemoveItems();
   }
 
   updateItemHue(item, newHue) {
     if (newHue.target) newHue = newHue.target.value
-    this.props.onUpdateItemHue(item, newHue);
+    this.props.onUpdateItem(item, {hue: newHue});
   }
 
   customizeItem(item) {
@@ -67,6 +72,10 @@ class EquippedItems extends Component {
           handle={handle}
           onChange={this.updateItemHue.bind(this, item)} />
       </span>
+      <label>
+        <span>Visible</span>
+        <Toggle onChange={this.toggleVisibility.bind(this, item)} checked={item.visible === undefined ? true: item.visible} />
+      </label>
     </div>);
   }
 }

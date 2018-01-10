@@ -115,12 +115,9 @@ class App extends Component {
         {
           (selectedCharacterIndex !== false && !_.isEmpty(characters[selectedCharacterIndex].selectedItems) ? <EquippedItems
             equippedItems={characters[selectedCharacterIndex].selectedItems}
-            skinId={characters[selectedCharacterIndex].skin}
             onRemoveItem={this.userRemovedItem.bind(this)}
-            mercEars={characters[selectedCharacterIndex].mercEars}
-            illiumEars={characters[selectedCharacterIndex].illiumEars}
-            onRemoveItems={this.userRemovedItems.bind(this)}
-            onUpdateItemHue={this.updateItemHue.bind(this)} /> : '')
+            onUpdateItem={this.updateItem.bind(this)}
+            onRemoveItems={this.userRemovedItems.bind(this)} /> : '')
         }
         <div className="disclaimer"><div>This project is actively being developed and considered a <b>prototype</b>.</div></div>
         <IntroModal
@@ -167,7 +164,7 @@ class App extends Component {
     }
 
     const itemsWithEmotion = _.values(currentCharacter.selectedItems)
-      .filter(item => item.Id)
+      .filter(item => item.Id && (item.visible === undefined || item.visible))
       .map(item => {
         var itemEntry = item.Id >= 20000 && item.Id <= 29999 ? `${item.Id}:${currentCharacter.emotion}` : item.Id
         if (item.hue) itemEntry = itemEntry + ';' + item.hue
@@ -237,13 +234,13 @@ class App extends Component {
     this.updateItems(selectedItems);
   }
 
-  updateItemHue (item, newHue) {
+  updateItem (item, newProps) {
     let selectedItems = {
       ...this.state.characters[this.state.selectedCharacterIndex].selectedItems,
     }
     selectedItems[item.TypeInfo.SubCategory] = {
       ...item,
-      hue: newHue
+      ...newProps
     }
     this.updateItems(selectedItems);
   }

@@ -109,6 +109,18 @@
   position: relative;
 }
 
+.customizing-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.customizing-item > label {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 4px;
+}
+
 .customizing-item > span {
   text-align: left;
   display: inline-block;
