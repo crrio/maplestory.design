@@ -32,7 +32,7 @@ class App extends Component {
     }
 
     // If we have a legacy character, upgrade to latest now
-    if (!_.isEmpty(this.state.selectedItems)) {
+    if (!_.isEmpty(this.state.selectedItems || {})) {
       const currentCharacter = {
         selectedItems: this.state.selectedItems,
         skin: this.state.skin || 2000
