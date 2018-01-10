@@ -1,11 +1,4 @@
-.canvas {
-  position: fixed;
-  top: 64px;
-  bottom: 64px;
-  left: 0;
-  right: 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: url('./graphy.png');
+.canvas-characters > div {
+  width: 128px;
+  height: 128px;
 }

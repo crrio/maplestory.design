@@ -12,9 +12,10 @@
     "rc-tooltip": "^3.7.0",
     "react": "^15.5.4",
     "react-dom": "^15.5.4",
+    "react-draggable": "^3.0.4",
     "react-modal": "^1.9.4",
-    "react-super-select": "^1.0.8",
     "react-tippy": "^1.2.2",
+    "react-toggle": "^4.0.2",
     "react-virtualized": "^9.8.0"
   },
   "scripts": {

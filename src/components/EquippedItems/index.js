@@ -37,30 +37,6 @@ class EquippedItems extends Component {
               </Tooltip>
             ))
           }
-          <a href={`https://labs.maplestory.io/api/gms/latest/character/download/${skinId}/${_.map(equippedItems, i => i.hue ? `${i.Id};${i.hue}` : i.Id).join(',')}?showears=${mercEars}&showLefEars=${illiumEars}`} target='_blank'  rel="noopener noreferrer">
-            <div className='download-bar bg-blue'>
-              <div className='equipped-items-item-meta'>
-                <div className='equipped-items-item-meta-name text-white'>Download Spritesheet</div>
-                <div className='equipped-items-item-meta-category text-white'>(will download a <b>.zip</b>)</div>
-              </div>
-            </div>
-          </a>
-          <div className="flex">
-            <a href={`https://labs.maplestory.io/api/gms/latest/character/download/${skinId}/${_.map(equippedItems, i => i.hue ? `${i.Id};${i.hue}` : i.Id).join(',')}?showears=${mercEars}&showLefEars=${illiumEars}&format=1`} target='_blank'  rel="noopener noreferrer">
-              <div className='download-bar bg-blue'>
-                <div className='equipped-items-item-meta'>
-                  <div className='equipped-items-item-meta-name text-white'>Download Layered Spritesheet</div>
-                  <div className='equipped-items-item-meta-category text-white'>(will download a <b>.zip</b>)</div>
-                  <div className='equipped-items-item-meta-category text-white'>Requires PDN plugin &gt;</div>
-                </div>
-              </div>
-            </a>
-            <a href="https://forums.getpaint.net/topic/31996-zip-archive-filetype-plugin-zip/" className='flex-column pdn-button'  target='_blank'  rel="noopener noreferrer">
-              <div className='download-bar bg-red text-white'>
-                PDN
-              </div>
-            </a>
-          </div>
         </div>
       </div>
     )

@@ -2,7 +2,7 @@
   position: fixed;
   left: 0;
   top: 64px;
-  bottom: 64px;
+  bottom: 128px;
   width: 25%;
   min-width: 420px;
   background: #FFF;
@@ -35,7 +35,7 @@
 }
 
 .item-listing-categories {
-  flex: 1;
+  flex: 0.7;
   border-right: 1px solid rgba(0,0,0,0.2);
   max-height: 100%;
   overflow: auto;

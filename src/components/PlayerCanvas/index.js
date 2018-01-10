@@ -1,14 +1,15 @@
 import React, { Component } from 'react'
 import './index.css'
+import Draggable from 'react-draggable'
+import CharacterEntry from '../CharacterList/CharacterEntry'
 
 class PlayerCanvas extends Component {
   render() {
-    const { summary } = this.props
-
+    const { summary, onClick } = this.props
     return (
-      <div className="canvas">
-        <img src={summary} alt="character"/>
-      </div>
+      <Draggable>
+        <img src={summary} alt="character" onClick={onClick}/>
+      </Draggable>
     )
   }
 }

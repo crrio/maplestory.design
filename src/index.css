@@ -5,6 +5,7 @@ body {
   min-width: 1200px;
   min-height: 100vh;
   overflow: hidden;
+  background-color: #ccc;
 }
 
 .anti-ad {

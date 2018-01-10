@@ -1,28 +1,37 @@
 import React, { Component } from 'react'
 import './index.css'
 import _ from 'lodash'
-import SuperSelect from 'react-super-select'
+import Toggle from 'react-toggle'
+import { Tooltip } from 'react-tippy'
+import CharacterEntry from './CharacterEntry'
 
 class CharacterList extends Component {
   render() {
+    const { characters, selectedCharacterIndex } = this.props
     return (
       <div className='character-list'>
-        <SuperSelect
-            dataSource={_.concat(this.props.otherCharacters, {id: Date.now(), name: "Create New", create: true})}
-            customOptionTemplateFunction={this.CharacterSummaryImg.bind(this)}
-            customValueTemplateFunction={() => ("")}
-            onChange={this.onChangeSelectedCharacter.bind(this)}
-            />
+        <div>
+          {characters.map((c, i) =>
+            <CharacterEntry
+              character={c}
+              isSelectedCharacter={i == selectedCharacterIndex}
+              onClick={this.clickCharacter.bind(this, c)}
+              onUpdateCharacter={this.props.onUpdateCharacter}
+              onDeleteCharacter={this.props.onDeleteCharacter} />
+          )}
+          <div onClick={this.addCharacter.bind(this)} className='add-character'><span>+</span></div>
+        </div>
       </div>
     )
   }
 
-  onChangeSelectedCharacter(e) {
-    this.props.onSelectedChanged(e);
+  addCharacter() {
+    this.props.onAddCharacter()
   }
 
-  CharacterSummaryImg(character) {
-      return character.create ? ('Create New') : (<img src={character.summary} />)
+  clickCharacter(character, e) {
+    if (e.target == e.currentTarget)
+      this.props.onUpdateSelectedCharacter(character)
   }
 }
 

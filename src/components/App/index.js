@@ -18,27 +18,55 @@ class App extends Component {
     if (isOpen === '' || isOpen === undefined || isOpen === 'undefined')
       isOpen = true
 
+    // Try to recover any existing state
     this.state = {
       selectedItems: JSON.parse((localStorage || [])['selectedItems'] || '{}'),
-      action: 'stand1',
-      emotion: 'default',
       skin: Number(localStorage['skin']) || 2000,
       isModalOpen: isOpen,
       zoom: Number(localStorage['zoom']) || 1,
       frame: Number(localStorage['frame']) || 0,
       mercEars: localStorage['mercEars'] == "true" || localStorage['mercEars'] === true,
       illiumEars: localStorage['illiumEars'] == "true" || localStorage['illiumEars'] === true,
+      characters: JSON.parse(localStorage['characters'] || 'false') || [false],
+      selectedCharacterIndex: JSON.parse(localStorage['selectedCharacterIndex'] || 'false') || 0
     }
+
+    // If we have a legacy character, upgrade to latest now
+    if (!_.isEmpty(this.state.selectedItems)) {
+      const currentCharacter = {
+        selectedItems: this.state.selectedItems,
+        skin: this.state.skin || 2000
+      }
+      if (this.state.characters[0] === false)
+        this.state.characters[0] = currentCharacter;
+      else
+        this.state.characters.push(currentCharacter)
+    }
+
+    // If we have no characters at all, gen a new shell
+    if (this.state.characters[0] === false)
+      this.state.characters[0] = this.getNewCharacter()
+
+    delete localStorage['selectedItems'];
+    delete localStorage['skin'];
+    delete localStorage['zoom'];
+    delete localStorage['frame'];
+    delete localStorage['mercEars'];
+    delete localStorage['illiumEars'];
 
     if (localStorage['currentCharacter']) {
       this.state = JSON.parse(localStorage['currentCharacter'])
+      delete localStorage['currentCharacter']
+      localStorage['characters'] = JSON.stringify([...this.state.characters, this.state])
+      this.state['characters'] = [...this.state.characters, this.state]
     }
 
-    this.state = {
-      ...this.state,
-      characterSummaries: (JSON.parse(localStorage['characters'] || 'false') || []).map(character => character.summary),
-      allCharacters: (JSON.parse(localStorage['characters'] || 'false') || [])
-    }
+    this.state.characters.forEach((character, index) => {
+      if (!character.id) character.id = Date.now() + (index + 1)
+      delete character.characters
+      delete character.otherCharacters
+      delete character.allCharacters
+    })
 
     this.updateBannerAdBlur()
   }
@@ -49,7 +77,7 @@ class App extends Component {
   }
 
   render() {
-    const { allCharacters, selectedItems, action, emotion, skin, isModalOpen, mercEars, illiumEars, zoom, frame, summary } = this.state
+    const { characters, selectedCharacterIndex, selectedItems, action, emotion, skin, isModalOpen, mercEars, illiumEars, zoom, frame, summary } = this.state
     this.updateBannerAdBlur()
 
     return (
@@ -57,40 +85,41 @@ class App extends Component {
         <div className="App-header">
           <span className="logo">
             <b>MapleStory:</b> Design<br/>
-            <span className="desc"><span className="alpha">Public Alpha</span> </span>
+            <span className="desc"><span className="alpha">Public Alpha</span></span>
           </span>
           <ul className="Nav-right">
             <li><a href="//medium.com/crrio/tagged/maplestory-design" target="_blank" rel="noopener noreferrer">Blog</a></li>
             <li><a href="https://discord.gg/D65Grk9" target="_blank" rel="noopener noreferrer">Discord</a></li>
           </ul>
         </div>
-        <PlayerCanvas
-          summary={summary} />
-        <ItemListing onItemSelected={this.userSelectedItem.bind(this)} />
-        <EquippedItems
-          equippedItems={selectedItems}
-          skinId={skin}
-          onRemoveItem={this.userRemovedItem.bind(this)}
-          mercEars={mercEars}
-          illiumEars={illiumEars}
-          onRemoveItems={this.userRemovedItems.bind(this)}
-          onUpdateItemHue={this.updateItemHue.bind(this)} />
-        <CharacterProperties
-          equippedItems={selectedItems}
-          action={action}
-          emotion={emotion}
-          skin={skin}
-          mercEars={mercEars}
-          illiumEars={illiumEars}
-          zoom={zoom}
-          frame={frame}
-          onChangeAction={this.userChangedAction.bind(this)}
-          onChangeEmotion={this.userChangedEmotion.bind(this)}
-          onChangeSkin={this.userChangedSkin.bind(this)}
-          onChangeMercEars={this.userChangedMercEars.bind(this)}
-          onChangeIlliumEars={this.userChangesIlliumEars.bind(this)}
-          onChangeZoom={this.userChangedZoom.bind(this)}
-          onChangeFrame={this.userChangedFrame.bind(this)} />
+        <div className='canvas-characters' onClick={this.clickCanvas.bind(this)}>
+          {
+            characters
+              .filter(character => character.visible)
+              .map(character => {
+                return (<PlayerCanvas summary={character.summary} key={'canvas' + character.id} onClick={this.userUpdateSelectedCharacter.bind(this, character)} />)
+              })
+          }
+        </div>
+        { (selectedCharacterIndex !== false) ? <ItemListing onItemSelected={this.userSelectedItem.bind(this)} /> : '' }
+        <CharacterList
+          characters={characters}
+          selectedCharacterIndex={selectedCharacterIndex}
+          onAddCharacter={this.addCharacter.bind(this)}
+          onDeleteCharacter={this.removeCharacter.bind(this)}
+          onUpdateSelectedCharacter={this.userUpdateSelectedCharacter.bind(this)}
+          onUpdateCharacter={this.userUpdateCharacter.bind(this)} />
+        {
+          (selectedCharacterIndex !== false && !_.isEmpty(characters[selectedCharacterIndex].selectedItems) ? <EquippedItems
+            equippedItems={characters[selectedCharacterIndex].selectedItems}
+            skinId={characters[selectedCharacterIndex].skin}
+            onRemoveItem={this.userRemovedItem.bind(this)}
+            mercEars={characters[selectedCharacterIndex].mercEars}
+            illiumEars={characters[selectedCharacterIndex].illiumEars}
+            onRemoveItems={this.userRemovedItems.bind(this)}
+            onUpdateItemHue={this.updateItemHue.bind(this)} /> : '')
+        }
+        <div className="disclaimer"><div>This project is actively being developed and considered a <b>prototype</b>.</div></div>
         <IntroModal
           isOpen={isModalOpen}
           onSetModalOpen={this.setModalOpen.bind(this)} />
@@ -98,121 +127,84 @@ class App extends Component {
     )
   }
 
-  changeCharacter({ id, create }) {
-    throw new Error('Not ready yet :D')
-    if (create && id !== creatingId) {
-      creatingId = id;
-      const currentCharacter = { ...this.state }
-      delete currentCharacter.allCharacters
-      delete currentCharacter.isModalOpen
-      delete currentCharacter.characterSummaries
+  clickCanvas(e) {
+    if (e.target == e.currentTarget && this.state.characters.length > 1) {
+      this.setState({ selectedCharacterIndex: false })
+      localStorage['selectedCharacterIndex'] = 'false'
+    }
+  }
 
-      const allCharacters = { ...this.state.allCharacters }
-      allCharacters[id] = currentCharacter
+  addCharacter() {
+    var characters = [ ...this.state.characters, this.getNewCharacter() ]
+    this.setState({ characters })
+    localStorage['characters'] = JSON.stringify(characters)
+  }
 
-      this.setState({
-        ...this.state,
-        id: id,
-        allCharacters,
-        action: 'stand1',
-        emotion: 'default',
-        skin: 2000,
-        zoom: 1,
-        frame: 0,
-        mercEars: false,
-        illiumEars: false,
-        selectedItems: [],
-        summary: `https://labs.maplestory.io/api/gms/latest/character/center/2000/1102039/stand1/0?showears=false&showLefEars=false&resize=1`
-      })
+  removeCharacter(character) {
+    var characters = this.state.characters.filter(c => c != character)
+    this.setState({ characters, selectedCharacterIndex: 0 })
+    localStorage['characters'] = JSON.stringify(characters)
+  }
+
+  userUpdateSelectedCharacter(character) {
+    const selectedCharacterIndex = this.state.characters.indexOf(character)
+    this.setState({
+      selectedCharacterIndex
+    })
+    localStorage['selectedCharacterIndex'] = selectedCharacterIndex
+  }
+
+  userUpdateCharacter(character, newProps) {
+    const characters = [...this.state.characters]
+    const characterIndex = characters.indexOf(character)
+
+    const currentCharacter = characters[characterIndex] = {
+      ...character,
+      ...newProps
     }
 
-    if (id !== creatingId) {
-      creatingId = id;
-      const currentCharacter = { ...this.state }
-      delete currentCharacter.allCharacters
-      delete currentCharacter.isModalOpen
-      delete currentCharacter.characterSummaries
+    const itemsWithEmotion = _.values(currentCharacter.selectedItems)
+      .filter(item => item.Id)
+      .map(item => {
+        var itemEntry = item.Id >= 20000 && item.Id <= 29999 ? `${item.Id}:${currentCharacter.emotion}` : item.Id
+        if (item.hue) itemEntry = itemEntry + ';' + item.hue
+        return itemEntry
+      });
+    currentCharacter.summary = `https://labs.maplestory.io/api/gms/latest/character/${currentCharacter.skin}/${(itemsWithEmotion.join(',') || 1102039)}/${currentCharacter.action}/${currentCharacter.frame}?showears=${currentCharacter.mercEars}&showLefEars=${currentCharacter.illiumEars}&resize=${currentCharacter.zoom}`
 
-      creatingId = id;
-      const allCharacters = { ...this.state.allCharacters }
-      allCharacters[id] = currentCharacter
-      this.setState({
-        ...this.state.allCharacters.find(character => character.id == id),
-        allCharacters
-      })
+    this.setState({
+        characters: characters
+    })
+    localStorage['characters'] = JSON.stringify(characters)
+  }
+
+  getNewCharacter() {
+    return {
+      id: Date.now(),
+      action: 'stand1',
+      emotion: 'default',
+      skin: 2000,
+      zoom: 1,
+      frame: 0,
+      mercEars: false,
+      illiumEars: false,
+      selectedItems: [],
+      visible: true,
+      summary: `https://labs.maplestory.io/api/gms/latest/character/2000/1102039/stand1/0?showears=false&showLefEars=false&resize=1`
     }
-
-    console.log(arguments, id, create);
   }
 
   updateCurrentCharacter(props) {
-    var newState = {
-      ...this.state,
-      ...props
-    }
-    const itemsWithEmotion = _.values(newState.selectedItems)
-    .filter(item => item.Id)
-    .map(item => {
-      var itemEntry = item.Id >= 20000 && item.Id <= 29999 ? `${item.Id}:${newState.emotion}` : item.Id
-      if (item.hue) itemEntry = itemEntry + ';' + item.hue
-      return itemEntry
-    });
-
-    this.setState({
-      ...props,
-      summary: `https://labs.maplestory.io/api/gms/latest/character/center/${newState.skin}/${(itemsWithEmotion.join(',') || 1102039)}/${newState.action}/${newState.frame}?showears=${newState.mercEars}&showLefEars=${newState.illiumEars}&resize=${newState.zoom}`
-    })
-
-    const currentCharacter = {
-      ...newState
-    }
-
-    if (currentCharacter.allCharacters) delete currentCharacter.allCharacters
-    delete currentCharacter.isModalOpen
-    delete currentCharacter.characterSummaries
-
-    localStorage['currentCharacter'] = JSON.stringify(currentCharacter);
+    this.userUpdateCharacter(this.state.characters[this.state.selectedCharacterIndex], props)
   }
 
   setModalOpen (isModalOpen) {
-    this.updateCurrentCharacter({ isModalOpen })
-  }
-
-  userChangesIlliumEars(illiumEars) {
-    this.updateCurrentCharacter({ illiumEars });
-  }
-
-  userChangedMercEars(mercEars) {
-    this.updateCurrentCharacter({ mercEars });
-  }
-
-  userChangedSkin (skin) {
-    this.updateCurrentCharacter({ skin })
-  }
-
-  userChangedEmotion (emotion) {
-    this.updateCurrentCharacter({ emotion })
-    console.log('Changed emotion: ', emotion)
-  }
-
-  userChangedAction (action) {
-    this.updateCurrentCharacter({ action })
-    console.log('Changed action: ', action)
-  }
-
-  userChangedZoom (zoom) {
-    this.updateCurrentCharacter({ zoom });
-    console.log('Set zoom: ', zoom);
-  }
-
-  userChangedFrame(frame) {
-    this.updateCurrentCharacter({ frame });
-    console.log('Set frame: ', frame);
+    this.setState({ isModalOpen })
   }
 
   userSelectedItem (item) {
     let selectedItems = {
-      ...this.state.selectedItems,
+      ...this.state.characters[this.state.selectedCharacterIndex].selectedItems,
     }
 
     if (item.TypeInfo.SubCategory === 'Overall') {
@@ -231,7 +223,7 @@ class App extends Component {
 
   userRemovedItem (item) {
     let selectedItems = {
-      ...this.state.selectedItems,
+      ...this.state.characters[this.state.selectedCharacterIndex].selectedItems,
     }
     delete selectedItems[item.TypeInfo.SubCategory]
     this.updateItems(selectedItems);
@@ -244,7 +236,7 @@ class App extends Component {
 
   updateItemHue (item, newHue) {
     let selectedItems = {
-      ...this.state.selectedItems,
+      ...this.state.characters[this.state.selectedCharacterIndex].selectedItems,
     }
     selectedItems[item.TypeInfo.SubCategory] = {
       ...item,
