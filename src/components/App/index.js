@@ -205,7 +205,7 @@ class App extends Component {
   }
 
   userUpdatePet(pet, newProps) {
-    if (pet.locked === true && !newProps.locked) {
+    if (pet.locked === true && newProps.locked === undefined) {
       NotificationManager.error('Pet is locked', 'Error', 1000)
       return;
     }
@@ -227,7 +227,7 @@ class App extends Component {
   }
 
   userUpdateCharacter(character, newProps) {
-    if (character.locked === true && !newProps.locked) {
+    if (character.locked === true && newProps.locked === undefined) {
       NotificationManager.error('Character is locked', 'Error', 1000)
       return;
     }
@@ -285,6 +285,7 @@ class App extends Component {
   userSelectedItem (item) {
     let selectedRenderable = null
     if (this.state.selectedIndex+1 > this.state.characters.length) selectedRenderable = this.state.pets[this.state.selectedIndex - this.state.characters.length]
+    else selectedRenderable = this.state.characters[this.state.selectedIndex]
 
     let selectedItems = {
       ...selectedRenderable.selectedItems,
