@@ -10,6 +10,7 @@ import {
   AutoSizer
 } from 'react-virtualized';
 
+// Black list for individual sub categories
 const blacklistSubcategories = [
   "Monster Battle",
   "Skill Effect",
@@ -20,6 +21,14 @@ const blacklistSubcategories = [
   "Pickaxe",
   "Totem"
 ]
+
+// White list for categories
+const applicableCategories = {
+  character: ['Character', 'Armor', 'Accessory', 'Mount', 'One-Handed Weapon', 'Two-Handed Weapon']
+}
+
+// White list for individual sub categories
+const applicableSubcategories = { }
 
 let cellMeasurerCache = null
 
@@ -120,6 +129,8 @@ class ItemListing extends Component {
 
     this.showIcons = this.showIcons.filter(item => item && item.Id)
 
+    const selectedType = this.props.target.type || 'character'
+
     return (
       <div className='item-listing'>
         <div className='item-listing-header'>
@@ -141,13 +152,13 @@ class ItemListing extends Component {
           <div className='item-listing-categories'>
           <ul>
           {
-            _.map(categoryNamesKeys, category => {
+            _.map((categoryNamesKeys || []).filter(categoryName => applicableCategories[selectedType].indexOf(categoryName) !== -1), category => {
               const subCategories = categoryNames[category];
               return (<li key={category} onClick={this.selectPrimaryCategory.bind(this, category)}>
               <span className={'category' + (category === categoryNameSelected ? ' active' : '')}>{category}</span>
               <ul>
                 {
-                  subCategories.filter(categoryName => blacklistSubcategories.indexOf(categoryName) === -1).map(subCategory => <li
+                  subCategories.filter(categoryName => blacklistSubcategories.indexOf(categoryName) === -1 && (!applicableSubcategories[selectedType] || applicableSubcategories[selectedType].indexOf(categoryName) !== -1)).map(subCategory => <li
                     key={subCategory}
                     className={subCategory === categoryNameSelected ? 'active' : ''}
                     onClick={this.selectChildCategory.bind(this, category, subCategory)}>

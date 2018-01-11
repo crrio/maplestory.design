@@ -104,7 +104,7 @@ class App extends Component {
               })
           }
         </div>
-        { (selectedCharacterIndex !== false) ? <ItemListing onItemSelected={this.userSelectedItem.bind(this)} /> : '' }
+        { (selectedCharacterIndex !== false) ? <ItemListing target={characters[selectedCharacterIndex]} onItemSelected={this.userSelectedItem.bind(this)} /> : '' }
         <CharacterList
           characters={characters}
           selectedCharacterIndex={selectedCharacterIndex}
