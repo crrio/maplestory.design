@@ -21,11 +21,7 @@ const blacklistSubcategories = [
   "Totem"
 ]
 
-const cellMeasurerCache = new CellMeasurerCache({
-  defaultHeight: 32,
-  defaultWidth: 32,
-  fixedWidth: true
-})
+let cellMeasurerCache = null
 
 const itemListPromise = axios.get('https://labs.maplestory.io/api/gms/latest/item/category/equip');
 const chairListPromise = axios.get('https://labs.maplestory.io/api/gms/latest/item/category/setup');
@@ -47,7 +43,12 @@ class ItemListing extends Component {
       similarItems: null
     }
 
-    this._cache = cellMeasurerCache;
+    this._cache = cellMeasurerCache = new CellMeasurerCache({
+      defaultHeight: 32,
+      defaultWidth: 32,
+      fixedWidth: true,
+      fixedHeight: true
+    });
 
     Promise.all([itemListPromise, chairListPromise]).then(responses => {
       if(!_.every(responses, res => res.status === 200)) return;
