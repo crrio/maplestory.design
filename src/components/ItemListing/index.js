@@ -28,6 +28,7 @@ const cellMeasurerCache = new CellMeasurerCache({
 })
 
 const itemListPromise = axios.get('https://labs.maplestory.io/api/gms/latest/item/category/equip');
+const chairListPromise = axios.get('https://labs.maplestory.io/api/gms/latest/item/category/setup');
 
 class ItemListing extends Component {
   constructor(props) {
@@ -46,53 +47,56 @@ class ItemListing extends Component {
       similarItems: null
     }
 
-    this._cache = cellMeasurerCache
+    this._cache = cellMeasurerCache;
 
-    itemListPromise.then(response => {
-      if(response.status === 200) {
-        const categories = _.mapValues(
-          _.groupBy(
-            response.data
-              .filter(item => item.Id < 10000 || item.Id > 50000)
-              .concat(
-                _.map(
-                  _.groupBy(
-                    response.data.filter(item => item.Id >= 30000 && item.Id <= 60000),
-                    item => Math.floor(item.Id / 10)
-                  ), itemGrouping => {
-                    const firstItem = itemGrouping[0]
-                    firstItem.similar = itemGrouping
-                    return firstItem
-                  }
-                )
-              )
-              .concat(
-                _.map(
-                  _.groupBy(
-                    response.data.filter(item => item.Id >= 10000 && item.Id < 30000),
-                    item => (item.Id % 100) + (item.Id - (item.Id % 1000))
-                  ), itemGrouping => {
-                    const firstItem = itemGrouping[0]
-                    firstItem.similar = itemGrouping
-                    return firstItem
-                  }
-                )
-              ),
-            item => item.TypeInfo.Category),
-          items => _.groupBy(items, item => item.TypeInfo.SubCategory)
-        );
+    Promise.all([itemListPromise, chairListPromise]).then(responses => {
+      if(!_.every(responses, res => res.status === 200)) return;
+      const setupData = responses[1].data
+      const chairData = setupData.filter(item => Math.floor(item.Id / 10000) === 301).map(chair => {
+        chair.TypeInfo.Category = "Character" // That way it shows up as part of the character section
+        return chair
+      })
+      const itemData = responses[0].data.concat(chairData)
+      const groupedHair = _.map(
+        _.groupBy(
+          itemData.filter(item => item.Id >= 30000 && item.Id <= 60000),
+          item => Math.floor(item.Id / 10)
+        ), itemGrouping => {
+          const firstItem = itemGrouping[0]
+          firstItem.similar = itemGrouping
+          return firstItem
+        }
+      )
+      const groupedFaces = _.map(
+        _.groupBy(
+          itemData.filter(item => item.Id >= 10000 && item.Id < 30000),
+          item => (item.Id % 100) + (item.Id - (item.Id % 1000))
+        ), itemGrouping => {
+          const firstItem = itemGrouping[0]
+          firstItem.similar = itemGrouping
+          return firstItem
+        }
+      )
+      const categories = _.mapValues(
+        _.groupBy(
+          itemData
+            .filter(item => item.Id < 10000 || item.Id > 50000)
+            .concat(groupedHair)
+            .concat(groupedFaces),
+          item => item.TypeInfo.Category),
+        items => _.groupBy(items, item => item.TypeInfo.SubCategory)
+      );
 
-        const categoryNames = _.mapValues(categories, _.keys);
-        const categoryNamesKeys = _.keys(categoryNames).filter((categoryName) => categoryName != 'Character');
-        categoryNamesKeys.unshift('Character');
+      const categoryNames = _.mapValues(categories, _.keys);
+      const categoryNamesKeys = _.keys(categoryNames).filter((categoryName) => categoryName != 'Character');
+      categoryNamesKeys.unshift('Character');
 
-        this.setState({
-          items: response.data,
-          categories,
-          categoryNames,
-          categoryNamesKeys
-        })
-      }
+      this.setState({
+        items: itemData,
+        categories,
+        categoryNames,
+        categoryNamesKeys
+      })
     })
   }
 
