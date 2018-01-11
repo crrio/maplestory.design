@@ -24,11 +24,12 @@ const blacklistSubcategories = [
 
 // White list for categories
 const applicableCategories = {
-  character: ['Character', 'Armor', 'Accessory', 'Mount', 'One-Handed Weapon', 'Two-Handed Weapon']
+  character: ['Character', 'Armor', 'Accessory', 'Mount', 'One-Handed Weapon', 'Two-Handed Weapon'],
+  pet: ['Other']
 }
 
 // White list for individual sub categories
-const applicableSubcategories = { }
+const applicableSubcategories = { pet: ['Pet Equipment'] }
 
 let cellMeasurerCache = null
 
@@ -115,7 +116,13 @@ class ItemListing extends Component {
     const search = this.state.search.toLowerCase()
 
     if (search) console.log(`Searching for ${search}`)
-    this.showIcons = !search ? (selectedCategory || items) : items.filter((item, i) => {
+
+    const selectedType = this.props.target.type || 'character'
+    const applicableItems = (items || []).filter(item => {
+      return applicableCategories[selectedType].indexOf(item.TypeInfo.Category) !== -1 && blacklistSubcategories.indexOf(item.TypeInfo.SubCategory) === -1 && (!applicableSubcategories[selectedType] || applicableSubcategories[selectedType].indexOf(item.TypeInfo.SubCategory) !== -1)
+    })
+
+    this.showIcons = !search ? (selectedCategory || applicableItems) : applicableItems.filter((item, i) => {
       return (item.Name || '').toLowerCase().indexOf(search) !== -1 ||
         item.Id.toString().toLowerCase().indexOf(search) !== -1 ||
         (item.desc || '').toLowerCase().indexOf(search) !== -1
@@ -128,8 +135,6 @@ class ItemListing extends Component {
       this.showIcons = this.showIcons.filter(c => c.RequiredGender == selectedGender);
 
     this.showIcons = this.showIcons.filter(item => item && item.Id)
-
-    const selectedType = this.props.target.type || 'character'
 
     return (
       <div className='item-listing'>

@@ -7,6 +7,8 @@ import CharacterProperties from '../CharacterProperties'
 import _ from 'lodash'
 import IntroModal from '../IntroModal'
 import CharacterList from '../CharacterList'
+import 'react-notifications/lib/notifications.css';
+import {NotificationContainer, NotificationManager} from 'react-notifications';
 
 var creatingId = null;
 
@@ -28,8 +30,11 @@ class App extends Component {
       mercEars: localStorage['mercEars'] == "true" || localStorage['mercEars'] === true,
       illiumEars: localStorage['illiumEars'] == "true" || localStorage['illiumEars'] === true,
       characters: JSON.parse(localStorage['characters'] || 'false') || [false],
-      selectedCharacterIndex: JSON.parse(localStorage['selectedCharacterIndex'] || 'false') || 0
+      pets: JSON.parse(localStorage['pets'] || 'false') || [],
+      selectedIndex: JSON.parse(localStorage['selectedIndex'] || 'false') || 0
     }
+
+    if (this.state.selectedIndex < 0) this.state.selectedIndex = false;
 
     // If we have a legacy character, upgrade to latest now
     if (!_.isEmpty(this.state.selectedItems || {})) {
@@ -63,13 +68,20 @@ class App extends Component {
 
     this.state.characters.forEach((character, index) => {
       if (!character.id) character.id = Date.now() + (index + 1)
+      character.type = 'character'
       delete character.characters
       delete character.otherCharacters
       delete character.allCharacters
     })
 
-    if (this.state.selectedCharacterIndex > this.state.characters.length || !this.state.characters.length)
-      this.state.selectedCharacterIndex = false;
+    this.state.pets.forEach((pet, index) => {
+      if (!pet.id) pet.id = Date.now() + (index + 1)
+      pet.type = 'pet'
+      pet.summary = `https://labs.maplestory.io/api/gms/latest/pet/${pet.petId}/${pet.animation || 'stand0'}/${pet.frame || 0}/${_.values(pet.selectedItems).map(item => item.Id).join(',')}?resize=${pet.zoom || 1}`
+    })
+
+    if ((this.state.selectedIndex + 1) > this.state.characters.length || !this.state.characters.length)
+      this.state.selectedIndex = false;
 
     this.updateBannerAdBlur()
   }
@@ -80,8 +92,10 @@ class App extends Component {
   }
 
   render() {
-    const { characters, selectedCharacterIndex, selectedItems, action, emotion, skin, isModalOpen, mercEars, illiumEars, zoom, frame, summary } = this.state
+    const { characters, pets, selectedIndex, selectedItems, action, emotion, skin, isModalOpen, mercEars, illiumEars, zoom, frame, summary } = this.state
     this.updateBannerAdBlur()
+
+    const renderables = characters.concat(pets)
 
     return (
       <div className={"App" + (isModalOpen ? ' modal-blur' : '')}>
@@ -97,24 +111,27 @@ class App extends Component {
         </div>
         <div className='canvas-characters' onClick={this.clickCanvas.bind(this)}>
           {
-            characters
-              .filter(character => character.visible)
-              .map(character => {
-                return (<PlayerCanvas summary={character.summary} key={'canvas' + character.id} onClick={this.userUpdateSelectedCharacter.bind(this, character)} />)
+            renderables
+              .filter(renderable => renderable.visible)
+              .map(renderable => {
+                return (<PlayerCanvas summary={renderable.summary} key={'canvas' + renderable.id} onClick={this.userUpdateSelectedRenderable.bind(this, renderable)} />)
               })
           }
         </div>
-        { (selectedCharacterIndex !== false) ? <ItemListing target={characters[selectedCharacterIndex]} onItemSelected={this.userSelectedItem.bind(this)} /> : '' }
+        { (selectedIndex !== false) ? <ItemListing target={renderables[selectedIndex]} onItemSelected={this.userSelectedItem.bind(this)} /> : '' }
         <CharacterList
-          characters={characters}
-          selectedCharacterIndex={selectedCharacterIndex}
+          renderables={renderables}
+          selectedIndex={selectedIndex}
           onAddCharacter={this.addCharacter.bind(this)}
+          onAddPet={this.addPet.bind(this)}
           onDeleteCharacter={this.removeCharacter.bind(this)}
-          onUpdateSelectedCharacter={this.userUpdateSelectedCharacter.bind(this)}
-          onUpdateCharacter={this.userUpdateCharacter.bind(this)} />
+          onDeletePet={this.removePet.bind(this)}
+          onUpdateSelectedCharacter={this.userUpdateSelectedRenderable.bind(this)}
+          onUpdateCharacter={this.userUpdateCharacter.bind(this)}
+          onUpdatePet={this.userUpdatePet.bind(this) }/>
         {
-          (selectedCharacterIndex !== false && !_.isEmpty(characters[selectedCharacterIndex].selectedItems) ? <EquippedItems
-            equippedItems={characters[selectedCharacterIndex].selectedItems}
+          (selectedIndex !== false && !_.isEmpty(renderables[selectedIndex].selectedItems) ? <EquippedItems
+            equippedItems={renderables[selectedIndex].selectedItems}
             onRemoveItem={this.userRemovedItem.bind(this)}
             onUpdateItem={this.updateItem.bind(this)}
             onRemoveItems={this.userRemovedItems.bind(this)} /> : '')
@@ -123,38 +140,98 @@ class App extends Component {
         <IntroModal
           isOpen={isModalOpen}
           onSetModalOpen={this.setModalOpen.bind(this)} />
+        <NotificationContainer />
       </div>
     )
   }
 
   clickCanvas(e) {
-    if (e.target == e.currentTarget && this.state.characters.length > 1) {
-      this.setState({ selectedCharacterIndex: false })
-      localStorage['selectedCharacterIndex'] = 'false'
+    if (e.target == e.currentTarget && (this.state.characters.length + this.state.pets.length) > 1) {
+      this.setState({ selectedIndex: false })
+      localStorage['selectedIndex'] = 'false'
+    }
+  }
+
+  addPet() {
+    var pets = [...(this.state.pets || []), this.getNewPet()]
+    this.setState({pets, selectedIndex: this.state.characters.length + this.state.pets.length})
+    localStorage['pets'] = JSON.stringify(pets)
+  }
+
+  removePet(pet) {
+    var pets = this.state.pets.filter(c => c != pet)
+    this.setState({ pets, selectedIndex: false }) // Unselect any pet in case we delete the last pet
+    localStorage['pets'] = JSON.stringify(pets)
+  }
+
+  getNewPet() {
+    const andysFavePetIds = [5000000, 5000001, 5000002, 5000003, 5000004, 5000005]
+    const petId = andysFavePetIds[Math.floor(Math.random() * andysFavePetIds.length)]
+    return {
+      petId,
+      selectedItems: [],
+      id: Date.now(),
+      type: 'pet',
+      summary: `https://labs.maplestory.io/api/gms/latest/pet/${petId}/stand0`,
+      animation: 'stand0',
+      visible: true,
+      frame: 0,
+      zoom: 1
     }
   }
 
   addCharacter() {
     var characters = [ ...this.state.characters, this.getNewCharacter() ]
-    this.setState({ characters, selectedCharacterIndex: this.state.characters.length })
+    this.setState({ characters, selectedIndex: this.state.characters.length })
     localStorage['characters'] = JSON.stringify(characters)
   }
 
   removeCharacter(character) {
     var characters = this.state.characters.filter(c => c != character)
-    this.setState({ characters, selectedCharacterIndex: false }) // Unselect any character in case we delete the last character
+    this.setState({ characters, selectedIndex: false }) // Unselect any character in case we delete the last character
     localStorage['characters'] = JSON.stringify(characters)
   }
 
-  userUpdateSelectedCharacter(character) {
-    const selectedCharacterIndex = this.state.characters.indexOf(character)
+  userUpdateSelectedRenderable(renderable) {
+    let selectedIndex = this.state.characters.indexOf(renderable)
+    if (selectedIndex == -1) {
+      selectedIndex = this.state.pets.indexOf(renderable)
+      if (selectedIndex != -1) selectedIndex += this.state.characters.length
+    }
     this.setState({
-      selectedCharacterIndex
+      selectedIndex
     })
-    localStorage['selectedCharacterIndex'] = selectedCharacterIndex
+    localStorage['selectedIndex'] = selectedIndex
+  }
+
+  userUpdatePet(pet, newProps) {
+    if (pet.locked === true && !newProps.locked) {
+      NotificationManager.error('Pet is locked', 'Error', 1000)
+      return;
+    }
+
+    const pets = [...this.state.pets]
+    const petIndex = pets.indexOf(pet)
+
+    const currentPet = pets[petIndex] = {
+      ...pet,
+      ...newProps
+    }
+
+    currentPet.summary = `https://labs.maplestory.io/api/gms/latest/pet/${currentPet.petId}/${currentPet.animation || 'stand0'}/${currentPet.frame || 0}/${_.values(currentPet.selectedItems).map(item => item.Id).join(',')}?resize=${currentPet.zoom || 1}`
+
+    this.setState({
+        pets: pets
+    })
+    localStorage['pets'] = JSON.stringify(pets)
   }
 
   userUpdateCharacter(character, newProps) {
+    if (character.locked === true && !newProps.locked) {
+      NotificationManager.error('Character is locked', 'Error', 1000)
+      return;
+    }
+
     const characters = [...this.state.characters]
     const characterIndex = characters.indexOf(character)
 
@@ -194,8 +271,11 @@ class App extends Component {
     }
   }
 
-  updateCurrentCharacter(props) {
-    this.userUpdateCharacter(this.state.characters[this.state.selectedCharacterIndex], props)
+  updateSelectedRenderable(props) {
+    if (this.state.selectedIndex+1 > this.state.characters.length)
+      this.userUpdatePet(this.state.pets[this.state.selectedIndex - this.state.characters.length], props)
+    else
+      this.userUpdateCharacter(this.state.characters[this.state.selectedIndex], props)
   }
 
   setModalOpen (isModalOpen) {
@@ -203,13 +283,18 @@ class App extends Component {
   }
 
   userSelectedItem (item) {
+    let selectedRenderable = null
+    if (this.state.selectedIndex+1 > this.state.characters.length) selectedRenderable = this.state.pets[this.state.selectedIndex - this.state.characters.length]
+
     let selectedItems = {
-      ...this.state.characters[this.state.selectedCharacterIndex].selectedItems,
+      ...selectedRenderable.selectedItems,
     }
 
-    if (item.TypeInfo.SubCategory === 'Overall') {
-      delete selectedItems['Top']
-      delete selectedItems['Bottom']
+    if (item.TypeInfo) {
+      if (item.TypeInfo.SubCategory === 'Overall') {
+        delete selectedItems['Top']
+        delete selectedItems['Bottom']
+      }
     }
 
     if (item.similar) {
@@ -217,13 +302,15 @@ class App extends Component {
       delete item['similar']
     }
 
-    selectedItems[item.TypeInfo.SubCategory] = item
+    if (item.TypeInfo) {
+      selectedItems[item.TypeInfo.SubCategory] = item
+    }
     this.updateItems(selectedItems)
   }
 
   userRemovedItem (item) {
     let selectedItems = {
-      ...this.state.characters[this.state.selectedCharacterIndex].selectedItems,
+      ...this.state.characters[this.state.selectedIndex].selectedItems,
     }
     delete selectedItems[item.TypeInfo.SubCategory]
     this.updateItems(selectedItems);
@@ -236,7 +323,7 @@ class App extends Component {
 
   updateItem (item, newProps) {
     let selectedItems = {
-      ...this.state.characters[this.state.selectedCharacterIndex].selectedItems,
+      ...this.state.characters[this.state.selectedIndex].selectedItems,
     }
     selectedItems[item.TypeInfo.SubCategory] = {
       ...item,
@@ -247,7 +334,7 @@ class App extends Component {
 
   updateItems (selectedItems) {
     console.log('New Items: ', selectedItems)
-    this.updateCurrentCharacter({
+    this.updateSelectedRenderable({
       selectedItems
     })
   }

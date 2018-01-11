@@ -1,3 +1,20 @@
+.add-possible {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.add-possible li {
+  padding: 4px;
+  cursor: pointer;
+  border-radius: 4px;
+  user-select: none;
+}
+
+.add-possible li:hover {
+  background: rgba(0, 0, 0, 0.1);
+}
+
 .character-list {
     position: fixed;
     right: 0;
@@ -23,7 +40,7 @@
   height: 128px;
 }
 
-.character-list div.character, .character-list .add-character {
+.character-list div.character, .character-list div.pet, .character-list .add {
     width: 128px;
     height: 128px;
     background-position: center;
@@ -34,7 +51,7 @@
     cursor: pointer;
 }
 
-.character-list .add-character span {
+.character-list .add span {
   font-size: 42px;
   width: 70px;
   height: 70px;
@@ -43,7 +60,7 @@
   line-height: 65px; /* It looks off center if the line height is 70px :( */
 }
 
-.character-list .add-character:hover span {
+.character-list .add:hover span {
   background: rgba(0,0,0, 0.1);
 }
 
@@ -51,7 +68,7 @@
     display: none;
 }
 
-.character-list div.character.active {
+.character-list div.active {
   box-shadow: inset 0 0 8px rgba(72, 138, 199, 0.7);
 }
 

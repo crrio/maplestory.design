@@ -1,0 +1,25 @@
+.pet-customizeable-options {
+  display: flex;
+  flex-direction: column;
+}
+
+.pet-customizeable-options > label {
+  display: flex;
+  justify-content: space-between;
+  padding: 4px 0;
+}
+
+.pet-customizeable-options > label > *:first-child {
+  margin-right: 8px;
+}
+
+.pet-customizeable-options select {
+  border: 0px none transparent;
+  box-shadow: 0 0 2px rgb(72, 138, 199);
+  padding: 4px;
+  border-radius: 2px;
+}
+
+.pet-customizeable-options a {
+  text-decoration: none;
+}

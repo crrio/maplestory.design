@@ -59,10 +59,10 @@ class CharacterEntry extends Component {
   }
 
   render() {
-    const { character, isSelectedCharacter, canvasMode, ...otherProps } = this.props
+    const { character, isSelected, canvasMode, ...otherProps } = this.props
     return (
-      <Tooltip html={this.customizeCharacter(character)} position={canvasMode ? undefined : 'bottom'} interactive={true} theme='light' distance={400} arrow={true}>
-        <div className={'character ' + (character.visible ? 'disabled ' : 'enabled ') + (isSelectedCharacter ? 'active' : 'inactive')} style={{backgroundImage: 'url('+character.summary+')'}} {...otherProps}>&nbsp;</div>
+      <Tooltip html={this.customizeCharacter(character)} position={canvasMode ? undefined : 'bottom'} interactive={true} theme='light' distance={450} arrow={true}>
+        <div className={'character ' + (character.visible ? 'disabled ' : 'enabled ') + (isSelected ? 'active' : 'inactive')} style={{backgroundImage: 'url('+character.summary+')'}} {...otherProps}>&nbsp;</div>
       </Tooltip>
     )
   }
@@ -142,6 +142,10 @@ class CharacterEntry extends Component {
         <span>Visible</span>
         <Toggle onChange={this.toggleVisibility.bind(this)} checked={character.visible} />
       </label>
+      <label>
+        <span>Lock</span>
+        <Toggle onChange={this.toggleLock.bind(this)} checked={character.locked} />
+      </label>
       <br />
       <a href={`https://labs.maplestory.io/api/gms/latest/character/download/${character.skin}/${_.map(character.selectedItems, i => i.hue ? `${i.Id};${i.hue}` : i.Id).join(',')}?showears=${character.mercEars}&showLefEars=${character.illiumEars}`} target='_blank'  rel="noopener noreferrer">
         <div className='download-bar bg-blue'>
@@ -204,6 +208,10 @@ class CharacterEntry extends Component {
 
   toggleVisibility(e) {
     this.props.onUpdateCharacter(this.props.character, { visible: !this.props.character.visible })
+  }
+
+  toggleLock(e) {
+    this.props.onUpdateCharacter(this.props.character, { locked: !this.props.character.locked })
   }
 }
 
