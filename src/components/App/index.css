@@ -161,3 +161,48 @@ body > div:not(.tippy-popper){ /* kms, this freaking rule. :< */
   justify-content: center;
   background: url('./graphy.png');
 }
+
+.App .notification-container {
+  right: calc(1em + 30px);
+  overflow: visible;
+  width: 230px;
+}
+
+.App .notification {
+  padding: 15px 8px;
+}
+
+.notification-container .notification:before {
+  content: ' ';
+  border-top: calc(1em + 5.5px) solid transparent;
+  border-bottom: calc(1em + 5.5px) solid transparent;
+  border-right: calc(1em + 5.5px) solid white;
+  width: 0;
+  height: 0;
+  position: absolute;
+  left: calc(-1em - 5.5px);
+  top: 15px;
+}
+
+.notification-container .notification:after {
+  content: ' ';
+  border-top: calc(1em + 5.5px) solid transparent;
+  border-bottom: calc(1em + 5.5px) solid transparent;
+  border-left: calc(1em + 5.5px) solid white;
+  width: 0;
+  height: 0;
+  position: absolute;
+  right: calc(-1em - 5.5px);
+  top: 1px;
+  font-size: 28px;
+}
+
+.notification-container .notification.notification-warning:after, .notification-container .notification.notification-warning:before {
+  border-left-color: #f89406;
+  border-right-color: #f89406;
+}
+
+.notification-container .notification.notification-error:after, .notification-container .notification.notification-error:before {
+  border-left-color: #bd362f;
+  border-right-color: #bd362f;
+}

@@ -69,6 +69,23 @@ class App extends Component {
     this.state.characters.forEach((character, index) => {
       if (!character.id) character.id = Date.now() + (index + 1)
       character.type = 'character'
+      character.action = character.action || 'stand1'
+      character.frame = character.frame || 0
+      character.zoom = character.zoom || 1
+      character.emotion = character.emotion || 'default'
+      character.skin = character.skin || 2000
+      character.mercEars = character.mercEars || false
+      character.illiumEars = character.illiumEars || false
+      character.selectedItems = character.selectedItems || []
+      character.visible = character.visible || false
+      const itemsWithEmotion = _.values(character.selectedItems)
+      .filter(item => item.Id && (item.visible === undefined || item.visible))
+      .map(item => {
+        var itemEntry = item.Id >= 20000 && item.Id <= 29999 ? `${item.Id}:${character.emotion}` : item.Id
+        if (item.hue) itemEntry = itemEntry + ';' + item.hue
+        return itemEntry
+      });
+      character.summary = `https://labs.maplestory.io/api/gms/latest/character/${character.skin}/${(itemsWithEmotion.join(',') || 1102039)}/${character.action}/${character.frame}?showears=${character.mercEars}&showLefEars=${character.illiumEars}&resize=${character.zoom}`
       delete character.characters
       delete character.otherCharacters
       delete character.allCharacters
@@ -114,7 +131,7 @@ class App extends Component {
             renderables
               .filter(renderable => renderable.visible)
               .map(renderable => {
-                return (<PlayerCanvas summary={renderable.summary} key={'canvas' + renderable.id} onClick={this.userUpdateSelectedRenderable.bind(this, renderable)} />)
+                return (<PlayerCanvas renderable={renderable} summary={renderable.summary} key={'canvas' + renderable.id} onClick={this.userUpdateSelectedRenderable.bind(this, renderable)} />)
               })
           }
         </div>
@@ -206,7 +223,7 @@ class App extends Component {
 
   userUpdatePet(pet, newProps) {
     if (pet.locked === true && newProps.locked === undefined) {
-      NotificationManager.error('Pet is locked', 'Error', 1000)
+      NotificationManager.error('Pet is locked and can not be modified', '', 1000)
       return;
     }
 
@@ -228,7 +245,7 @@ class App extends Component {
 
   userUpdateCharacter(character, newProps) {
     if (character.locked === true && newProps.locked === undefined) {
-      NotificationManager.error('Character is locked', 'Error', 1000)
+      NotificationManager.error('Character is locked and can not be modified', '', 1000)
       return;
     }
 
