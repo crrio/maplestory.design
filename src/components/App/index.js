@@ -95,6 +95,7 @@ class App extends Component {
         return itemEntry
       });
       character.summary = `https://labs.maplestory.io/api/gms/latest/character/${character.skin}/${(itemsWithEmotion.join(',') || 1102039)}/${character.action}/${character.frame}?showears=${character.mercEars}&showLefEars=${character.illiumEars}&resize=${character.zoom}`
+      character.centeredSummary = `https://labs.maplestory.io/api/gms/latest/character/center/${character.skin}/${(itemsWithEmotion.join(',') || 1102039)}/${character.action}/${character.frame}?showears=${character.mercEars}&showLefEars=${character.illiumEars}&resize=${character.zoom}`
       delete character.characters
       delete character.otherCharacters
       delete character.allCharacters
@@ -280,6 +281,7 @@ class App extends Component {
         return itemEntry
       });
     currentCharacter.summary = `https://labs.maplestory.io/api/gms/latest/character/${currentCharacter.skin}/${(itemsWithEmotion.join(',') || 1102039)}/${currentCharacter.action}/${currentCharacter.frame}?showears=${currentCharacter.mercEars}&showLefEars=${currentCharacter.illiumEars}&resize=${currentCharacter.zoom}`
+    currentCharacter.centeredSummary = `https://labs.maplestory.io/api/gms/latest/character/center/${currentCharacter.skin}/${(itemsWithEmotion.join(',') || 1102039)}/${currentCharacter.action}/${currentCharacter.frame}?showears=${currentCharacter.mercEars}&showLefEars=${currentCharacter.illiumEars}&resize=${currentCharacter.zoom}`
 
     this.setState({
         characters: characters
@@ -300,7 +302,8 @@ class App extends Component {
       selectedItems: [],
       visible: true,
       position: {x: 0, y: 0},
-      summary: `https://labs.maplestory.io/api/gms/latest/character/2000/1102039/stand1/0?showears=false&showLefEars=false&resize=1`
+      summary: `https://labs.maplestory.io/api/gms/latest/character/2000/1102039/stand1/0?showears=false&showLefEars=false&resize=1`,
+      centeredSummary: `https://labs.maplestory.io/api/gms/latest/character/center/2000/1102039/stand1/0?showears=false&showLefEars=false&resize=1`
     }
   }
 
