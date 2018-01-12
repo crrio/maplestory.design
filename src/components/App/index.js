@@ -120,6 +120,7 @@ class App extends Component {
     this.state.pets.forEach((pet, index) => {
       if (!pet.id) pet.id = Date.now() + (index + 1)
       pet.type = 'pet'
+      pet.position = pet.position || { x: 0, y: 0}
       pet.summary = `https://labs.maplestory.io/api/gms/latest/pet/${pet.petId}/${pet.animation || 'stand0'}/${pet.frame || 0}/${_.values(pet.selectedItems).map(item => item.Id).join(',')}?resize=${pet.zoom || 1}`
     })
 
@@ -268,7 +269,8 @@ class App extends Component {
       animation: 'stand0',
       visible: true,
       frame: 0,
-      zoom: 1
+      zoom: 1,
+      position: { x:0, y:0 }
     }
   }
 
