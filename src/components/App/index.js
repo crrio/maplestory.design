@@ -9,10 +9,16 @@ import CharacterList from '../CharacterList'
 import 'react-notifications/lib/notifications.css';
 import {NotificationContainer, NotificationManager} from 'react-notifications';
 import RenderCanvas from '../RenderCanvas'
+import axios from 'axios'
 
 var creatingId = null;
 
 const throttledErrorNotification = _.throttle(NotificationManager.error.bind(NotificationManager), 1500, { leading:true })
+
+const mapPromise = axios.get(`https://labs.maplestory.io/api/gms/latest/map`)
+  .then(response => maps = response.data)
+
+let maps = []
 
 class App extends Component {
   constructor(props) {
@@ -80,6 +86,7 @@ class App extends Component {
       character.illiumEars = character.illiumEars || false
       character.selectedItems = character.selectedItems || []
       character.visible = character.visible || false
+      character.position = character.position || {x:0,y:0}
       const itemsWithEmotion = _.values(character.selectedItems)
       .filter(item => item.Id && (item.visible === undefined || item.visible))
       .map(item => {
@@ -103,6 +110,10 @@ class App extends Component {
       this.state.selectedIndex = false;
 
     this.updateBannerAdBlur()
+    if (maps.length != 0)
+      this.state.maps = maps
+    else
+      mapPromise.then(() => this.setState(maps))
   }
 
   updateBannerAdBlur() {
@@ -288,6 +299,7 @@ class App extends Component {
       illiumEars: false,
       selectedItems: [],
       visible: true,
+      position: {x: 0, y: 0},
       summary: `https://labs.maplestory.io/api/gms/latest/character/2000/1102039/stand1/0?showears=false&showLefEars=false&resize=1`
     }
   }
