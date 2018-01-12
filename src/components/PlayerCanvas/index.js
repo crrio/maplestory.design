@@ -25,7 +25,7 @@ class PlayerCanvas extends Component {
         onDrag={onUpdateRenderablePosition}
         position={renderable.position}
         >
-        <div>
+        <div style={{ transform: `translate(${renderable.position.x}px, ${renderable.position.y}px)` }}>
           <img
             src={imgLink}
             alt=''
@@ -35,7 +35,6 @@ class PlayerCanvas extends Component {
             onError={this.showError.bind(this)}
             style={{
               position: 'relative',
-              transform: `translate(${renderable.position.x}px, ${renderable.position.y}px)`,
               touchAction: 'none'
             }}
             />
