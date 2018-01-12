@@ -1,5 +1,4 @@
 .App {
-  overflow: hidden;
   font-family: Muli,sans-serif;
   width: 100%;
   bottom: 0px;
@@ -205,4 +204,38 @@ body > div:not(.tippy-popper){ /* kms, this freaking rule. :< */
 .notification-container .notification.notification-error:after, .notification-container .notification.notification-error:before {
   border-left-color: #bd362f;
   border-right-color: #bd362f;
+}
+
+.map-select-container {
+  width: 400px;
+  padding: 13px 0;
+  font-size: 16px;
+  position: relative;
+  z-index: 10001;
+}
+
+.map-select-container .VirtualizedSelectOption {
+  color: #333;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  line-height: 35px;
+  padding: 0 4px;
+  cursor: pointer;
+}
+
+.map-select-container .VirtualizedSelectOption:hover {
+  background: #eee;
+}
+
+.canvas-zoom {
+  display: flex;
+  width: 200px;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px;
+}
+
+.canvas-zoom span {
+  margin-right: 16px;
 }

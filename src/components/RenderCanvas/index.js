@@ -11,13 +11,15 @@ import RcTooltip from 'rc-tooltip'
 import Slider from 'rc-slider'
 import PlayerCanvas from '../PlayerCanvas'
 import Draggable, { DraggableCore } from 'react-draggable'
+import { NotificationManager } from 'react-notifications'
 
 class RenderCanvas extends Component {
   constructor(props) {
     super(props)
     this.state = {
       x: 0,
-      y: 0
+      y: 0,
+      childDragCount: 0
     }
 
     if (props.selectedRenderable !== undefined) {
@@ -34,7 +36,7 @@ class RenderCanvas extends Component {
 
   componentDidUpdate(prevProps) {
     if (prevProps.selectedRenderable === this.props.selectedRenderable) return
-    const { selectedRenderable } = this.props
+    const { selectedRenderable, mapId } = this.props
 
     const renderable = this.props.renderables[selectedRenderable]
     if (renderable)
@@ -42,16 +44,22 @@ class RenderCanvas extends Component {
   }
 
   render() {
-    const { renderables } = this.props
+    const { renderables, mapId, zoom } = this.props
+
+    const styleOptions = { transform: `translate(${this.state.x}px, ${this.state.y}px) scale(${zoom})` }
+
     return (
       <DraggableCore
         onDrag={(e, o) => {
-          if(!this.state.childDragging && e.target.classList.contains('canvas-characters'))
+          if(!this.state.childDragging && (e.target.classList.contains('canvas-characters') || e.target.classList.contains('map')))
             this.setState({ x: this.state.x + o.deltaX, y: this.state.y + o.deltaY })
         }}
         >
         <div className='canvas-characters' onClick={this.props.onClick}>
-          <div className='renderables-container' style={{ transform: `translate(${this.state.x}px, ${this.state.y}px)` }}>
+          <div className='renderables-container' style={styleOptions}>
+          {
+            mapId ? <img className='map' src={`https://labs.maplestory.io/api/gms/latest/map/${mapId}/render`} draggable={false} onClick={this.props.onClick} onError={this.mapLoadingError} /> : ''
+          }
           {
             renderables
               .filter(renderable => renderable.visible)
@@ -59,17 +67,20 @@ class RenderCanvas extends Component {
                 return (<PlayerCanvas
                   onStart={this.childDragging.bind(this)}
                   onStop={this.childStopDragging.bind(this)}
-                  onClick={() => {
-                    this.props.onClickRenderable(renderable)
-                  }}
+                  onClick={(function (){
+                    if (this.state.childDragCount === 0)
+                      this.props.onClickRenderable(renderable)
+                  }).bind(this)}
                   onUpdateRenderablePosition={(o,e) => {
+                    if (!e.deltaX && !e.deltaY) return
+                    this.setState({ childDragCount: this.state.childDragCount + 1 })
                     renderable.position = renderable.position || { x:0, y:0 }
                     if(Number.isNaN(renderable.position.x)) renderable.position.x = 0
                     if(Number.isNaN(renderable.position.y)) renderable.position.y = 0
                     this.props.onUpdateRenderable(renderable, {
                       position: {
-                        x: (renderable.position || {}).x + e.deltaX,
-                        y: (renderable.position || {}).y + e.deltaY
+                        x: (renderable.position || {}).x + (e.deltaX / zoom),
+                        y: (renderable.position || {}).y + (e.deltaY / zoom)
                       }
                     })
                   }}
@@ -84,7 +95,11 @@ class RenderCanvas extends Component {
     )
   }
 
-  childDragging() { this.setState({childDragging: true}) }
+  mapLoadingError() {
+    NotificationManager.warning(`There was an error rendering that map`, '', 10000)
+  }
+
+  childDragging() { this.setState({childDragging: true, childDragCount: 0}) }
   childStopDragging() { this.setState({childDragging: false}) }
 }
 

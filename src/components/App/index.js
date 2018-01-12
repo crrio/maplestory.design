@@ -6,19 +6,33 @@ import CharacterProperties from '../CharacterProperties'
 import _ from 'lodash'
 import IntroModal from '../IntroModal'
 import CharacterList from '../CharacterList'
-import 'react-notifications/lib/notifications.css';
-import {NotificationContainer, NotificationManager} from 'react-notifications';
+import 'react-notifications/lib/notifications.css'
+import {NotificationContainer, NotificationManager} from 'react-notifications'
 import RenderCanvas from '../RenderCanvas'
 import axios from 'axios'
+import VirtualizedSelect from 'react-virtualized-select'
+import 'react-select/dist/react-select.css'
+import createFilterOptions from 'react-select-fast-filter-options'
+import Slider from 'rc-slider'
+import RcTooltip from 'rc-tooltip'
 
 var creatingId = null;
 
 const throttledErrorNotification = _.throttle(NotificationManager.error.bind(NotificationManager), 1500, { leading:true })
 
 const mapPromise = axios.get(`https://labs.maplestory.io/api/gms/latest/map`)
-  .then(response => maps = response.data)
+  .then(response => {
+    maps = _.map(response.data, map => {
+      return {
+        label: [map.streetName, map.name].join(' - '),
+        value: map.id
+      }
+    })
+    mapsIndexed = createFilterOptions({options: maps})
+})
 
 let maps = []
+let mapsIndexed = null;
 
 class App extends Component {
   constructor(props) {
@@ -39,7 +53,10 @@ class App extends Component {
       illiumEars: localStorage['illiumEars'] == "true" || localStorage['illiumEars'] === true,
       characters: JSON.parse(localStorage['characters'] || 'false') || [false],
       pets: JSON.parse(localStorage['pets'] || 'false') || [],
-      selectedIndex: JSON.parse(localStorage['selectedIndex'] || 'false') || 0
+      selectedIndex: JSON.parse(localStorage['selectedIndex'] || 'false') || 0,
+      selectedMap: JSON.parse(localStorage['selectedMap'] || 'false') || null,
+      zoom: JSON.parse(localStorage['zoom'] || 'false') || 1,
+      mapPosition: {x: 0, y: 0}
     }
 
     if (this.state.selectedIndex < 0) this.state.selectedIndex = false;
@@ -62,7 +79,6 @@ class App extends Component {
 
     delete localStorage['selectedItems'];
     delete localStorage['skin'];
-    delete localStorage['zoom'];
     delete localStorage['frame'];
     delete localStorage['mercEars'];
     delete localStorage['illiumEars'];
@@ -123,7 +139,7 @@ class App extends Component {
   }
 
   render() {
-    const { characters, pets, selectedIndex, selectedItems, action, emotion, skin, isModalOpen, mercEars, illiumEars, zoom, frame, summary } = this.state
+    const { characters, pets, selectedIndex, isModalOpen, zoom, summary, selectedMap } = this.state
     this.updateBannerAdBlur()
 
     const renderables = characters.concat(pets)
@@ -136,11 +152,40 @@ class App extends Component {
             <span className="desc"><span className="alpha">Public Alpha</span></span>
           </span>
           <ul className="Nav-right">
+            <li>
+              <label className='canvas-zoom'>
+                <span>Zoom</span>
+                <Slider
+                  value={zoom || 1}
+                  min={0.25}
+                  max={2}
+                  step={0.25}
+                  handle={handle}
+                  onChange={this.changeZoom.bind(this)} />
+              </label>
+            </li>
+            <li>
+              <div className='map-select-container'>
+                <VirtualizedSelect
+                  filterOptions={mapsIndexed}
+                  isLoading={maps.length === 0}
+                  name='map-selection'
+                  searchable
+                  clearable
+                  simpleValue
+                  value={selectedMap}
+                  onChange={this.selectMap.bind(this)}
+                  options={maps}
+                  />
+              </div>
+            </li>
             <li><a href="//medium.com/crrio/tagged/maplestory-design" target="_blank" rel="noopener noreferrer">Blog</a></li>
             <li><a href="https://discord.gg/D65Grk9" target="_blank" rel="noopener noreferrer">Discord</a></li>
           </ul>
         </div>
         <RenderCanvas
+          zoom={zoom}
+          mapId={selectedMap}
           renderables={renderables}
           selectedRenderable={selectedIndex}
           onUpdateRenderable={this.updateRenderable.bind(this)}
@@ -173,6 +218,18 @@ class App extends Component {
     )
   }
 
+  changeZoom(newZoom) {
+    this.setState({ zoom: newZoom })
+    localStorage['zoom'] = newZoom
+  }
+
+  selectMap(mapId) {
+    this.setState({
+      selectedMap: mapId
+    })
+    localStorage['selectedMap'] = mapId
+  }
+
   updateRenderable(renderable, newProps) {
     if (renderable.type == 'pet') this.userUpdatePet(renderable, newProps)
     if (renderable.type == 'character') this.userUpdateCharacter(renderable, newProps)
@@ -193,8 +250,10 @@ class App extends Component {
 
   removePet(pet) {
     var pets = this.state.pets.filter(c => c != pet)
-    this.setState({ pets, selectedIndex: false }) // Unselect any pet in case we delete the last pet
+    this.setState({ pets, selectedIndex: false, zoom: 1 }) // Unselect any pet in case we delete the last pet
     localStorage['pets'] = JSON.stringify(pets)
+    localStorage['selectedIndex'] = false
+    localStorage['zoom'] = 1
   }
 
   getNewPet() {
@@ -221,8 +280,10 @@ class App extends Component {
 
   removeCharacter(character) {
     var characters = this.state.characters.filter(c => c != character)
-    this.setState({ characters, selectedIndex: false }) // Unselect any character in case we delete the last character
+    this.setState({ characters, selectedIndex: false, zoom: 1 }) // Unselect any character in case we delete the last character
     localStorage['characters'] = JSON.stringify(characters)
+    localStorage['selectedIndex'] = false
+    localStorage['zoom'] = 1
   }
 
   userUpdateSelectedRenderable(renderable) {
@@ -232,9 +293,11 @@ class App extends Component {
       if (selectedIndex != -1) selectedIndex += this.state.characters.length
     }
     this.setState({
-      selectedIndex
+      selectedIndex,
+      zoom: 1
     })
     localStorage['selectedIndex'] = selectedIndex
+    localStorage['zoom'] = 1
   }
 
   userUpdatePet(pet, newProps) {
@@ -376,5 +439,25 @@ class App extends Component {
     })
   }
 }
+
+const createSliderWithTooltip = Slider.createSliderWithTooltip;
+const Range = createSliderWithTooltip(Slider.Range);
+const Handle = Slider.Handle;
+
+const handle = (props) => {
+  const { value, dragging, index, ...restProps } = props;
+  return (
+    <RcTooltip
+      prefixCls="rc-slider-tooltip"
+      overlay={value}
+      visible={dragging}
+      placement="top"
+      style={{border: "solid 2px hsl("+value+", 53%, 53%)"}}
+      key={index}
+    >
+      <Handle value={value} {...restProps} />
+    </RcTooltip>
+  );
+};
 
 export default App

@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import './index.css'
-import Draggable from 'react-draggable'
+import Draggable, { DraggableCore } from 'react-draggable'
 import CharacterEntry from '../CharacterList/CharacterEntry'
 import { NotificationManager } from 'react-notifications'
 
@@ -19,7 +19,7 @@ class PlayerCanvas extends Component {
     if (summary.indexOf('?') !== -1) imgLink = summary + `&tryCount=${tryCount}`
     else imgLink = summary + `?tryCount=${tryCount}`
     return (
-      <Draggable
+      <DraggableCore
         onStart={onStart}
         onStop={onStop}
         onDrag={onUpdateRenderablePosition}
@@ -31,14 +31,16 @@ class PlayerCanvas extends Component {
             alt=''
             className='renderable-instance'
             draggable={false}
-            onClick={onClick.bind(this, renderable)}
+            onClick={onClick}
             onError={this.showError.bind(this)}
             style={{
-              position: 'relative'
+              position: 'relative',
+              transform: `translate(${renderable.position.x}px, ${renderable.position.y}px)`,
+              touchAction: 'none'
             }}
             />
         </div>
-        </Draggable>
+        </DraggableCore>
     )
   }
 
