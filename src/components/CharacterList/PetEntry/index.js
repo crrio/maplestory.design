@@ -48,7 +48,7 @@ class PetEntry extends Component {
   }
 
   render() {
-    const { pet, isSelected, canvasMode, ...otherProps } = this.props
+    const { pet, isSelected, canvasMode, onUpdatePet, onDeletePet, ...otherProps } = this.props
     return (
       <Tooltip html={this.customizePet(pet)} position={canvasMode ? undefined : 'bottom'} interactive={true} theme='light' distance={200} arrow={true}>
         <div className={'pet ' + (pet.visible ? 'disabled ' : 'enabled ') + (isSelected ? 'active' : 'inactive')} style={{backgroundImage: 'url('+pet.summary+')'}} {...otherProps}>&nbsp;</div>

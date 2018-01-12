@@ -1,6 +1,5 @@
 import React, { Component } from 'react'
 import './index.css'
-import PlayerCanvas from '../PlayerCanvas'
 import ItemListing from '../ItemListing'
 import EquippedItems from '../EquippedItems'
 import CharacterProperties from '../CharacterProperties'
@@ -9,8 +8,11 @@ import IntroModal from '../IntroModal'
 import CharacterList from '../CharacterList'
 import 'react-notifications/lib/notifications.css';
 import {NotificationContainer, NotificationManager} from 'react-notifications';
+import RenderCanvas from '../RenderCanvas'
 
 var creatingId = null;
+
+const throttledErrorNotification = _.throttle(NotificationManager.error.bind(NotificationManager), 1500, { leading:true })
 
 class App extends Component {
   constructor(props) {
@@ -97,7 +99,7 @@ class App extends Component {
       pet.summary = `https://labs.maplestory.io/api/gms/latest/pet/${pet.petId}/${pet.animation || 'stand0'}/${pet.frame || 0}/${_.values(pet.selectedItems).map(item => item.Id).join(',')}?resize=${pet.zoom || 1}`
     })
 
-    if ((this.state.selectedIndex + 1) > this.state.characters.length || !this.state.characters.length)
+    if ((this.state.selectedIndex + 1) > (this.state.characters.length + this.state.pets.length) || !this.state.characters.length)
       this.state.selectedIndex = false;
 
     this.updateBannerAdBlur()
@@ -126,15 +128,12 @@ class App extends Component {
             <li><a href="https://discord.gg/D65Grk9" target="_blank" rel="noopener noreferrer">Discord</a></li>
           </ul>
         </div>
-        <div className='canvas-characters' onClick={this.clickCanvas.bind(this)}>
-          {
-            renderables
-              .filter(renderable => renderable.visible)
-              .map(renderable => {
-                return (<PlayerCanvas renderable={renderable} summary={renderable.summary} key={'canvas' + renderable.id} onClick={this.userUpdateSelectedRenderable.bind(this, renderable)} />)
-              })
-          }
-        </div>
+        <RenderCanvas
+          renderables={renderables}
+          selectedRenderable={selectedIndex}
+          onUpdateRenderable={this.updateRenderable.bind(this)}
+          onClick={this.clickCanvas.bind(this)}
+          onClickRenderable={this.userUpdateSelectedRenderable.bind(this)}/>
         { (selectedIndex !== false) ? <ItemListing target={renderables[selectedIndex]} onItemSelected={this.userSelectedItem.bind(this)} /> : '' }
         <CharacterList
           renderables={renderables}
@@ -160,6 +159,11 @@ class App extends Component {
         <NotificationContainer />
       </div>
     )
+  }
+
+  updateRenderable(renderable, newProps) {
+    if (renderable.type == 'pet') this.userUpdatePet(renderable, newProps)
+    if (renderable.type == 'character') this.userUpdateCharacter(renderable, newProps)
   }
 
   clickCanvas(e) {
@@ -223,7 +227,7 @@ class App extends Component {
 
   userUpdatePet(pet, newProps) {
     if (pet.locked === true && newProps.locked === undefined) {
-      NotificationManager.error('Pet is locked and can not be modified', '', 1000)
+      throttledErrorNotification('Pet is locked and can not be modified', '', 1000)
       return;
     }
 
@@ -245,7 +249,7 @@ class App extends Component {
 
   userUpdateCharacter(character, newProps) {
     if (character.locked === true && newProps.locked === undefined) {
-      NotificationManager.error('Character is locked and can not be modified', '', 1000)
+      throttledErrorNotification('Character is locked and can not be modified', '', 1000)
       return;
     }
 

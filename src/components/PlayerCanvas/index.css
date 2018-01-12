@@ -1,4 +1,3 @@
-.canvas-characters > div {
-  width: 128px;
-  height: 128px;
+.renderable-instance {
+  transform: translate(-100%, -100%);
 }

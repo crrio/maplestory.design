@@ -59,7 +59,7 @@ class CharacterEntry extends Component {
   }
 
   render() {
-    const { character, isSelected, canvasMode, ...otherProps } = this.props
+    const { character, isSelected, canvasMode, onUpdateCharacter, onDeleteCharacter, ...otherProps } = this.props
     return (
       <Tooltip html={this.customizeCharacter(character)} position={canvasMode ? undefined : 'bottom'} interactive={true} theme='light' distance={450} arrow={true}>
         <div className={'character ' + (character.visible ? 'disabled ' : 'enabled ') + (isSelected ? 'active' : 'inactive')} style={{backgroundImage: 'url('+character.summary+')'}} {...otherProps}>&nbsp;</div>

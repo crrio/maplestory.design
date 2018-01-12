@@ -1,0 +1,7 @@
+.renderables-container {
+  position: relative;
+}
+
+.renderables-container > * {
+  position: absolute;
+}
