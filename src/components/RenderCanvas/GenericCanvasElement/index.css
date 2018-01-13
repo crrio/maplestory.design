@@ -1,3 +1,3 @@
 .selected-canvas-element {
-  /* TODO: Add a proper selected canvas element effect. */
+  -webkit-filter: drop-shadow(3px 3px 10px rgba(0, 0, 0, 0.6));
 }
