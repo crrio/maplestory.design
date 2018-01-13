@@ -241,7 +241,7 @@ class App extends Component {
 
   updateRenderable(renderable, newProps) {
     if (renderable.type == 'pet') this.userUpdatePet(renderable, newProps)
-    if (renderable.type == 'character') this.userUpdateCharacter(renderable, newProps)
+    if (renderable.type == 'character' || renderable.type === undefined) this.userUpdateCharacter(renderable, newProps)
   }
 
   clickCanvas(e) {
@@ -365,6 +365,7 @@ class App extends Component {
   getNewCharacter() {
     return {
       id: Date.now(),
+      type: 'character',
       action: 'stand1',
       emotion: 'default',
       skin: 2000,
