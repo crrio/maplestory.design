@@ -1,4 +1,3 @@
 .selected-canvas-element {
-  box-shadow: 0 0 16px black;
-  background: rgba(255, 255, 255, 0.5);
+  /* TODO: Add a proper selected canvas element effect. */
 }
