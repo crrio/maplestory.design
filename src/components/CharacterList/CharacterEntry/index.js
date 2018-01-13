@@ -61,7 +61,7 @@ class CharacterEntry extends Component {
   render() {
     const { character, isSelected, canvasMode, onUpdateCharacter, onDeleteCharacter, ...otherProps } = this.props
     return (
-      <Tooltip html={this.customizeCharacter(character)} delay={[100, 300]} position={canvasMode ? undefined : 'bottom'} interactive={true} theme='light' distance={480} arrow={true}>
+      <Tooltip html={this.customizeCharacter(character)} delay={[100, 300]} position={canvasMode ? undefined : 'bottom'} interactive={true} theme='light' distance={500} arrow={true}>
         <div
           className={'character ' + (character.visible ? 'disabled ' : 'enabled ') + (isSelected ? 'active' : 'inactive')}
           style={{
@@ -153,6 +153,10 @@ class CharacterEntry extends Component {
         <Toggle onChange={this.toggleFlipX.bind(this)} checked={character.flipX} />
       </label>
       <label>
+        <span>Foothold Snapping</span>
+        <Toggle onChange={this.toggleFHSnap.bind(this)} checked={character.fhSnap} />
+      </label>
+      <label>
         <span>Lock</span>
         <Toggle onChange={this.toggleLock.bind(this)} checked={character.locked} />
       </label>
@@ -182,6 +186,10 @@ class CharacterEntry extends Component {
         </a>
       </div>
     </div>)
+  }
+
+  toggleFHSnap(e) {
+    this.props.onUpdateCharacter(this.props.character, { fhSnap: !this.props.character.fhSnap })
   }
 
   toggleFlipX(e) {

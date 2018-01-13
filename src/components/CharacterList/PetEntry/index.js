@@ -114,10 +114,18 @@ class PetEntry extends Component {
         <Toggle onChange={this.toggleFlipX.bind(this)} checked={pet.flipX} />
       </label>
       <label>
+        <span>Foothold Snapping</span>
+        <Toggle onChange={this.toggleFHSnap.bind(this)} checked={pet.fhSnap} />
+      </label>
+      <label>
         <span>Lock</span>
         <Toggle onChange={this.toggleLock.bind(this)} checked={pet.locked} />
       </label>
     </div>)
+  }
+
+  toggleFHSnap(e) {
+    this.props.onUpdateCharacter(this.props.pet, { fhSnap: !this.props.pet.fhSnap })
   }
 
   toggleFlipX(e) {

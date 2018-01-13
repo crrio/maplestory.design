@@ -166,7 +166,7 @@ class RenderCanvas extends Component {
     let { x, y } = renderable.position
     x = (cursorX / zoom);
     y = (cursorY / zoom);
-    if (footholds) {
+    if (footholds && renderable.fhSnap) {
       const validFootholds = footholds.filter(fh => {
         const isVertical = fh.x1 == fh.x2
         const isWithin = (fh.x1 < x && fh.x2 > x) || (fh.x2 < x && fh.x1 > x)

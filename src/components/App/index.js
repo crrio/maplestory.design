@@ -278,6 +278,7 @@ class App extends Component {
       visible: true,
       frame: 0,
       zoom: 1,
+      fhSnap: true,
       position: { x:0, y:0 }
     }
   }
@@ -376,6 +377,7 @@ class App extends Component {
       selectedItems: [],
       visible: true,
       position: {x: 0, y: 0},
+      fhSnap: true,
       summary: `https://labs.maplestory.io/api/gms/latest/character/2000/1102039/stand1/0?showears=false&showLefEars=false&resize=1`,
       centeredSummary: `https://labs.maplestory.io/api/gms/latest/character/center/2000/1102039/stand1/0?showears=false&showLefEars=false&resize=1`
     }
