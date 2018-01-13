@@ -57,6 +57,7 @@ class CharacterCanvasElement extends Component {
 
   render() {
     const { character, onUpdateRenderablePosition, summary, onStart, onStop, onClick, selected } = this.props
+    const { zoom } = character
     const { details } = this.state
     return (
       <DraggableCore
@@ -65,7 +66,7 @@ class CharacterCanvasElement extends Component {
         onDrag={onUpdateRenderablePosition}
         position={character.position}
         >
-        <div className={selected ? 'selected-canvas-element' : ''} style={{ transform: `translate(${character.position.x}px, ${character.position.y}px) translate(${details ? -details.item2.feetCenter.x : 0}px, ${details ? -details.item2.feetCenter.y : 0}px)` }}>
+        <div className={selected ? 'selected-canvas-element' : ''} style={{ transform: `translate(${character.position.x}px, ${character.position.y}px) translate(${details ? -(details.item2.feetCenter.x * zoom) : 0}px, ${details ? -(details.item2.feetCenter.y * zoom) : 0}px)` }}>
          {
             details ? (<img
               src={character.summary}
