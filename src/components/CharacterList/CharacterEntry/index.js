@@ -79,6 +79,10 @@ class CharacterEntry extends Component {
         <a href="#" className='btn bg-red text-white right' onClick={this.deleteCharacter.bind(this)}>Delete Character</a>
       </div>
       <label>
+        <span>Name</span>
+        <input type='text' value={character.name} onChange={this.changeName.bind(this)} />
+      </label>
+      <label>
         <span>Facial Expression</span>
         <select disabled={!character.selectedItems.Face} onChange={this.changeEmotion.bind(this)} value={character.emotion}>
           {
@@ -154,7 +158,7 @@ class CharacterEntry extends Component {
       </label>
       <label>
         <span>Foothold Snapping</span>
-        <Toggle onChange={this.toggleFHSnap.bind(this)} checked={character.fhSnap} />
+        <Toggle onChange={this.toggleFHSnap.bind(this)} checked={character.fhSnap || false} />
       </label>
       <label>
         <span>Lock</span>
@@ -186,6 +190,10 @@ class CharacterEntry extends Component {
         </a>
       </div>
     </div>)
+  }
+
+  changeName(e) {
+    this.props.onUpdateCharacter(this.props.character, { name: e.target.value })
   }
 
   toggleFHSnap(e) {

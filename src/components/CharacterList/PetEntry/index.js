@@ -115,7 +115,7 @@ class PetEntry extends Component {
       </label>
       <label>
         <span>Foothold Snapping</span>
-        <Toggle onChange={this.toggleFHSnap.bind(this)} checked={pet.fhSnap} />
+        <Toggle onChange={this.toggleFHSnap.bind(this)} checked={pet.fhSnap || false} />
       </label>
       <label>
         <span>Lock</span>

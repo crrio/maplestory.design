@@ -6,11 +6,20 @@
 .character-customizeable-options > label {
   display: flex;
   justify-content: space-between;
+  align-items: center;
   padding: 4px 0;
 }
 
 .character-customizeable-options > label > *:first-child {
   margin-right: 8px;
+}
+
+.character-customizeable-options input {
+  border: 0px none transparent;
+  box-shadow: 0 0 2px rgb(72, 138, 199);
+  padding: 4px;
+  font-size: 14px;
+  border-radius: 2px;
 }
 
 .character-customizeable-options select {
