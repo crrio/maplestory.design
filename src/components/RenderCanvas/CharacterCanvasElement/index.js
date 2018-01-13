@@ -33,7 +33,7 @@ class CharacterCanvasElement extends Component {
     });
 
     const { tryCount } = this.state
-    const link = `https://labs.maplestory.io/api/gms/latest/character/detailed/${character.skin}/${(itemsWithEmotion.join(',') || 1102039)}/${character.action}/${character.frame}?showears=${character.mercEars}&showLefEars=${character.illiumEars}&resize=${character.zoom}&tryCount=${tryCount}`
+    const link = `https://labs.maplestory.io/api/gms/latest/character/detailed/${character.skin}/${(itemsWithEmotion.join(',') || 1102039)}/${character.action}/${character.frame}?showears=${character.mercEars}&showLefEars=${character.illiumEars}&resize=${character.zoom}&tryCount=${tryCount}&flipX=${character.flipX}`
 
     if (isSync) {
       this.state.linkUsed = link
@@ -60,7 +60,7 @@ class CharacterCanvasElement extends Component {
     const { zoom } = character
     const { details } = this.state
     const styling = {
-      transform: `translate(${character.position.x}px, ${character.position.y}px) translate(${details ? -(details.item2.feetCenter.x * zoom) : 0}px, ${details ? -(details.item2.feetCenter.y) : 0}px)`
+      transform: `translate(${character.position.x}px, ${character.position.y}px) translate(${details ? -(details.item2.feetCenter.x) : 0}px, ${details ? -(details.item2.feetCenter.y) : 0}px)`
     }
 
     const imgStyle = {
