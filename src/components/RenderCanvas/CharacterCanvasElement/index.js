@@ -59,6 +59,22 @@ class CharacterCanvasElement extends Component {
     const { character, onUpdateRenderablePosition, summary, onStart, onStop, onClick, selected } = this.props
     const { zoom } = character
     const { details } = this.state
+    const styling = {
+      transform: `translate(${character.position.x}px, ${character.position.y}px) translate(0, ${details ? -(details.item2.feetCenter.y * zoom) : 0}px)`
+    }
+
+    if (character.flipX) {
+      styling.transform = styling.transform + ' scaleX(-1)' +
+      `translate(calc(100% - ${details ? (details.item2.feetCenter.x * zoom) : 0}px), 0)`
+    } else {
+      styling.transform = styling.transform + `translate(${details ? -(details.item2.feetCenter.x * zoom) : 0}px, 0)`
+    }
+
+    const imgStyle = {
+      position: 'relative',
+      touchAction: 'none'
+    }
+
     return (
       <DraggableCore
         onStart={onStart}
@@ -66,7 +82,7 @@ class CharacterCanvasElement extends Component {
         onDrag={onUpdateRenderablePosition}
         position={character.position}
         >
-        <div className={selected ? 'selected-canvas-element' : ''} style={{ transform: `translate(${character.position.x}px, ${character.position.y}px) translate(${details ? -(details.item2.feetCenter.x * zoom) : 0}px, ${details ? -(details.item2.feetCenter.y * zoom) : 0}px)` }}>
+        <div className={selected ? 'selected-canvas-element' : ''} style={styling}>
          {
             details ? (<img
               src={character.summary}
@@ -75,11 +91,7 @@ class CharacterCanvasElement extends Component {
               draggable={false}
               onClick={onClick}
               onError={this.showError.bind(this)}
-              style={{
-                position: 'relative',
-                touchAction: 'none',
-                transform: character.flipX ? 'scaleX(-1)' : ''
-              }}
+              style={imgStyle}
               />) : <div className='loading-character'>&nbsp;</div>
          }
         </div>
