@@ -50,8 +50,14 @@ class PetEntry extends Component {
   render() {
     const { pet, isSelected, canvasMode, onUpdatePet, onDeletePet, ...otherProps } = this.props
     return (
-      <Tooltip html={this.customizePet(pet)} position={canvasMode ? undefined : 'bottom'} interactive={true} theme='light' distance={200} arrow={true}>
-        <div className={'pet ' + (pet.visible ? 'disabled ' : 'enabled ') + (isSelected ? 'active' : 'inactive')} style={{backgroundImage: 'url('+pet.summary+')'}} {...otherProps}>&nbsp;</div>
+      <Tooltip html={this.customizePet(pet)} delay={[100, 300]} position={canvasMode ? undefined : 'bottom'} interactive={true} theme='light' distance={250} arrow={true}>
+        <div
+          className={'pet ' + (pet.visible ? 'disabled ' : 'enabled ') + (isSelected ? 'active' : 'inactive')}
+          style={{
+            backgroundImage: 'url('+pet.summary+')',
+            transform: pet.flipX ? 'scaleX(-1)' : ''
+          }}
+          {...otherProps}>&nbsp;</div>
       </Tooltip>
     )
   }
@@ -104,10 +110,18 @@ class PetEntry extends Component {
         <Toggle onChange={this.toggleVisibility.bind(this)} checked={pet.visible} />
       </label>
       <label>
+        <span>Flip Horizontal</span>
+        <Toggle onChange={this.toggleFlipX.bind(this)} checked={pet.flipX} />
+      </label>
+      <label>
         <span>Lock</span>
         <Toggle onChange={this.toggleLock.bind(this)} checked={pet.locked} />
       </label>
     </div>)
+  }
+
+  toggleFlipX(e) {
+    this.props.onUpdatePet(this.props.pet, { flipX: !this.props.pet.flipX })
   }
 
   deletePet() {

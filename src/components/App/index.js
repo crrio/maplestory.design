@@ -60,6 +60,7 @@ class App extends Component {
     }
 
     if (this.state.selectedIndex < 0) this.state.selectedIndex = false;
+    this.state.focusRenderable = this.state.selectedIndex
 
     // If we have a legacy character, upgrade to latest now
     if (!_.isEmpty(this.state.selectedItems || {})) {
@@ -140,7 +141,7 @@ class App extends Component {
   }
 
   render() {
-    const { characters, pets, selectedIndex, isModalOpen, zoom, summary, selectedMap } = this.state
+    const { characters, pets, selectedIndex, isModalOpen, zoom, summary, selectedMap, focusRenderable } = this.state
     this.updateBannerAdBlur()
 
     const renderables = characters.concat(pets)
@@ -189,6 +190,7 @@ class App extends Component {
           mapId={selectedMap}
           renderables={renderables}
           selectedRenderable={selectedIndex}
+          focusRenderable={focusRenderable === undefined ? selectedIndex : focusRenderable}
           onUpdateRenderable={this.updateRenderable.bind(this)}
           onClick={this.clickCanvas.bind(this)}
           onClickRenderable={this.userUpdateSelectedRenderable.bind(this)}/>
@@ -200,7 +202,13 @@ class App extends Component {
           onAddPet={this.addPet.bind(this)}
           onDeleteCharacter={this.removeCharacter.bind(this)}
           onDeletePet={this.removePet.bind(this)}
-          onUpdateSelectedCharacter={this.userUpdateSelectedRenderable.bind(this)}
+          onUpdateSelectedCharacter={function (renderable) {
+            this.userUpdateSelectedRenderable(renderable, () => {
+              this.setState({
+                focusRenderable: this.state.selectedIndex
+              })
+            })
+          }.bind(this)}
           onUpdateCharacter={this.userUpdateCharacter.bind(this)}
           onUpdatePet={this.userUpdatePet.bind(this) }/>
         {
@@ -237,7 +245,7 @@ class App extends Component {
   }
 
   clickCanvas(e) {
-    if (e.target == e.currentTarget && (this.state.characters.length + this.state.pets.length) > 1) {
+    if (e.target === e.currentTarget && (this.state.characters.length + this.state.pets.length) > 1) {
       this.setState({ selectedIndex: false })
       localStorage['selectedIndex'] = 'false'
     }
@@ -288,7 +296,7 @@ class App extends Component {
     localStorage['zoom'] = 1
   }
 
-  userUpdateSelectedRenderable(renderable) {
+  userUpdateSelectedRenderable(renderable, callback) {
     let selectedIndex = this.state.characters.indexOf(renderable)
     if (selectedIndex == -1) {
       selectedIndex = this.state.pets.indexOf(renderable)
@@ -297,7 +305,7 @@ class App extends Component {
     this.setState({
       selectedIndex,
       zoom: 1
-    })
+    }, callback)
     localStorage['selectedIndex'] = selectedIndex
     localStorage['zoom'] = 1
   }

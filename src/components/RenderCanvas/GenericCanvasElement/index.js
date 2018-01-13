@@ -1,10 +1,9 @@
 import React, { Component } from 'react'
 import './index.css'
 import Draggable, { DraggableCore } from 'react-draggable'
-import CharacterEntry from '../CharacterList/CharacterEntry'
 import { NotificationManager } from 'react-notifications'
 
-class PlayerCanvas extends Component {
+class GenericCanvasElement extends Component {
   constructor(props) {
     super(props)
 
@@ -13,7 +12,7 @@ class PlayerCanvas extends Component {
     }
   }
   render() {
-    const { renderable, onUpdateRenderablePosition, summary, onStart, onStop, onClick } = this.props
+    const { renderable, onUpdateRenderablePosition, summary, onStart, onStop, onClick, selected } = this.props
     const { tryCount } = this.state
     let imgLink = summary
     if (summary.indexOf('?') !== -1) imgLink = summary + `&tryCount=${tryCount}`
@@ -25,7 +24,7 @@ class PlayerCanvas extends Component {
         onDrag={onUpdateRenderablePosition}
         position={renderable.position}
         >
-        <div style={{ transform: `translate(${renderable.position.x}px, ${renderable.position.y}px)` }}>
+        <div className={'flex' + (selected ? ' selected-canvas-element' : '')} style={{ transform: `translate(${renderable.position.x}px, ${renderable.position.y}px) translate(-50%, -100%)` }}>
           <img
             src={imgLink}
             alt=''
@@ -35,7 +34,8 @@ class PlayerCanvas extends Component {
             onError={this.showError.bind(this)}
             style={{
               position: 'relative',
-              touchAction: 'none'
+              touchAction: 'none',
+              transform: renderable.flipX ? 'scaleX(-1)' : ''
             }}
             />
         </div>
@@ -56,4 +56,4 @@ class PlayerCanvas extends Component {
   }
 }
 
-export default PlayerCanvas
+export default GenericCanvasElement

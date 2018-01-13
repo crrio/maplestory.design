@@ -61,8 +61,14 @@ class CharacterEntry extends Component {
   render() {
     const { character, isSelected, canvasMode, onUpdateCharacter, onDeleteCharacter, ...otherProps } = this.props
     return (
-      <Tooltip html={this.customizeCharacter(character)} position={canvasMode ? undefined : 'bottom'} interactive={true} theme='light' distance={450} arrow={true}>
-        <div className={'character ' + (character.visible ? 'disabled ' : 'enabled ') + (isSelected ? 'active' : 'inactive')} style={{backgroundImage: 'url('+character.summary+')'}} {...otherProps}>&nbsp;</div>
+      <Tooltip html={this.customizeCharacter(character)} delay={[100, 300]} position={canvasMode ? undefined : 'bottom'} interactive={true} theme='light' distance={480} arrow={true}>
+        <div
+          className={'character ' + (character.visible ? 'disabled ' : 'enabled ') + (isSelected ? 'active' : 'inactive')}
+          style={{
+            backgroundImage: 'url('+character.summary+')',
+            transform: character.flipX ? 'scaleX(-1)' : ''
+          }}
+          {...otherProps}>&nbsp;</div>
       </Tooltip>
     )
   }
@@ -143,6 +149,10 @@ class CharacterEntry extends Component {
         <Toggle onChange={this.toggleVisibility.bind(this)} checked={character.visible} />
       </label>
       <label>
+        <span>Flip Horizontal</span>
+        <Toggle onChange={this.toggleFlipX.bind(this)} checked={character.flipX} />
+      </label>
+      <label>
         <span>Lock</span>
         <Toggle onChange={this.toggleLock.bind(this)} checked={character.locked} />
       </label>
@@ -172,6 +182,10 @@ class CharacterEntry extends Component {
         </a>
       </div>
     </div>)
+  }
+
+  toggleFlipX(e) {
+    this.props.onUpdateCharacter(this.props.character, { flipX: !this.props.character.flipX })
   }
 
   deleteCharacter() {
