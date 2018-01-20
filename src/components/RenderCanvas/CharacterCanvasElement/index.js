@@ -28,7 +28,6 @@ class CharacterCanvasElement extends Component {
     .filter(item => item.Id && (item.visible === undefined || item.visible))
     .map(item => {
       var itemEntry = item.Id >= 20000 && item.Id <= 29999 ? `${item.Id}:${character.emotion}` : item.Id
-      if (item.hue) itemEntry = itemEntry + ';' + item.hue
       return itemEntry
     });
 
