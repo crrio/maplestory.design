@@ -125,7 +125,7 @@ class PetEntry extends Component {
   }
 
   toggleFHSnap(e) {
-    this.props.onUpdateCharacter(this.props.pet, { fhSnap: !this.props.pet.fhSnap })
+    this.props.onUpdatePet(this.props.pet, { fhSnap: !this.props.pet.fhSnap })
   }
 
   toggleFlipX(e) {
