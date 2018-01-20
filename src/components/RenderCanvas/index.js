@@ -30,8 +30,8 @@ class RenderCanvas extends Component {
       if (renderable){
         this.state = {
           ...this.state,
-          x: -renderable.position.x,
-          y: -renderable.position.y
+          x: Math.round(-renderable.position.x),
+          y: Math.round(-renderable.position.y)
         }
       }
     }
@@ -66,8 +66,8 @@ class RenderCanvas extends Component {
             if (renderable)
               stateChanges = {
                 ...stateChanges,
-                x: -renderable.position.x + (mapData ? mapData.graphicBounds.x : 0),
-                y: -renderable.position.y + (mapData ? mapData.graphicBounds.y : 0)
+                x: Math.round(-renderable.position.x + (mapData ? mapData.graphicBounds.x : 0)),
+                y: Math.round(-renderable.position.y + (mapData ? mapData.graphicBounds.y : 0))
               }
           }
 
@@ -81,24 +81,28 @@ class RenderCanvas extends Component {
     const { mapData } = this.state
     const mapOrigin = {}
 
-    const styleOptions = { transform: `translate(${this.state.x}px, ${this.state.y}px) scale(${zoom})` }
+    const styleOptions = { transform: `translate(${this.state.x}px, ${this.state.y}px) translateZ(0)` }
+    if (zoom != 1) styleOptions.transform = styleOptions.transform + ` scale(${zoom})`
 
     if (mapData) mapOrigin.transform = `translate(${-mapData.graphicBounds.x}px, ${-mapData.graphicBounds.y}px)`
 
     return (
       <DraggableCore
         onDrag={(e, o) => {
+          console.log(e)
           if(!this.state.childDragging && (e.target.classList.contains('canvas-characters') || e.target.classList.contains('map')))
-            this.setState({ x: this.state.x + o.deltaX, y: this.state.y + o.deltaY })
+            this.setState({ x: this.state.x + o.deltaX, y: this.state.y + o.deltaY, dragCount: (this.state.dragCount || 0) + 1 })
         }}
+        onStart={(function() { this.setState({ dragging: true, dragCount: 0 }); console.log('dragging') }).bind(this)}
+        onStop={(function() { this.setState({ dragging: false }); console.log('done') }).bind(this)}
         >
-        <div className='canvas-characters' onClick={this.props.onClick}>
-          <div className='renderables-container' style={styleOptions}>
+        <div className={'canvas-characters' + (this.state.dragging ? ' dragging' : '')} onClick={this.clickCanvas.bind(this)} style={{ backgroundPositionX: `${this.state.x}`, backgroundPositionY: `${this.state.y}` }}>
+          <div className={'renderables-container' + (this.state.dragging ? ' dragging' : '')} style={styleOptions}>
           {
-            mapId ? <img className='map' src={`https://labs.maplestory.io/api/gms/latest/map/${mapId}/render`} draggable={false} onClick={this.props.onClick} onError={this.mapLoadingError} /> : ''
+            mapId ? <img className='map' src={`https://labs.maplestory.io/api/gms/latest/map/${mapId}/render`} draggable={false} onClick={this.clickCanvas.bind(this)} onError={this.mapLoadingError} /> : ''
           }
           {
-            (mapData && renderFootholds) ? <svg className='map' onClick={this.props.onClick} width={mapData.graphicBounds.width} height={mapData.graphicBounds.height} viewBox={`${mapData.graphicBounds.x} ${mapData.graphicBounds.y} ${mapData.graphicBounds.width} ${mapData.graphicBounds.height}`}>{
+            (mapData && renderFootholds) ? <svg className='map' onClick={this.clickCanvas.bind(this)} width={mapData.graphicBounds.width} height={mapData.graphicBounds.height} viewBox={`${mapData.graphicBounds.x} ${mapData.graphicBounds.y} ${mapData.graphicBounds.width} ${mapData.graphicBounds.height}`}>{
               ((_.values(mapData.footholds) || []).map((fh, i) =>
                 <line x1={fh.x1} x2={fh.x2} y1={fh.y1} y2={fh.y2} strokeWidth='2' stroke='black' key={'svg' + i} />
               ))
@@ -117,6 +121,11 @@ class RenderCanvas extends Component {
         </div>
       </DraggableCore>
     )
+  }
+
+  clickCanvas(e) {
+    if (!this.state.dragCount)
+      this.props.onClick(e)
   }
 
   getRenderableElement(renderable, index) {
@@ -164,8 +173,8 @@ class RenderCanvas extends Component {
     if(Number.isNaN(renderable.position.x)) renderable.position.x = 0
     if(Number.isNaN(renderable.position.y)) renderable.position.y = 0
     let { x, y } = renderable.position
-    x = (cursorX / zoom);
-    y = (cursorY / zoom);
+    x = Math.round(cursorX / zoom);
+    y = Math.round(cursorY / zoom);
     if (footholds && renderable.fhSnap) {
       const validFootholds = footholds.filter(fh => {
         const isVertical = fh.x1 == fh.x2

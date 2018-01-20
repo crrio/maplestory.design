@@ -32,7 +32,7 @@ class CharacterList extends Component {
                 />);
             }
           })}
-          <Tooltip html={this.renderAddList()} position='bottom' theme='light' interactive={true} distance={50}>
+          <Tooltip html={this.renderAddList()} position='bottom' theme='light' interactive={true} >
             <div className='add'><span>+</span>
           </div></Tooltip>
         </div>
@@ -42,8 +42,9 @@ class CharacterList extends Component {
 
   renderAddList() {
     return (<ul className='add-possible'>
-      <li onClick={this.props.onAddPet}>Add Pet</li>
-      <li onClick={this.props.onAddCharacter}>Add Character</li>
+      <li>Add:</li>
+      <li className='clickable' onClick={this.props.onAddPet}>Pet</li>
+      <li className='clickable' onClick={this.props.onAddCharacter}>Character</li>
     </ul>);
   }
 
