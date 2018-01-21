@@ -59,7 +59,7 @@ class App extends Component {
       zoom: JSON.parse(localStorage['zoom'] || 'false') || 1,
       mapPosition: {x: 0, y: 0},
       backgroundColor: JSON.parse(localStorage['backgroundColor'] || false) || {"hsl":{"h":0,"s":0,"l":0,"a":0},"hex":"transparent","rgb":{"r":0,"g":0,"b":0,"a":0},"hsv":{"h":0,"s":0,"v":0,"a":0},"oldHue":0,"source":"rgb"},
-      colorPickerOpen: true
+      colorPickerOpen: false
     }
 
     if (this.state.selectedIndex < 0) this.state.selectedIndex = false;
