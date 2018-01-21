@@ -77,7 +77,7 @@ class RenderCanvas extends Component {
   }
 
   render() {
-    const { renderables, mapId, zoom } = this.props
+    const { renderables, mapId, zoom, backgroundColor } = this.props
     const { mapData } = this.state
     const mapOrigin = {}
 
@@ -87,39 +87,40 @@ class RenderCanvas extends Component {
     if (mapData) mapOrigin.transform = `translate(${-mapData.graphicBounds.x}px, ${-mapData.graphicBounds.y}px)`
 
     return (
-      <DraggableCore
-        onDrag={(e, o) => {
-          console.log(e)
-          if(!this.state.childDragging && (e.target.classList.contains('canvas-characters') || e.target.classList.contains('map')))
-            this.setState({ x: this.state.x + o.deltaX, y: this.state.y + o.deltaY, dragCount: (this.state.dragCount || 0) + 1 })
-        }}
-        onStart={(function() { this.setState({ dragging: true, dragCount: 0 }); console.log('dragging') }).bind(this)}
-        onStop={(function() { this.setState({ dragging: false }); console.log('done') }).bind(this)}
-        >
-        <div className={'canvas-characters' + (this.state.dragging ? ' dragging' : '')} onClick={this.clickCanvas.bind(this)} style={{ backgroundPositionX: `${this.state.x}`, backgroundPositionY: `${this.state.y}` }}>
-          <div className={'renderables-container' + (this.state.dragging ? ' dragging' : '')} style={styleOptions}>
-          {
-            mapId ? <img className='map' src={`https://labs.maplestory.io/api/gms/latest/map/${mapId}/render`} draggable={false} onClick={this.clickCanvas.bind(this)} onError={this.mapLoadingError} /> : ''
-          }
-          {
-            (mapData && renderFootholds) ? <svg className='map' onClick={this.clickCanvas.bind(this)} width={mapData.graphicBounds.width} height={mapData.graphicBounds.height} viewBox={`${mapData.graphicBounds.x} ${mapData.graphicBounds.y} ${mapData.graphicBounds.width} ${mapData.graphicBounds.height}`}>{
-              ((_.values(mapData.footholds) || []).map((fh, i) =>
-                <line x1={fh.x1} x2={fh.x2} y1={fh.y1} y2={fh.y2} strokeWidth='2' stroke='black' key={'svg' + i} />
-              ))
-            }</svg> : ''
-          }
-            <div style={mapOrigin} className='character-container'>
-              {
-                renderables
-                  .filter(renderable => renderable.visible)
-                  .map((renderable, i) => {
-                    return this.getRenderableElement(renderable, i)
-                  })
-              }
+      <div className={'canvas-bg' + (this.state.dragging ? ' dragging' : '')} style={{ backgroundPositionX: `${this.state.x}px`, backgroundPositionY: `${this.state.y}px` }}>
+        <DraggableCore
+          onDrag={(e, o) => {
+            if(!this.state.childDragging && (e.target.classList.contains('canvas-characters') || e.target.classList.contains('map')))
+              this.setState({ x: this.state.x + o.deltaX, y: this.state.y + o.deltaY, dragCount: (this.state.dragCount || 0) + 1 })
+          }}
+          onStart={(function() { this.setState({ dragging: true, dragCount: 0 }); console.log('dragging') }).bind(this)}
+          onStop={(function() { this.setState({ dragging: false }); console.log('done') }).bind(this)}
+          >
+          <div className={'canvas-characters' + (this.state.dragging ? ' dragging' : '')} onClick={this.clickCanvas.bind(this)} style={{ backgroundColor }}>
+            <div className={'renderables-container' + (this.state.dragging ? ' dragging' : '')} style={styleOptions}>
+            {
+              mapId ? <img className='map' src={`https://labs.maplestory.io/api/gms/latest/map/${mapId}/render`} draggable={false} onClick={this.clickCanvas.bind(this)} onError={this.mapLoadingError} /> : ''
+            }
+            {
+              (mapData && renderFootholds) ? <svg className='map' onClick={this.clickCanvas.bind(this)} width={mapData.graphicBounds.width} height={mapData.graphicBounds.height} viewBox={`${mapData.graphicBounds.x} ${mapData.graphicBounds.y} ${mapData.graphicBounds.width} ${mapData.graphicBounds.height}`}>{
+                ((_.values(mapData.footholds) || []).map((fh, i) =>
+                  <line x1={fh.x1} x2={fh.x2} y1={fh.y1} y2={fh.y2} strokeWidth='2' stroke='black' key={'svg' + i} />
+                ))
+              }</svg> : ''
+            }
+              <div style={mapOrigin} className='character-container'>
+                {
+                  renderables
+                    .filter(renderable => renderable.visible)
+                    .map((renderable, i) => {
+                      return this.getRenderableElement(renderable, i)
+                    })
+                }
+              </div>
             </div>
           </div>
-        </div>
-      </DraggableCore>
+        </DraggableCore>
+      </div>
     )
   }
 

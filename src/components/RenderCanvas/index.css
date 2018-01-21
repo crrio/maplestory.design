@@ -1,5 +1,9 @@
-.canvas-characters:not(.dragging) {
+.canvas-bg:not(.dragging) {
   transition: background-position-x 0.5s, background-position-y 0.5s;
+}
+
+.canvas-bg, .bg-color-picker {
+  background: url('./graphy.png');
 }
 
 .renderables-container {

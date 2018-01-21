@@ -11,6 +11,7 @@
     "rc-slider": "^8.6.0",
     "rc-tooltip": "^3.7.0",
     "react": "^15.5.4",
+    "react-color": "^2.13.8",
     "react-dom": "^15.5.4",
     "react-draggable": "^3.0.4",
     "react-modal": "^1.9.4",

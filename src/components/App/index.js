@@ -15,6 +15,7 @@ import 'react-select/dist/react-select.css'
 import createFilterOptions from 'react-select-fast-filter-options'
 import Slider from 'rc-slider'
 import RcTooltip from 'rc-tooltip'
+import { SketchPicker } from 'react-color'
 
 var creatingId = null;
 
@@ -56,7 +57,9 @@ class App extends Component {
       selectedIndex: JSON.parse(localStorage['selectedIndex'] || 'false') || 0,
       selectedMap: JSON.parse(localStorage['selectedMap'] || 'false') || null,
       zoom: JSON.parse(localStorage['zoom'] || 'false') || 1,
-      mapPosition: {x: 0, y: 0}
+      mapPosition: {x: 0, y: 0},
+      backgroundColor: JSON.parse(localStorage['backgroundColor'] || false) || {"hsl":{"h":0,"s":0,"l":0,"a":0},"hex":"transparent","rgb":{"r":0,"g":0,"b":0,"a":0},"hsv":{"h":0,"s":0,"v":0,"a":0},"oldHue":0,"source":"rgb"},
+      colorPickerOpen: true
     }
 
     if (this.state.selectedIndex < 0) this.state.selectedIndex = false;
@@ -132,6 +135,22 @@ class App extends Component {
       this.state.maps = maps
     else
       mapPromise.then(() => this.setState(maps))
+
+    document.addEventListener("click", this.handleClick.bind(this))
+  }
+
+  handleClick(e) {
+    let element = e.target
+    let found = false
+    while (this.state.colorPickerOpen && !found && (element = element.parentElement) != null) {
+      if (element.className != 'bg-color-picker-container') continue;
+      else {
+        found = true;
+        console.log('found bg-color-picker-container')
+      }
+    }
+
+    if (!found && this.state.colorPickerOpen) this.setState({ colorPickerOpen: false })
   }
 
   updateBannerAdBlur() {
@@ -140,8 +159,21 @@ class App extends Component {
   }
 
   render() {
-    const { characters, pets, selectedIndex, isModalOpen, zoom, summary, selectedMap, focusRenderable } = this.state
+    const {
+      characters,
+      pets,
+      selectedIndex,
+      isModalOpen,
+      zoom,
+      summary,
+      selectedMap,
+      focusRenderable,
+      backgroundColor,
+      colorPickerOpen
+    } = this.state
     this.updateBannerAdBlur()
+
+    const bgColorText = `rgba(${backgroundColor.rgb.r}, ${backgroundColor.rgb.g}, ${backgroundColor.rgb.b}, ${backgroundColor.rgb.a})`
 
     const renderables = characters.concat(pets)
 
@@ -153,6 +185,12 @@ class App extends Component {
             <span className="desc"><span className="alpha">Public Alpha</span></span>
           </span>
           <ul className="Nav-right">
+            <li className='bg-color-picker-container' onClick={this.openColorPicker.bind(this)}>
+              <div className='bg-color-picker'>
+                <div className='bg-color-grid' style={{ backgroundColor: bgColorText }}></div>
+              </div>
+              { colorPickerOpen ? <SketchPicker color={bgColorText} onChange={this.onChangeColor.bind(this)} /> : '' }
+            </li>
             <li>
               <label className='canvas-zoom'>
                 <span>Zoom</span>
@@ -185,6 +223,7 @@ class App extends Component {
           </ul>
         </div>
         <RenderCanvas
+          backgroundColor={bgColorText}
           zoom={zoom}
           mapId={selectedMap}
           renderables={renderables}
@@ -447,6 +486,15 @@ class App extends Component {
     this.updateSelectedRenderable({
       selectedItems
     })
+  }
+
+  onChangeColor(backgroundColor, event) {
+    this.setState({ backgroundColor })
+    localStorage['backgroundColor'] = JSON.stringify(backgroundColor)
+  }
+
+  openColorPicker() {
+    this.setState({ colorPickerOpen: true })
   }
 }
 

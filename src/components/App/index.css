@@ -29,7 +29,7 @@
   display: flex;
   justify-content: space-between;
   position: relative;
-  z-index: 2;
+  z-index: 10000;
 }
 
 .App-header .logo {
@@ -149,7 +149,7 @@ body > div:not(.tippy-popper){ /* kms, this freaking rule. :< */
   font-family: Muli,sans-serif;
 }
 
-.canvas-characters {
+.canvas-characters, .canvas-bg {
   position: fixed;
   top: 0;
   right: 0;
@@ -158,7 +158,6 @@ body > div:not(.tippy-popper){ /* kms, this freaking rule. :< */
   display: flex;
   align-items: center;
   justify-content: center;
-  background: url('./graphy.png');
 }
 
 .App .notification-container {
@@ -238,4 +237,28 @@ body > div:not(.tippy-popper){ /* kms, this freaking rule. :< */
 
 .canvas-zoom span {
   margin-right: 16px;
+}
+
+.bg-color-picker {
+  width: 24px;
+  height: 24px;
+  margin: 20px 8px;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.bg-color-grid {
+  width: 24px;
+  height: 24px;
+  border-radius: 4px;
+}
+
+.bg-color-picker-container {
+  position: relative;
+}
+
+.bg-color-picker-container .sketch-picker {
+  position: absolute;
+  top: 44px;
+  left: 8px;
 }
