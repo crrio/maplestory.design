@@ -107,6 +107,8 @@ class App extends Component {
       character.selectedItems = character.selectedItems || []
       character.visible = character.visible || false
       character.position = character.position || {x:0,y:0}
+      character.flipX = character.flipX || false;
+      character.name = character.name || '';
       const itemsWithEmotion = _.values(character.selectedItems)
       .filter(item => item.Id && (item.visible === undefined || item.visible))
       .map(item => {
@@ -114,7 +116,7 @@ class App extends Component {
         if (item.hue) itemEntry = itemEntry + ';' + item.hue
         return itemEntry
       });
-      character.summary = `https://labs.maplestory.io/api/gms/latest/character/${character.skin}/${(itemsWithEmotion.join(',') || 1102039)}/${character.action}/${character.frame}?showears=${character.mercEars}&showLefEars=${character.illiumEars}&resize=${character.zoom}&name=${character.name || ''}&flipX=${character.flipX}`
+      character.summary = `https://labs.maplestory.io/api/gms/latest/character${ character.animating ? '/animated/' : '/' }${character.skin}/${(itemsWithEmotion.join(',') || 1102039)}/${character.action}/${character.frame}?showears=${character.mercEars}&showLefEars=${character.illiumEars}&resize=${character.zoom}&name=${character.name || ''}&flipX=${character.flipX}`
       delete character.characters
       delete character.otherCharacters
       delete character.allCharacters
@@ -392,7 +394,7 @@ class App extends Component {
         if (item.hue) itemEntry = itemEntry + ';' + item.hue
         return itemEntry
       });
-    currentCharacter.summary = `https://labs.maplestory.io/api/gms/latest/character/${currentCharacter.skin}/${(itemsWithEmotion.join(',') || 1102039)}/${currentCharacter.action}/${currentCharacter.frame}?showears=${currentCharacter.mercEars}&showLefEars=${currentCharacter.illiumEars}&resize=${currentCharacter.zoom}&name=${currentCharacter.name || ''}&flipX=${currentCharacter.flipX}`
+    currentCharacter.summary = `https://labs.maplestory.io/api/gms/latest/character${ currentCharacter.animating ? '/animated/' : '/' }${currentCharacter.skin}/${(itemsWithEmotion.join(',') || 1102039)}/${currentCharacter.action}/${currentCharacter.frame}?showears=${currentCharacter.mercEars}&showLefEars=${currentCharacter.illiumEars}&resize=${currentCharacter.zoom}&name=${currentCharacter.name || ''}&flipX=${currentCharacter.flipX}`
 
     this.setState({
         characters: characters

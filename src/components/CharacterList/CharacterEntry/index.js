@@ -41,21 +41,57 @@ class CharacterEntry extends Component {
         'troubled',
         'vomit',
         'wink'
-      ]
+      ],
+      frames: { stand1: 3, stand2: 3 },
+      frameDelay: 1000
     }
 
-    // Populate true action list
-    axios.get(`https://labs.maplestory.io/api/gms/latest/character/actions/1040004`)
-      .then(response => this.setState({actions: _.sortBy(response.data, a => a)}))
+    this.updateCharacterDetails(props, true)
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.equippedItems === this.props.equippedItems) return
-    const { equippedItems } = this.props
+    if (prevProps.character === this.props.character) return
+    const { character } = this.props
 
-    const itemIds = _.values(equippedItems).map(item => item.Id)
-    axios.get(`https://labs.maplestory.io/api/gms/latest/character/actions/${itemIds.join(',')}`)
-      .then(response => this.setState({actions: _.sortBy(response.data, a => a)}))
+    this.updateCharacterDetails(this.props, false)
+  }
+
+  updateCharacterDetails(props, isSync) {
+    const { character } = props
+    const itemsWithEmotion = _.values(character.selectedItems)
+    .filter(item => item.Id && (item.visible === undefined || item.visible))
+    .map(item => {
+      var itemEntry = item.Id >= 20000 && item.Id <= 29999 ? `${item.Id}:${character.emotion}` : item.Id
+      return itemEntry
+    });
+
+    const { tryCount } = this.state
+    const link = `https://labs.maplestory.io/api/gms/latest/character/detailed/${character.skin}/${(itemsWithEmotion.join(',') || 1102039)}/${character.action}/0?showears=${character.mercEars}&showLefEars=${character.illiumEars}&resize=${character.zoom}&tryCount=${tryCount}&flipX=${character.flipX}&name=${character.name}`
+
+    if (isSync) {
+      this.state.linkUsed = link
+      axios.get(link).then(function(res) {
+        if (this.state.linkUsed == link) {
+          this.setState({
+            details: res.data,
+            actions: _.keys(res.data.item3),
+            frames: res.data.item3,
+            frameDelay: res.data.item4 || 1000
+          })
+        }
+      }.bind(this))
+    } else this.setState({ linkUsed: link }, () => {
+      axios.get(link).then(function(res) {
+        if (this.state.linkUsed == link) {
+          this.setState({
+            details: res.data,
+            actions: _.keys(res.data.item3),
+            frames: res.data.item3,
+            frameDelay: res.data.item4 || 1000
+          })
+        }
+      }.bind(this))
+    })
   }
 
   render() {
@@ -73,6 +109,7 @@ class CharacterEntry extends Component {
   }
 
   customizeCharacter(character) {
+    const { actions, frames, emotions } = this.state
     return (<div className='character-customizeable-options'>
       <div>
         <a href="#" className='btn bg-red text-white right' onClick={this.deleteCharacter.bind(this)}>Delete Character</a>
@@ -85,7 +122,7 @@ class CharacterEntry extends Component {
         <span>Facial Expression</span>
         <select disabled={!character.selectedItems.Face} onChange={this.changeEmotion.bind(this)} value={character.emotion}>
           {
-            this.state.emotions.map(e => (
+            emotions.map(e => (
               <option value={e} key={e}>{e}</option>
             ))
           }
@@ -95,7 +132,7 @@ class CharacterEntry extends Component {
         <span>Pose / Action</span>
         <select onChange={this.changeAction.bind(this)} value={character.action}>
           {
-            this.state.actions.map(a => (
+            actions.map(a => (
               <option value={a} key={a}>{a}</option>
             ))
           }
@@ -134,9 +171,16 @@ class CharacterEntry extends Component {
         <Slider
           value={character.frame || 0}
           min={0}
-          max={10}
+          max={frames[character.action] - 1}
           handle={handle}
+          disabled={character.animating}
           onChange={this.changeFrame.bind(this)} />
+      </label>
+      <label>
+        <span>Animate</span>
+        <Toggle
+          onChange={this.changeAnimating.bind(this)}
+          checked={character.animating} />
       </label>
       <label>
         <span>Zoom</span>
@@ -189,6 +233,10 @@ class CharacterEntry extends Component {
         </a>
       </div>
     </div>)
+  }
+
+  changeAnimating() {
+    this.props.onUpdateCharacter(this.props.character, { animating: !this.props.character.animating })
   }
 
   changeName(e) {

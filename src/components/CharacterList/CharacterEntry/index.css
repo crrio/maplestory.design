@@ -32,3 +32,8 @@
 .character-customizeable-options a {
   text-decoration: none;
 }
+
+.character-customizeable-options .animation-play {
+  margin-left: 16px;
+  cursor: pointer;
+}
