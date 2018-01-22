@@ -109,7 +109,7 @@ class App extends Component {
       character.position = character.position || {x:0,y:0}
       character.flipX = character.flipX || false;
       character.name = character.name || '';
-      character.includeBackground = character.includeBackground || true
+      character.includeBackground = character.includeBackground === undefined ? true : character.includeBackground
       const itemsWithEmotion = _.values(character.selectedItems)
       .filter(item => item.Id && (item.visible === undefined || item.visible))
       .map(item => {

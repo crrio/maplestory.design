@@ -50,10 +50,10 @@ class CharacterEntry extends Component {
   }
 
   componentDidUpdate(prevProps) {
-    if (prevProps.character === this.props.character) return
-    const { character } = this.props
-
-    this.updateCharacterDetails(this.props, false)
+    const ifChanged = ['skin', 'selectedItems', 'action', 'frame', 'mercEars', 'illiumEars', 'zoom', 'flipX']
+    if (_.find(ifChanged, (property) => this.props.character[property] != prevProps.character[property])){
+      this.updateCharacterDetails(this.props, false)
+    }
   }
 
   updateCharacterDetails(props, isSync) {
@@ -97,7 +97,7 @@ class CharacterEntry extends Component {
   render() {
     const { character, isSelected, canvasMode, onUpdateCharacter, onDeleteCharacter, ...otherProps } = this.props
     return (
-      <Tooltip html={this.customizeCharacter(character)} delay={[100, 300]} position={canvasMode ? undefined : 'bottom'} interactive={true} theme='light' distance={550} arrow={true}>
+      <Tooltip html={this.customizeCharacter(character)} delay={[100, 300]} position={canvasMode ? undefined : 'bottom'} interactive={true} theme='light' distance={400} arrow={true}>
         <div
           className={'character ' + (character.visible ? 'disabled ' : 'enabled ') + (isSelected ? 'active' : 'inactive')}
           style={{
@@ -110,7 +110,8 @@ class CharacterEntry extends Component {
 
   customizeCharacter(character) {
     const { actions, frames, emotions } = this.state
-    return (<div className='character-customizeable-options'>
+    return (<div className='character-customizeable-options-container'>
+    <div className='character-customizeable-options'>
       <div>
         <a href="#" className='btn bg-red text-white right' onClick={this.deleteCharacter.bind(this)}>Delete Character</a>
       </div>
@@ -238,7 +239,7 @@ class CharacterEntry extends Component {
           </div>
         </a>
       </div>
-    </div>)
+    </div></div>)
   }
 
   changeIncludeBackground() {

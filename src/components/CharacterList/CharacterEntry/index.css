@@ -37,3 +37,9 @@
   margin-left: 16px;
   cursor: pointer;
 }
+
+.character-customizeable-options-container {
+  overflow-y: auto;
+  max-height: 400px;
+  padding: 0 16px 0 0;
+}
