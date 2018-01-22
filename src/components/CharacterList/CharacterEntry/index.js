@@ -192,6 +192,12 @@ class CharacterEntry extends Component {
           onChange={this.changeZoom.bind(this)} />
       </label>
       <label>
+        <span>Add BG to GIF</span>
+        <Toggle
+          onChange={this.changeIncludeBackground.bind(this)}
+          checked={character.includeBackground} />
+      </label>
+      <label>
         <span>Visible</span>
         <Toggle onChange={this.toggleVisibility.bind(this)} checked={character.visible} />
       </label>
@@ -233,6 +239,10 @@ class CharacterEntry extends Component {
         </a>
       </div>
     </div>)
+  }
+
+  changeIncludeBackground() {
+    this.props.onUpdateCharacter(this.props.character, { includeBackground: !this.props.character.includeBackground })
   }
 
   changeAnimating() {

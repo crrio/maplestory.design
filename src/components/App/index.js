@@ -109,6 +109,7 @@ class App extends Component {
       character.position = character.position || {x:0,y:0}
       character.flipX = character.flipX || false;
       character.name = character.name || '';
+      character.includeBackground = character.includeBackground || true
       const itemsWithEmotion = _.values(character.selectedItems)
       .filter(item => item.Id && (item.visible === undefined || item.visible))
       .map(item => {
@@ -119,7 +120,7 @@ class App extends Component {
 
       const { backgroundColor } = this.state
       const bgColorText = `${backgroundColor.rgb.r},${backgroundColor.rgb.g},${backgroundColor.rgb.b},${backgroundColor.rgb.a}`
-      character.summary = `https://labs.maplestory.io/api/gms/latest/character${ character.animating ? '/animated/' : '/' }${character.skin}/${(itemsWithEmotion.join(',') || 1102039)}/${character.action}/${character.frame}?showears=${character.mercEars}&showLefEars=${character.illiumEars}&resize=${character.zoom}&name=${character.name || ''}&flipX=${character.flipX}&bgColor=${bgColorText}`
+      character.summary = `https://labs.maplestory.io/api/gms/latest/character${ character.animating ? '/animated/' : '/' }${character.skin}/${(itemsWithEmotion.join(',') || 1102039)}/${character.action}/${character.frame}?showears=${character.mercEars}&showLefEars=${character.illiumEars}&resize=${character.zoom}&name=${character.name || ''}&flipX=${character.flipX}` + (character.includeBackground ? `&bgColor=${bgColorText}` : '')
       delete character.characters
       delete character.otherCharacters
       delete character.allCharacters
@@ -401,7 +402,7 @@ class App extends Component {
     const { backgroundColor } = this.state
     const bgColorText = `${backgroundColor.rgb.r},${backgroundColor.rgb.g},${backgroundColor.rgb.b},${backgroundColor.rgb.a}`
 
-    currentCharacter.summary = `https://labs.maplestory.io/api/gms/latest/character${ currentCharacter.animating ? '/animated/' : '/' }${currentCharacter.skin}/${(itemsWithEmotion.join(',') || 1102039)}/${currentCharacter.action}/${currentCharacter.frame}?showears=${currentCharacter.mercEars}&showLefEars=${currentCharacter.illiumEars}&resize=${currentCharacter.zoom}&name=${currentCharacter.name || ''}&flipX=${currentCharacter.flipX}&bgColor=${bgColorText}`
+    currentCharacter.summary = `https://labs.maplestory.io/api/gms/latest/character${ currentCharacter.animating ? '/animated/' : '/' }${currentCharacter.skin}/${(itemsWithEmotion.join(',') || 1102039)}/${currentCharacter.action}/${currentCharacter.frame}?showears=${currentCharacter.mercEars}&showLefEars=${currentCharacter.illiumEars}&resize=${currentCharacter.zoom}&name=${currentCharacter.name || ''}&flipX=${currentCharacter.flipX}` + (currentCharacter.includeBackground ? `&bgColor=${bgColorText}` : '')
 
     this.setState({
         characters: characters
@@ -498,7 +499,24 @@ class App extends Component {
   }
 
   onChangeColor(backgroundColor, event) {
-    this.setState({ backgroundColor })
+    const bgColorText = `${backgroundColor.rgb.r},${backgroundColor.rgb.g},${backgroundColor.rgb.b},${backgroundColor.rgb.a}`
+
+    const characters = this.state.characters.map((character, index) => {
+      const itemsWithEmotion = _.values(character.selectedItems)
+      .filter(item => item.Id && (item.visible === undefined || item.visible))
+      .map(item => {
+        var itemEntry = item.Id >= 20000 && item.Id <= 29999 ? `${item.Id}:${character.emotion}` : item.Id
+        if (item.hue) itemEntry = itemEntry + ';' + item.hue
+        return itemEntry
+      });
+
+      return {
+        ...character,
+        summary: `https://labs.maplestory.io/api/gms/latest/character${ character.animating ? '/animated/' : '/' }${character.skin}/${(itemsWithEmotion.join(',') || 1102039)}/${character.action}/${character.frame}?showears=${character.mercEars}&showLefEars=${character.illiumEars}&resize=${character.zoom}&name=${character.name || ''}&flipX=${character.flipX}` + (character.includeBackground ? `&bgColor=${bgColorText}` : '')
+      }
+    });
+
+    this.setState({ backgroundColor, characters })
     localStorage['backgroundColor'] = JSON.stringify(backgroundColor)
   }
 
