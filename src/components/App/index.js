@@ -116,7 +116,10 @@ class App extends Component {
         if (item.hue) itemEntry = itemEntry + ';' + item.hue
         return itemEntry
       });
-      character.summary = `https://labs.maplestory.io/api/gms/latest/character${ character.animating ? '/animated/' : '/' }${character.skin}/${(itemsWithEmotion.join(',') || 1102039)}/${character.action}/${character.frame}?showears=${character.mercEars}&showLefEars=${character.illiumEars}&resize=${character.zoom}&name=${character.name || ''}&flipX=${character.flipX}`
+
+      const { backgroundColor } = this.state
+      const bgColorText = `${backgroundColor.rgb.r},${backgroundColor.rgb.g},${backgroundColor.rgb.b},${backgroundColor.rgb.a}`
+      character.summary = `https://labs.maplestory.io/api/gms/latest/character${ character.animating ? '/animated/' : '/' }${character.skin}/${(itemsWithEmotion.join(',') || 1102039)}/${character.action}/${character.frame}?showears=${character.mercEars}&showLefEars=${character.illiumEars}&resize=${character.zoom}&name=${character.name || ''}&flipX=${character.flipX}&bgColor=${bgColorText}`
       delete character.characters
       delete character.otherCharacters
       delete character.allCharacters
@@ -394,7 +397,11 @@ class App extends Component {
         if (item.hue) itemEntry = itemEntry + ';' + item.hue
         return itemEntry
       });
-    currentCharacter.summary = `https://labs.maplestory.io/api/gms/latest/character${ currentCharacter.animating ? '/animated/' : '/' }${currentCharacter.skin}/${(itemsWithEmotion.join(',') || 1102039)}/${currentCharacter.action}/${currentCharacter.frame}?showears=${currentCharacter.mercEars}&showLefEars=${currentCharacter.illiumEars}&resize=${currentCharacter.zoom}&name=${currentCharacter.name || ''}&flipX=${currentCharacter.flipX}`
+
+    const { backgroundColor } = this.state
+    const bgColorText = `${backgroundColor.rgb.r},${backgroundColor.rgb.g},${backgroundColor.rgb.b},${backgroundColor.rgb.a}`
+
+    currentCharacter.summary = `https://labs.maplestory.io/api/gms/latest/character${ currentCharacter.animating ? '/animated/' : '/' }${currentCharacter.skin}/${(itemsWithEmotion.join(',') || 1102039)}/${currentCharacter.action}/${currentCharacter.frame}?showears=${currentCharacter.mercEars}&showLefEars=${currentCharacter.illiumEars}&resize=${currentCharacter.zoom}&name=${currentCharacter.name || ''}&flipX=${currentCharacter.flipX}&bgColor=${bgColorText}`
 
     this.setState({
         characters: characters

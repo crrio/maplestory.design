@@ -59,7 +59,7 @@ class CharacterCanvasElement extends Component {
     const { zoom } = character
     const { details } = this.state
     const styling = {
-      transform: `translate(${character.position.x}px, ${character.position.y}px) translate(${details ? -(details.item2.centerReal.x) : 0}px, ${details ? -(details.item2.feetCenter.y) : 0}px)`
+      transform: `translate(${character.position.x}px, ${character.position.y}px) translate(${details ? -(details.item2.feetCenter.x) : 0}px, ${details ? -(details.item2.feetCenter.y) : 0}px)`
     }
 
     const imgStyle = {
