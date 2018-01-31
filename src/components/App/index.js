@@ -20,6 +20,11 @@ import Localization from '../../const/localize'
 import Localize from '../../const/localize'
 import { Tooltip } from 'react-tippy'
 import FontAwesome from 'react-fontawesome'
+import 'rc-slider/assets/index.css'
+import 'rc-tooltip/assets/bootstrap.css'
+import 'react-tippy/dist/tippy.css';
+import Toggle from 'react-toggle'
+
 
 var creatingId = null;
 
@@ -64,7 +69,8 @@ class App extends Component {
       mapPosition: {x: 0, y: 0},
       backgroundColor: JSON.parse(localStorage['backgroundColor'] || false) || {"hsl":{"h":0,"s":0,"l":0,"a":0},"hex":"transparent","rgb":{"r":0,"g":0,"b":0,"a":0},"hsv":{"h":0,"s":0,"v":0,"a":0},"oldHue":0,"source":"rgb"},
       colorPickerOpen: false,
-      language: JSON.parse(localStorage['language'] || false) || 'en'
+      language: localStorage['language'] == 'undefined' ? 'en' : localStorage['language'],
+      music: false
     }
 
     if (this.state.selectedIndex < 0) this.state.selectedIndex = false;
@@ -181,7 +187,8 @@ class App extends Component {
       focusRenderable,
       backgroundColor,
       colorPickerOpen,
-      language
+      language,
+      music
     } = this.state
     this.updateBannerAdBlur()
 
@@ -251,6 +258,7 @@ class App extends Component {
           localized={localized}
           onSetModalOpen={this.setModalOpen.bind(this)} />
         <NotificationContainer />
+        { music ? <audio src={`//labs.maplestory.io/api/gms/latest/map/${selectedMap}/bgm`} autoPlay={true} loop={true} /> : '' }
       </div>
     )
   }
@@ -317,8 +325,20 @@ class App extends Component {
               />
           </div>
         </div>
+        <label>
+        <span>{localized.playMusic}</span>
+        <Toggle
+          onChange={this.toggleMusic.bind(this)}
+          checked={this.state.music} />
+      </label>
       </div>
     )
+  }
+
+  toggleMusic(e) {
+    this.setState({
+      music: !this.state.music
+    })
   }
 
   changeLanguage(e) {

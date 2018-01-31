@@ -315,7 +315,8 @@ const all = {
     messageboard: "Messageboard",
     miscellaneous: "Miscellaneous",
     cakeVsPie: "Cake vs Pie",
-    language: 'Language'
+    language: 'Language',
+    playMusic: 'Play Music'
   },
   jp: {
     maplestory: 'メイプルストーリー',
