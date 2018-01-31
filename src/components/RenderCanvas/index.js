@@ -77,7 +77,7 @@ class RenderCanvas extends Component {
   }
 
   render() {
-    const { renderables, mapId, zoom, backgroundColor } = this.props
+    const { renderables, mapId, zoom, backgroundColor, localized } = this.props
     const { mapData } = this.state
     const mapOrigin = {}
 
@@ -90,6 +90,7 @@ class RenderCanvas extends Component {
       <div className={'canvas-bg' + (this.state.dragging ? ' dragging' : '')} style={{ backgroundPositionX: `${this.state.x}px`, backgroundPositionY: `${this.state.y}px` }}>
         <DraggableCore
           onDrag={(e, o) => {
+            if (!o.deltaX && !o.deltaY) return
             if(!this.state.childDragging && (e.target.classList.contains('canvas-characters') || e.target.classList.contains('map')))
               this.setState({ x: this.state.x + o.deltaX, y: this.state.y + o.deltaY, dragCount: (this.state.dragCount || 0) + 1 })
           }}
@@ -125,6 +126,7 @@ class RenderCanvas extends Component {
   }
 
   clickCanvas(e) {
+    console.log(this.state.dragCount, 'click')
     if (!this.state.dragCount)
       this.props.onClick(e)
   }
@@ -143,6 +145,7 @@ class RenderCanvas extends Component {
       character={renderable}
       summary={renderable.summary}
       selected={selectedRenderable === index}
+      localized={this.props.localized}
       key={'canvas' + renderable.id} />
     ) : (
     <GenericCanvasElement
@@ -156,6 +159,7 @@ class RenderCanvas extends Component {
       renderable={renderable}
       summary={renderable.summary}
       selected={selectedRenderable === index}
+      localized={this.props.localized}
       key={'canvas' + renderable.id} />
     )
   }

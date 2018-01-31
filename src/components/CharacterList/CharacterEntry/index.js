@@ -109,18 +109,19 @@ class CharacterEntry extends Component {
   }
 
   customizeCharacter(character) {
+    const { localized } = this.props
     const { actions, frames, emotions } = this.state
     return (<div className='character-customizeable-options-container'>
     <div className='character-customizeable-options'>
       <div>
-        <a href="#" className='btn bg-red text-white right' onClick={this.deleteCharacter.bind(this)}>Delete Character</a>
+        <a href="#" className='btn bg-red text-white right' onClick={this.deleteCharacter.bind(this)}>{localized.deleteCharacter}</a>
       </div>
       <label>
-        <span>Name</span>
+        <span>{localized.name}</span>
         <input type='text' value={character.name} onChange={this.changeName.bind(this)} />
       </label>
       <label>
-        <span>Facial Expression</span>
+        <span>{localized.expression}</span>
         <select disabled={!character.selectedItems.Face} onChange={this.changeEmotion.bind(this)} value={character.emotion}>
           {
             emotions.map(e => (
@@ -130,7 +131,7 @@ class CharacterEntry extends Component {
         </select>
       </label>
       <label>
-        <span>Pose / Action</span>
+        <span>{localized.action}</span>
         <select onChange={this.changeAction.bind(this)} value={character.action}>
           {
             actions.map(a => (
@@ -140,7 +141,7 @@ class CharacterEntry extends Component {
         </select>
       </label>
       <label>
-        <span>Skin</span>
+        <span>{localized.skin}</span>
         <select onChange={this.changeSkin.bind(this)} value={character.skin}>
             <option value='2000'>Light</option>
             <option value='2004'>Ashen</option>
@@ -156,19 +157,19 @@ class CharacterEntry extends Component {
           </select>
       </label>
       <label>
-        <span>Illium Ears</span>
+        <span>{localized.illiumEars}</span>
         <Toggle
           onChange={this.changeIlliumEars.bind(this)}
           checked={character.illiumEars} />
       </label>
       <label>
-        <span>Mercedes Ears</span>
+        <span>{localized.mercEars}</span>
         <Toggle
           onChange={this.changeMercEars.bind(this)}
           checked={character.mercEars} />
       </label>
       <label>
-        <span>Frame</span>
+        <span>{localized.frame}</span>
         <Slider
           value={character.frame || 0}
           min={0}
@@ -178,13 +179,13 @@ class CharacterEntry extends Component {
           onChange={this.changeFrame.bind(this)} />
       </label>
       <label>
-        <span>Animate</span>
+        <span>{localized.animate}</span>
         <Toggle
           onChange={this.changeAnimating.bind(this)}
           checked={character.animating} />
       </label>
       <label>
-        <span>Zoom</span>
+        <span>{localized.zoom}</span>
         <Slider
           value={character.zoom || 1}
           min={1}
@@ -193,33 +194,33 @@ class CharacterEntry extends Component {
           onChange={this.changeZoom.bind(this)} />
       </label>
       <label>
-        <span>Add BG to GIF</span>
+        <span>{localized.addBgToGif}</span>
         <Toggle
           onChange={this.changeIncludeBackground.bind(this)}
           checked={character.includeBackground} />
       </label>
       <label>
-        <span>Visible</span>
+        <span>{localized.visible}</span>
         <Toggle onChange={this.toggleVisibility.bind(this)} checked={character.visible} />
       </label>
       <label>
-        <span>Flip Horizontal</span>
+        <span>{localized.flipHorizontal}</span>
         <Toggle onChange={this.toggleFlipX.bind(this)} checked={character.flipX} />
       </label>
       <label>
-        <span>Foothold Snapping</span>
+        <span>{localized.footholdSnapping}</span>
         <Toggle onChange={this.toggleFHSnap.bind(this)} checked={character.fhSnap || false} />
       </label>
       <label>
-        <span>Lock</span>
+        <span>{localized.lock}</span>
         <Toggle onChange={this.toggleLock.bind(this)} checked={character.locked} />
       </label>
       <br />
       <a href={`https://labs.maplestory.io/api/gms/latest/character/download/${character.skin}/${_.map(character.selectedItems, i => i.hue ? `${i.Id};${i.hue}` : i.Id).join(',')}?showears=${character.mercEars}&showLefEars=${character.illiumEars}`} target='_blank'  rel="noopener noreferrer">
         <div className='download-bar bg-blue'>
           <div className='equipped-items-item-meta'>
-            <div className='equipped-items-item-meta-name text-white'>Download Spritesheet</div>
-            <div className='equipped-items-item-meta-category text-white'>(will download a <b>.zip</b>)</div>
+            <div className='equipped-items-item-meta-name text-white'>{localized.downloadSpriteSheet}</div>
+            <div className='equipped-items-item-meta-category text-white'>({localized.willDownloadZip})</div>
           </div>
         </div>
       </a>
@@ -227,9 +228,9 @@ class CharacterEntry extends Component {
         <a href={`https://labs.maplestory.io/api/gms/latest/character/download/${character.skin}/${_.map(character.selectedItems, i => i.hue ? `${i.Id};${i.hue}` : i.Id).join(',')}?showears=${character.mercEars}&showLefEars=${character.illiumEars}&format=1`} target='_blank'  rel="noopener noreferrer">
           <div className='download-bar bg-blue'>
             <div className='equipped-items-item-meta'>
-              <div className='equipped-items-item-meta-name text-white'>Download Layered Spritesheet</div>
-              <div className='equipped-items-item-meta-category text-white'>(will download a <b>.zip</b>)</div>
-              <div className='equipped-items-item-meta-category text-white'>Requires PDN plugin &gt;</div>
+              <div className='equipped-items-item-meta-name text-white'>{localized.downloadLayeredSpriteSheet}</div>
+              <div className='equipped-items-item-meta-category text-white'>({localized.willDownloadZip})</div>
+              <div className='equipped-items-item-meta-category text-white'>{localized.requiresPDNPlugin} &gt;</div>
             </div>
           </div>
         </a>

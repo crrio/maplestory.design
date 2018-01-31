@@ -63,12 +63,13 @@ class PetEntry extends Component {
   }
 
   customizePet(pet) {
+    const { localized } = this.props
     return (<div className='pet-customizeable-options'>
       <div>
-        <a href="#" className='btn bg-red text-white right' onClick={this.deletePet.bind(this)}>Delete Pet</a>
+        <a href="#" className='btn bg-red text-white right' onClick={this.deletePet.bind(this)}>{localized.deletePet}</a>
       </div>
       <label>
-        <span>Pet Type</span>
+        <span>{localized.petType}</span>
         <select onChange={this.changePetId.bind(this)} value={pet.petId}>
           {
             pets.map(a => (
@@ -78,7 +79,7 @@ class PetEntry extends Component {
         </select>
       </label>
       <label>
-        <span>Pose / Action</span>
+        <span>{localized.action}</span>
         <select onChange={this.changeAction.bind(this)} value={pet.animation}>
           {
             this.state.actions.map(a => (
@@ -88,7 +89,7 @@ class PetEntry extends Component {
         </select>
       </label>
       <label>
-        <span>Frame</span>
+        <span>{localized.frame}</span>
         <Slider
           value={pet.frame || 0}
           min={0}
@@ -97,7 +98,7 @@ class PetEntry extends Component {
           onChange={this.changeFrame.bind(this)} />
       </label>
       <label>
-        <span>Zoom</span>
+        <span>{localized.zoom}</span>
         <Slider
           value={pet.zoom || 1}
           min={1}
@@ -106,19 +107,19 @@ class PetEntry extends Component {
           onChange={this.changeZoom.bind(this)} />
       </label>
       <label>
-        <span>Visible</span>
+        <span>{localized.visible}</span>
         <Toggle onChange={this.toggleVisibility.bind(this)} checked={pet.visible} />
       </label>
       <label>
-        <span>Flip Horizontal</span>
+        <span>{localized.flipHorizontal}</span>
         <Toggle onChange={this.toggleFlipX.bind(this)} checked={pet.flipX} />
       </label>
       <label>
-        <span>Foothold Snapping</span>
+        <span>{localized.footholdSnapping}</span>
         <Toggle onChange={this.toggleFHSnap.bind(this)} checked={pet.fhSnap || false} />
       </label>
       <label>
-        <span>Lock</span>
+        <span>{localized.lock}</span>
         <Toggle onChange={this.toggleLock.bind(this)} checked={pet.locked} />
       </label>
     </div>)

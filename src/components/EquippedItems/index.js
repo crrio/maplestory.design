@@ -12,7 +12,7 @@ import Toggle from 'react-toggle'
 
 class EquippedItems extends Component {
   render() {
-    const { equippedItems } = this.props
+    const { equippedItems, localized } = this.props
 
     const ad = document.querySelector(".adsbygoogle")
     if (ad.offsetParent === null)
@@ -21,7 +21,7 @@ class EquippedItems extends Component {
     return (
       <div className='equipped-items'>
         <div className='equipped-items-header'>
-          <span className="equipped-items-title">Quick View</span> <span onClick={this.removeItems.bind(this)} className="btn bg-red text-white right">Remove All</span>
+          <span className="equipped-items-title">{localized.quickView}</span> <span onClick={this.removeItems.bind(this)} className="btn bg-red text-white right">Remove All</span>
         </div>
         <div className='equipped-items-listing'>
           {

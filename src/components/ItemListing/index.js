@@ -114,6 +114,7 @@ class ItemListing extends Component {
   render() {
     const { categoryNames, categoryNamesKeys, selectedCategory, items, categoryNameSelected, cashItemsOnly, selectedGender, similarItems } = this.state
     const search = this.state.search.toLowerCase()
+    const { localized } = this.props
 
     if (search) console.log(`Searching for ${search}`)
 
@@ -144,13 +145,13 @@ class ItemListing extends Component {
         <div className='filters'>
           <label>
             <input type="checkbox" onChange={this.toggleCashItems.bind(this)} checked={this.cashItemsOnly} />
-            Cash Only
+            {localized.isCashFilter}
           </label>
           <select onChange={this.changeGender.bind(this)} value={this.selectedGender} className="gender-select">
-            <option value="">Gender Filter</option>
-            <option value="0">Male</option>
-            <option value="1">Female</option>
-            <option value="2">Universal</option>
+            <option value="">{localized.genderFilter}</option>
+            <option value="0">{localized.male}</option>
+            <option value="1">{localized.female}</option>
+            <option value="2">{localized.universal}</option>
           </select>
         </div>
         <div className='item-listing-content'>

@@ -8,7 +8,7 @@ import PetEntry from './PetEntry'
 
 class CharacterList extends Component {
   render() {
-    const { renderables, selectedIndex } = this.props
+    const { renderables, selectedIndex, localized } = this.props
     return (
       <div className='character-list'>
         <div>
@@ -20,12 +20,14 @@ class CharacterList extends Component {
                 onClick={this.clickCharacter.bind(this, c)}
                 onUpdateCharacter={this.props.onUpdateCharacter}
                 key={'character' + i}
+                localized={localized}
                 onDeleteCharacter={this.props.onDeleteCharacter} />)
             } else if (c.type == 'pet') {
               return (<PetEntry
                   pet={c}
                   isSelected={i == selectedIndex}
                   key={'pet' + i}
+                  localized={localized}
                   onClick={this.clickCharacter.bind(this, c)}
                   onUpdatePet={this.props.onUpdatePet}
                   onDeletePet={this.props.onDeletePet}
@@ -43,8 +45,8 @@ class CharacterList extends Component {
   renderAddList() {
     return (<ul className='add-possible'>
       <li>Add:</li>
-      <li className='clickable' onClick={this.props.onAddPet}>Pet</li>
-      <li className='clickable' onClick={this.props.onAddCharacter}>Character</li>
+      <li className='clickable' onClick={this.props.onAddPet}>{this.props.localized.pet}</li>
+      <li className='clickable' onClick={this.props.onAddCharacter}>{this.props.localized.character}</li>
     </ul>);
   }
 

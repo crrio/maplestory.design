@@ -16,6 +16,10 @@ import createFilterOptions from 'react-select-fast-filter-options'
 import Slider from 'rc-slider'
 import RcTooltip from 'rc-tooltip'
 import { SketchPicker } from 'react-color'
+import Localization from '../../const/localize'
+import Localize from '../../const/localize'
+import { Tooltip } from 'react-tippy'
+import FontAwesome from 'react-fontawesome'
 
 var creatingId = null;
 
@@ -59,7 +63,8 @@ class App extends Component {
       zoom: JSON.parse(localStorage['zoom'] || 'false') || 1,
       mapPosition: {x: 0, y: 0},
       backgroundColor: JSON.parse(localStorage['backgroundColor'] || false) || {"hsl":{"h":0,"s":0,"l":0,"a":0},"hex":"transparent","rgb":{"r":0,"g":0,"b":0,"a":0},"hsv":{"h":0,"s":0,"v":0,"a":0},"oldHue":0,"source":"rgb"},
-      colorPickerOpen: false
+      colorPickerOpen: false,
+      language: JSON.parse(localStorage['language'] || false) || 'en'
     }
 
     if (this.state.selectedIndex < 0) this.state.selectedIndex = false;
@@ -175,9 +180,12 @@ class App extends Component {
       selectedMap,
       focusRenderable,
       backgroundColor,
-      colorPickerOpen
+      colorPickerOpen,
+      language
     } = this.state
     this.updateBannerAdBlur()
+
+    const localized = Localize.getLocalized(language)
 
     const bgColorText = `rgba(${backgroundColor.rgb.r}, ${backgroundColor.rgb.g}, ${backgroundColor.rgb.b}, ${backgroundColor.rgb.a})`
 
@@ -187,43 +195,11 @@ class App extends Component {
       <div className={"App" + (isModalOpen ? ' modal-blur' : '')}>
         <div className="App-header">
           <span className="logo">
-            <b>MapleStory:</b> Design<br/>
-            <span className="desc"><span className="alpha">Public Alpha</span></span>
+            <b>{localized.maplestory}:</b> {localized.design}<br/>
+            <span className="desc"><span className="alpha">{localized.alpha}</span></span>
           </span>
           <ul className="Nav-right">
-            <li className='bg-color-picker-container' onClick={this.openColorPicker.bind(this)}>
-              <div className='bg-color-picker'>
-                <div className='bg-color-grid' style={{ backgroundColor: bgColorText }}></div>
-              </div>
-              { colorPickerOpen ? <SketchPicker color={bgColorText} onChange={this.onChangeColor.bind(this)} /> : '' }
-            </li>
-            <li>
-              <label className='canvas-zoom'>
-                <span>Zoom</span>
-                <Slider
-                  value={zoom || 1}
-                  min={0.25}
-                  max={2}
-                  step={0.25}
-                  handle={handle}
-                  onChange={this.changeZoom.bind(this)} />
-              </label>
-            </li>
-            <li>
-              <div className='map-select-container'>
-                <VirtualizedSelect
-                  filterOptions={mapsIndexed}
-                  isLoading={maps.length === 0}
-                  name='map-selection'
-                  searchable
-                  clearable
-                  simpleValue
-                  value={selectedMap}
-                  onChange={this.selectMap.bind(this)}
-                  options={maps}
-                  />
-              </div>
-            </li>
+            <li className='settings-cog'><Tooltip html={this.renderSettings()} delay={[100, 300]} position={'top'} interactive={true} theme='light' arrow={true}><FontAwesome name='cog' /></Tooltip></li>
             <li><a href="//medium.com/crrio/tagged/maplestory-design" target="_blank" rel="noopener noreferrer">Blog</a></li>
             <li><a href="https://discord.gg/D65Grk9" target="_blank" rel="noopener noreferrer">Discord</a></li>
           </ul>
@@ -237,8 +213,13 @@ class App extends Component {
           focusRenderable={focusRenderable === undefined ? selectedIndex : focusRenderable}
           onUpdateRenderable={this.updateRenderable.bind(this)}
           onClick={this.clickCanvas.bind(this)}
+          localized={localized}
           onClickRenderable={this.userUpdateSelectedRenderable.bind(this)}/>
-        { (selectedIndex !== false) ? <ItemListing target={renderables[selectedIndex]} onItemSelected={this.userSelectedItem.bind(this)} /> : '' }
+        { (selectedIndex !== false) ?
+          <ItemListing
+            target={renderables[selectedIndex]}
+            onItemSelected={this.userSelectedItem.bind(this)}
+            localized={localized} /> : '' }
         <CharacterList
           renderables={renderables}
           selectedIndex={selectedIndex}
@@ -246,6 +227,7 @@ class App extends Component {
           onAddPet={this.addPet.bind(this)}
           onDeleteCharacter={this.removeCharacter.bind(this)}
           onDeletePet={this.removePet.bind(this)}
+          localized={localized}
           onUpdateSelectedCharacter={function (renderable) {
             this.userUpdateSelectedRenderable(renderable, () => {
               this.setState({
@@ -260,15 +242,90 @@ class App extends Component {
             equippedItems={renderables[selectedIndex].selectedItems}
             onRemoveItem={this.userRemovedItem.bind(this)}
             onUpdateItem={this.updateItem.bind(this)}
+            localized={localized}
             onRemoveItems={this.userRemovedItems.bind(this)} /> : '')
         }
-        <div className="disclaimer"><div>This project is actively being developed and considered a <b>prototype</b>.</div></div>
+        <div className="disclaimer"><div>{localized.prototype}</div></div>
         <IntroModal
           isOpen={isModalOpen}
+          localized={localized}
           onSetModalOpen={this.setModalOpen.bind(this)} />
         <NotificationContainer />
       </div>
     )
+  }
+
+  renderSettings() {
+    const {
+      characters,
+      pets,
+      selectedIndex,
+      isModalOpen,
+      zoom,
+      summary,
+      selectedMap,
+      focusRenderable,
+      backgroundColor,
+      colorPickerOpen,
+      language
+    } = this.state
+    this.updateBannerAdBlur()
+
+    const localized = Localize.getLocalized(language)
+
+    const bgColorText = `rgba(${backgroundColor.rgb.r}, ${backgroundColor.rgb.g}, ${backgroundColor.rgb.b}, ${backgroundColor.rgb.a})`
+    return (
+      <div className='settings-container'>
+        <label className='bg-color-picker-container' onClick={this.openColorPicker.bind(this)}>
+        Background color
+          <div className='bg-color-picker'>
+            <div className='bg-color-grid' style={{ backgroundColor: bgColorText }}></div>
+          </div>
+          { colorPickerOpen ? <SketchPicker color={bgColorText} onChange={this.onChangeColor.bind(this)} /> : '' }
+        </label>
+        <label className='canvas-zoom'>
+          <span>{localized.zoom}</span>
+          <Slider
+            value={zoom || 1}
+            min={0.25}
+            max={2}
+            step={0.25}
+            handle={handle}
+            onChange={this.changeZoom.bind(this)} />
+        </label>
+        <label className='canvas-zoom'>
+          <span>{localized.language}</span>
+          <select value={this.state.language} onChange={this.changeLanguage.bind(this)}>
+            <option value='en'>English</option>
+            <option value='jp'>Japanese</option>
+            <option value='kr'>Korean</option>
+            <option value='ch'>Chinese (Traditional)</option>
+          </select>
+        </label>
+        <div>
+          <div className='map-select-container'>
+            <VirtualizedSelect
+              filterOptions={mapsIndexed}
+              isLoading={maps.length === 0}
+              name='map-selection'
+              searchable
+              clearable
+              simpleValue
+              value={selectedMap}
+              onChange={this.selectMap.bind(this)}
+              options={maps}
+              />
+          </div>
+        </div>
+      </div>
+    )
+  }
+
+  changeLanguage(e) {
+    this.setState({
+      language: e.target.value
+    })
+    localStorage['language'] = e.target.value
   }
 
   changeZoom(newZoom) {

@@ -206,7 +206,7 @@ body > div:not(.tippy-popper){ /* kms, this freaking rule. :< */
 }
 
 .map-select-container {
-  width: 400px;
+  width: 374px;
   padding: 13px 0;
   font-size: 16px;
   position: relative;
@@ -227,22 +227,9 @@ body > div:not(.tippy-popper){ /* kms, this freaking rule. :< */
   background: #eee;
 }
 
-.canvas-zoom {
-  display: flex;
-  width: 200px;
-  justify-content: space-between;
-  align-items: center;
-  padding: 16px;
-}
-
-.canvas-zoom span {
-  margin-right: 16px;
-}
-
 .bg-color-picker {
   width: 24px;
   height: 24px;
-  margin: 20px 8px;
   border-radius: 4px;
   cursor: pointer;
 }
@@ -255,10 +242,65 @@ body > div:not(.tippy-popper){ /* kms, this freaking rule. :< */
 
 .bg-color-picker-container {
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
 }
 
 .bg-color-picker-container .sketch-picker {
   position: absolute;
   top: 44px;
   left: 8px;
+}
+
+.settings-container {
+  display: flex;
+  flex-direction: column;
+}
+
+.settings-container > label {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 4px 0;
+}
+
+.settings-container > label > *:first-child {
+  margin-right: 8px;
+}
+
+.settings-container input {
+  border: 0px none transparent;
+  box-shadow: 0 0 2px rgb(72, 138, 199);
+  padding: 4px;
+  font-size: 14px;
+  border-radius: 2px;
+}
+
+.settings-container select {
+  border: 0px none transparent;
+  box-shadow: 0 0 2px rgb(72, 138, 199);
+  padding: 4px;
+  border-radius: 2px;
+}
+
+.settings-container a {
+  text-decoration: none;
+}
+
+.settings-container .animation-play {
+  margin-left: 16px;
+  cursor: pointer;
+}
+
+.settings-cog {
+  width: 48px;
+}
+
+.settings-cog > div {
+  width: 100%;
+  height: 100%;
+  display: flex!important;
+  justify-content: center;
+  align-items: center;
 }
