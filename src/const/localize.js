@@ -354,7 +354,7 @@ const all = {
     expression: '표정',
     action: '자세',
     skin: '피부색',
-    zoom: '줌렌즈'
+    zoom: '줌'
   },
   ch: {
     maplestory: '楓之谷',
