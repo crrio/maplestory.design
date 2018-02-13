@@ -320,7 +320,9 @@ const all = {
   },
   nl: {
     language: 'Taal',
-    playMusic: 'Speel Muziek'
+    playMusic: 'Speel Muziek',
+    pet: 'Diertje',
+    skin: 'Huid'
   },
   jp: {
     maplestory: 'メイプルストーリー',
