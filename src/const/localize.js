@@ -318,6 +318,10 @@ const all = {
     language: 'Language',
     playMusic: 'Play Music'
   },
+  nl: {
+    language: 'Taal',
+    playMusic: 'Speel Muziek'
+  },
   jp: {
     maplestory: 'メイプルストーリー',
     design: 'デザイン',
