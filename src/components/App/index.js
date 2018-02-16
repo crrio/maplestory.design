@@ -309,6 +309,7 @@ class App extends Component {
             <option value='kr'>Korean</option>
             <option value='ch'>Chinese (Traditional)</option>
             <option value='nl'>Dutch</option>
+            <option value='br'>Portuguese (Brazil)</option>
           </select>
         </label>
         <div>
