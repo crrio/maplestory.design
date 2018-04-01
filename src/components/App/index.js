@@ -75,8 +75,8 @@ class App extends Component {
       colorPickerOpen: false,
       language: localStorage['language'] == 'undefined' ? 'en' : localStorage['language'],
       music: false,
-      region: !localStorage['region'] ? 'GMS' : localStorage['region'],
-      version: !localStorage['version'] ? 'latest' : localStorage['version'],
+      region: localStorage['region'] ? localStorage['region'] : 'GMS',
+      version: localStorage['version'] ? localStorage['version'] : 'latest',
       maps: [],
       versions
     }

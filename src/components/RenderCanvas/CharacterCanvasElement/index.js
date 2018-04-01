@@ -5,6 +5,9 @@ import { NotificationManager } from 'react-notifications'
 import axios from 'axios'
 import _ from 'lodash'
 
+const region = !localStorage['region'] ? 'GMS' : localStorage['region']
+const version = !localStorage['version'] ? 'latest' : localStorage['version']
+
 class CharacterCanvasElement extends Component {
   constructor(props) {
     super(props)
@@ -33,7 +36,7 @@ class CharacterCanvasElement extends Component {
     });
 
     const { tryCount } = this.state
-    const link = `https://labs.maplestory.io/api/gms/latest/character/detailed/${character.skin}/${(itemsWithEmotion.join(',') || 1102039)}/${character.action}/${character.frame}?showears=${character.mercEars}&showLefEars=${character.illiumEars}&resize=${character.zoom}&tryCount=${tryCount}&flipX=${character.flipX}`
+    const link = `https://labs.maplestory.io/api/${region}/${version}/character/detailed/${character.skin}/${(itemsWithEmotion.join(',') || 1102039)}/${character.action}/${character.frame}?showears=${character.mercEars}&showLefEars=${character.illiumEars}&resize=${character.zoom}&tryCount=${tryCount}&flipX=${character.flipX}`
 
     if (isSync) {
       this.state.linkUsed = link
