@@ -59,9 +59,9 @@ class CharacterEntry extends Component {
   updateCharacterDetails(props, isSync) {
     const { character } = props
     const itemsWithEmotion = _.values(character.selectedItems)
-    .filter(item => item.Id && (item.visible === undefined || item.visible))
+    .filter(item => item.id && (item.visible === undefined || item.visible))
     .map(item => {
-      var itemEntry = item.Id >= 20000 && item.Id <= 29999 ? `${item.Id}:${character.emotion}` : item.Id
+      var itemEntry = item.id >= 20000 && item.id <= 29999 ? `${item.id}:${character.emotion}` : item.id
       return itemEntry
     });
 
@@ -216,7 +216,7 @@ class CharacterEntry extends Component {
         <Toggle onChange={this.toggleLock.bind(this)} checked={character.locked} />
       </label>
       <br />
-      <a href={`https://labs.maplestory.io/api/gms/latest/character/download/${character.skin}/${_.map(character.selectedItems, i => i.hue ? `${i.Id};${i.hue}` : i.Id).join(',')}?showears=${character.mercEars}&showLefEars=${character.illiumEars}`} target='_blank'  rel="noopener noreferrer">
+      <a href={`https://labs.maplestory.io/api/gms/latest/character/download/${character.skin}/${_.map(character.selectedItems, i => i.hue ? `${i.id};${i.hue}` : i.id).join(',')}?showears=${character.mercEars}&showLefEars=${character.illiumEars}`} target='_blank'  rel="noopener noreferrer">
         <div className='download-bar bg-blue'>
           <div className='equipped-items-item-meta'>
             <div className='equipped-items-item-meta-name text-white'>{localized.downloadSpriteSheet}</div>
@@ -225,7 +225,7 @@ class CharacterEntry extends Component {
         </div>
       </a>
       <div className="flex">
-        <a href={`https://labs.maplestory.io/api/gms/latest/character/download/${character.skin}/${_.map(character.selectedItems, i => i.hue ? `${i.Id};${i.hue}` : i.Id).join(',')}?showears=${character.mercEars}&showLefEars=${character.illiumEars}&format=1`} target='_blank'  rel="noopener noreferrer">
+        <a href={`https://labs.maplestory.io/api/gms/latest/character/download/${character.skin}/${_.map(character.selectedItems, i => i.hue ? `${i.id};${i.hue}` : i.id).join(',')}?showears=${character.mercEars}&showLefEars=${character.illiumEars}&format=1`} target='_blank'  rel="noopener noreferrer">
           <div className='download-bar bg-blue'>
             <div className='equipped-items-item-meta'>
               <div className='equipped-items-item-meta-name text-white'>{localized.downloadLayeredSpriteSheet}</div>

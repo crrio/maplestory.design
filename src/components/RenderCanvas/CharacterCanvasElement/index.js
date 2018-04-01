@@ -29,9 +29,9 @@ class CharacterCanvasElement extends Component {
   updateCharacterDetails(props, isSync) {
     const { character } = props
     const itemsWithEmotion = _.values(character.selectedItems)
-    .filter(item => item.Id && (item.visible === undefined || item.visible))
+    .filter(item => item.id && (item.visible === undefined || item.visible))
     .map(item => {
-      var itemEntry = item.Id >= 20000 && item.Id <= 29999 ? `${item.Id}:${character.emotion}` : item.Id
+      var itemEntry = item.id >= 20000 && item.id <= 29999 ? `${item.id}:${character.emotion}` : item.id
       return itemEntry
     });
 

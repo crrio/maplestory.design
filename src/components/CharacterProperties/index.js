@@ -46,7 +46,7 @@ class CharacterProperties extends Component {
     if (prevProps.equippedItems === this.props.equippedItems) return
     const { equippedItems } = this.props
 
-    const itemIds = _.values(equippedItems).map(item => item.Id)
+    const itemIds = _.values(equippedItems).map(item => item.id)
     axios.get(`https://labs.maplestory.io/api/gms/latest/character/actions/${itemIds.join(',')}`)
       .then(response => this.setState({actions: _.sortBy(response.data, a => a)}))
   }

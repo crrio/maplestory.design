@@ -35,6 +35,31 @@ let versions = {GMS: [{region: 0, MapleVersionId: "latest", IsReady: true}]}
 
 const regionCodeToName = ['GMS', 'JMS', 'KMS', 'TMS', 'CMS', 'SEA'];
 
+function toCamel(o) {
+  var newO, origKey, newKey, value
+  if (o instanceof Array) {
+    return o.map(function(value) {
+        if (typeof value === "object") {
+          value = toCamel(value)
+        }
+        return value
+    })
+  } else {
+    newO = {}
+    for (origKey in o) {
+      if (o.hasOwnProperty(origKey)) {
+        newKey = (origKey.charAt(0).toLowerCase() + origKey.slice(1) || origKey).toString()
+        value = o[origKey]
+        if (value instanceof Array || (value !== null && value.constructor === Object)) {
+          value = toCamel(value)
+        }
+        newO[newKey] = value
+      }
+    }
+  }
+  return newO
+}
+
 let wzPromise = axios.get(`https://labs.maplestory.io/api/wz`)
 .then(response => {
   let WZs = _.map(response.data.filter(wzEntry => wzEntry.isReady), wzEntry => {
@@ -145,10 +170,11 @@ class App extends Component {
       character.flipX = character.flipX || false;
       character.name = character.name || '';
       character.includeBackground = character.includeBackground === undefined ? true : character.includeBackground
+      character.selectedItems = toCamel(character.selectedItems)
       const itemsWithEmotion = _.values(character.selectedItems)
-      .filter(item => item.Id && (item.visible === undefined || item.visible))
+      .filter(item => item.id && (item.visible === undefined || item.visible))
       .map(item => {
-        var itemEntry = item.Id >= 20000 && item.Id <= 29999 ? `${item.Id}:${character.emotion}` : item.Id
+        var itemEntry = item.id >= 20000 && item.id <= 29999 ? `${item.id}:${character.emotion}` : item.id
         if (item.hue) itemEntry = itemEntry + ';' + item.hue
         return itemEntry
       });
@@ -165,7 +191,7 @@ class App extends Component {
       if (!pet.id) pet.id = Date.now() + (index + 1)
       pet.type = 'pet'
       pet.position = pet.position || { x: 0, y: 0}
-      pet.summary = `https://labs.maplestory.io/api/${this.state.region}/${this.state.version}/pet/${pet.petId}/${pet.animation || 'stand0'}/${pet.frame || 0}/${_.values(pet.selectedItems).map(item => item.Id).join(',')}?resize=${pet.zoom || 1}`
+      pet.summary = `https://labs.maplestory.io/api/${this.state.region}/${this.state.version}/pet/${pet.petId}/${pet.animation || 'stand0'}/${pet.frame || 0}/${_.values(pet.selectedItems).map(item => item.id).join(',')}?resize=${pet.zoom || 1}`
     })
 
     if ((this.state.selectedIndex + 1) > (this.state.characters.length + this.state.pets.length) || !this.state.characters.length)
@@ -497,7 +523,7 @@ class App extends Component {
       ...newProps
     }
 
-    currentPet.summary = `https://labs.maplestory.io/api/${this.state.region}/${this.state.version}/pet/${currentPet.petId}/${currentPet.animation || 'stand0'}/${currentPet.frame || 0}/${_.values(currentPet.selectedItems).map(item => item.Id).join(',')}?resize=${currentPet.zoom || 1}`
+    currentPet.summary = `https://labs.maplestory.io/api/${this.state.region}/${this.state.version}/pet/${currentPet.petId}/${currentPet.animation || 'stand0'}/${currentPet.frame || 0}/${_.values(currentPet.selectedItems).map(item => item.id).join(',')}?resize=${currentPet.zoom || 1}`
 
     this.setState({
         pets: pets
@@ -520,9 +546,9 @@ class App extends Component {
     }
 
     const itemsWithEmotion = _.values(currentCharacter.selectedItems)
-      .filter(item => item.Id && (item.visible === undefined || item.visible))
+      .filter(item => item.id && (item.visible === undefined || item.visible))
       .map(item => {
-        var itemEntry = item.Id >= 20000 && item.Id <= 29999 ? `${item.Id}:${currentCharacter.emotion}` : item.Id
+        var itemEntry = item.id >= 20000 && item.id <= 29999 ? `${item.id}:${currentCharacter.emotion}` : item.id
         if (item.hue) itemEntry = itemEntry + ';' + item.hue
         return itemEntry
       });
@@ -577,8 +603,8 @@ class App extends Component {
       ...selectedRenderable.selectedItems,
     }
 
-    if (item.TypeInfo) {
-      if (item.TypeInfo.SubCategory === 'Overall') {
+    if (item.typeInfo) {
+      if (item.typeInfo.subCategory === 'Overall') {
         delete selectedItems['Top']
         delete selectedItems['Bottom']
       }
@@ -589,8 +615,8 @@ class App extends Component {
       delete item['similar']
     }
 
-    if (item.TypeInfo) {
-      selectedItems[item.TypeInfo.SubCategory] = item
+    if (item.typeInfo) {
+      selectedItems[item.typeInfo.subCategory] = item
     }
     this.updateItems(selectedItems)
   }
@@ -599,7 +625,7 @@ class App extends Component {
     let selectedItems = {
       ...this.state.characters[this.state.selectedIndex].selectedItems,
     }
-    delete selectedItems[item.TypeInfo.SubCategory]
+    delete selectedItems[item.typeInfo.subCategory]
     this.updateItems(selectedItems);
   }
 
@@ -612,7 +638,7 @@ class App extends Component {
     let selectedItems = {
       ...this.state.characters[this.state.selectedIndex].selectedItems,
     }
-    selectedItems[item.TypeInfo.SubCategory] = {
+    selectedItems[item.typeInfo.subCategory] = {
       ...item,
       ...newProps
     }
@@ -631,9 +657,9 @@ class App extends Component {
 
     const characters = this.state.characters.map((character, index) => {
       const itemsWithEmotion = _.values(character.selectedItems)
-      .filter(item => item.Id && (item.visible === undefined || item.visible))
+      .filter(item => item.id && (item.visible === undefined || item.visible))
       .map(item => {
-        var itemEntry = item.Id >= 20000 && item.Id <= 29999 ? `${item.Id}:${character.emotion}` : item.Id
+        var itemEntry = item.id >= 20000 && item.id <= 29999 ? `${item.id}:${character.emotion}` : item.id
         if (item.hue) itemEntry = itemEntry + ';' + item.hue
         return itemEntry
       });
