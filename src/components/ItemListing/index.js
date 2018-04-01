@@ -127,16 +127,16 @@ class ItemListing extends Component {
     })
 
     this.showIcons = !search ? (selectedCategory || applicableItems) : applicableItems.filter((item, i) => {
-      return (item.Name || '').toLowerCase().indexOf(search) !== -1 ||
+      return (item.name || '').toLowerCase().indexOf(search) !== -1 ||
         item.id.toString().toLowerCase().indexOf(search) !== -1 ||
         (item.desc || '').toLowerCase().indexOf(search) !== -1
     })
 
     if (cashItemsOnly)
-      this.showIcons = this.showIcons.filter(item => item.IsCash)
+      this.showIcons = this.showIcons.filter(item => item.isCash)
 
     if (selectedGender)
-      this.showIcons = this.showIcons.filter(c => c.RequiredGender == selectedGender);
+      this.showIcons = this.showIcons.filter(c => c.requiredGender == selectedGender);
 
     this.showIcons = this.showIcons.filter(item => item && item.id)
 
@@ -335,8 +335,8 @@ class ItemListing extends Component {
     return (<img
       src={`https://labs.maplestory.io/api/${region}/${version}/item/${item.id}/icon`}
       onClick={this.selectItem.bind(this, item)}
-      alt={item.Name}
-      title={item.Name}
+      alt={item.name}
+      title={item.name}
       id={item.id}
       key={item.id}
       onMouseOver={!hideSimilar && item.similar ? this.showSimilar.bind(this, item) : false} />)
