@@ -33,8 +33,11 @@ const applicableSubcategories = { pet: ['Pet Equipment'] }
 
 let cellMeasurerCache = null
 
-const itemListPromise = axios.get('https://labs.maplestory.io/api/gms/latest/item/category/equip');
-const chairListPromise = axios.get('https://labs.maplestory.io/api/gms/latest/item/category/setup');
+const region = !localStorage['region'] ? 'GMS' : localStorage['region']
+const version = !localStorage['version'] ? 'latest' : localStorage['version']
+
+const itemListPromise = axios.get(`https://labs.maplestory.io/api/${region}/${version}/item/category/equip`);
+const chairListPromise = axios.get(`https://labs.maplestory.io/api/${region}/${version}/item/category/setup`);
 
 class ItemListing extends Component {
   constructor(props) {
@@ -63,15 +66,15 @@ class ItemListing extends Component {
     Promise.all([itemListPromise, chairListPromise]).then(responses => {
       if(!_.every(responses, res => res.status === 200)) return;
       const setupData = responses[1].data
-      const chairData = setupData.filter(item => Math.floor(item.Id / 10000) === 301).map(chair => {
-        chair.TypeInfo.Category = "Character" // That way it shows up as part of the character section
+      const chairData = setupData.filter(item => Math.floor(item.id / 10000) === 301).map(chair => {
+        chair.typeInfo.category = "Character" // That way it shows up as part of the character section
         return chair
       })
       const itemData = responses[0].data.concat(chairData)
       const groupedHair = _.map(
         _.groupBy(
-          itemData.filter(item => item.Id >= 30000 && item.Id <= 60000),
-          item => Math.floor(item.Id / 10)
+          itemData.filter(item => item.id >= 30000 && item.id <= 60000),
+          item => Math.floor(item.id / 10)
         ), itemGrouping => {
           const firstItem = itemGrouping[0]
           firstItem.similar = itemGrouping
@@ -80,8 +83,8 @@ class ItemListing extends Component {
       )
       const groupedFaces = _.map(
         _.groupBy(
-          itemData.filter(item => item.Id >= 10000 && item.Id < 30000),
-          item => (item.Id % 100) + (item.Id - (item.Id % 1000))
+          itemData.filter(item => item.id >= 10000 && item.id < 30000),
+          item => (item.id % 100) + (item.id - (item.id % 1000))
         ), itemGrouping => {
           const firstItem = itemGrouping[0]
           firstItem.similar = itemGrouping
@@ -91,11 +94,11 @@ class ItemListing extends Component {
       const categories = _.mapValues(
         _.groupBy(
           itemData
-            .filter(item => item.Id < 10000 || item.Id > 50000)
+            .filter(item => item.id < 10000 || item.id > 50000)
             .concat(groupedHair)
             .concat(groupedFaces),
-          item => item.TypeInfo.Category),
-        items => _.groupBy(items, item => item.TypeInfo.SubCategory)
+          item => item.typeInfo.category),
+        items => _.groupBy(items, item => item.typeInfo.subCategory)
       );
 
       const categoryNames = _.mapValues(categories, _.keys);
@@ -120,12 +123,12 @@ class ItemListing extends Component {
 
     const selectedType = this.props.target.type || 'character'
     const applicableItems = (items || []).filter(item => {
-      return applicableCategories[selectedType].indexOf(item.TypeInfo.Category) !== -1 && blacklistSubcategories.indexOf(item.TypeInfo.SubCategory) === -1 && (!applicableSubcategories[selectedType] || applicableSubcategories[selectedType].indexOf(item.TypeInfo.SubCategory) !== -1)
+      return applicableCategories[selectedType].indexOf(item.typeInfo.category) !== -1 && blacklistSubcategories.indexOf(item.typeInfo.subCategory) === -1 && (!applicableSubcategories[selectedType] || applicableSubcategories[selectedType].indexOf(item.typeInfo.subCategory) !== -1)
     })
 
     this.showIcons = !search ? (selectedCategory || applicableItems) : applicableItems.filter((item, i) => {
       return (item.Name || '').toLowerCase().indexOf(search) !== -1 ||
-        item.Id.toString().toLowerCase().indexOf(search) !== -1 ||
+        item.id.toString().toLowerCase().indexOf(search) !== -1 ||
         (item.desc || '').toLowerCase().indexOf(search) !== -1
     })
 
@@ -135,7 +138,7 @@ class ItemListing extends Component {
     if (selectedGender)
       this.showIcons = this.showIcons.filter(c => c.RequiredGender == selectedGender);
 
-    this.showIcons = this.showIcons.filter(item => item && item.Id)
+    this.showIcons = this.showIcons.filter(item => item && item.id)
 
     return (
       <div className='item-listing'>
@@ -304,7 +307,7 @@ class ItemListing extends Component {
       <CellMeasurer
         cache={cellMeasurerCache}
         index={index}
-        key={item.Id}
+        key={item.id}
         parent={parent}
       >
         <div className="item-img-container" style={{
@@ -330,17 +333,17 @@ class ItemListing extends Component {
 
   itemIcon(item, hideSimilar) {
     return (<img
-      src={`https://labs.maplestory.io/api/gms/latest/item/${item.Id}/icon`}
+      src={`https://labs.maplestory.io/api/${region}/${version}/item/${item.id}/icon`}
       onClick={this.selectItem.bind(this, item)}
       alt={item.Name}
       title={item.Name}
-      id={item.Id}
-      key={item.Id}
+      id={item.id}
+      key={item.id}
       onMouseOver={!hideSimilar && item.similar ? this.showSimilar.bind(this, item) : false} />)
   }
 
   showSimilar(item) {
-    const iconImg = document.getElementById(item.Id).parentElement
+    const iconImg = document.getElementById(item.id).parentElement
     const masonryContainer = document.getElementsByClassName("ReactVirtualized__Masonry")[0]
     this.setState({
       similarItems: {

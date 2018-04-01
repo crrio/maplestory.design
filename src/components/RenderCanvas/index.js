@@ -20,12 +20,12 @@ class RenderCanvas extends Component {
   constructor(props) {
     super(props)
     this.state = {
-      x: 0,
-      y: 0,
+      x: Number(localStorage['canvasX']) || 0,
+      y: Number(localStorage['canvasX']) || 0,
       childDragCount: 0
     }
 
-    if (props.selectedRenderable !== undefined) {
+    if (props.selectedRenderable !== undefined && (Number.isNaN(Number(localStorage['canvasX'])) || Number.isNaN(Number(localStorage['canvasY'])))) {
       const renderable = props.renderables[props.selectedRenderable]
       if (renderable){
         this.state = {
@@ -69,6 +69,9 @@ class RenderCanvas extends Component {
                 x: Math.round(-renderable.position.x + (mapData ? mapData.graphicBounds.x : 0)),
                 y: Math.round(-renderable.position.y + (mapData ? mapData.graphicBounds.y : 0))
               }
+
+              localStorage['canvasX'] = stateChanges.x
+              localStorage['canvasY'] = stateChanges.y
           }
 
           this.setState(stateChanges)
@@ -91,8 +94,12 @@ class RenderCanvas extends Component {
         <DraggableCore
           onDrag={(e, o) => {
             if (!o.deltaX && !o.deltaY) return
-            if(!this.state.childDragging && (e.target.classList.contains('canvas-characters') || e.target.classList.contains('map')))
-              this.setState({ x: this.state.x + o.deltaX, y: this.state.y + o.deltaY, dragCount: (this.state.dragCount || 0) + 1 })
+            if(!this.state.childDragging && (e.target.classList.contains('canvas-characters') || e.target.classList.contains('map'))) {
+              let stateChanges = { x: this.state.x + o.deltaX, y: this.state.y + o.deltaY, dragCount: (this.state.dragCount || 0) + 1 }
+              localStorage['canvasX'] = stateChanges.x
+              localStorage['canvasY'] = stateChanges.y
+              this.setState(stateChanges)
+            }
           }}
           onStart={(function() { this.setState({ dragging: true, dragCount: 0 }); console.log('dragging') }).bind(this)}
           onStop={(function() { this.setState({ dragging: false }); console.log('done') }).bind(this)}

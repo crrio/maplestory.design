@@ -25,24 +25,28 @@ import 'rc-tooltip/assets/bootstrap.css'
 import 'react-tippy/dist/tippy.css';
 import Toggle from 'react-toggle'
 
+localStorage['region'] = localStorage['region'] || 'GMS'
+localStorage['version'] = localStorage['version'] || '55'
 
-var creatingId = null;
-
+var creatingId = null
 const throttledErrorNotification = _.throttle(NotificationManager.error.bind(NotificationManager), 1500, { leading:true })
+let mapsIndexed = null
+let versions = {GMS: [{region: 0, MapleVersionId: "latest", IsReady: true}]}
 
-const mapPromise = axios.get(`https://labs.maplestory.io/api/gms/latest/map`)
-  .then(response => {
-    maps = _.map(response.data, map => {
-      return {
-        label: [map.streetName, map.name].join(' - '),
-        value: map.id
-      }
-    })
-    mapsIndexed = createFilterOptions({options: maps})
+const regionCodeToName = ['GMS', 'JMS', 'KMS', 'TMS', 'CMS', 'SEA'];
+
+let wzPromise = axios.get(`https://labs.maplestory.io/api/wz`)
+.then(response => {
+  let WZs = _.map(response.data.filter(wzEntry => wzEntry.isReady), wzEntry => {
+    return {
+      ...wzEntry,
+      region: regionCodeToName[wzEntry.region]
+    }
+  })
+  versions = _.groupBy(WZs, 'region')
+  console.log(versions);
+  return versions;
 })
-
-let maps = []
-let mapsIndexed = null;
 
 class App extends Component {
   constructor(props) {
@@ -70,8 +74,28 @@ class App extends Component {
       backgroundColor: JSON.parse(localStorage['backgroundColor'] || false) || {"hsl":{"h":0,"s":0,"l":0,"a":0},"hex":"transparent","rgb":{"r":0,"g":0,"b":0,"a":0},"hsv":{"h":0,"s":0,"v":0,"a":0},"oldHue":0,"source":"rgb"},
       colorPickerOpen: false,
       language: localStorage['language'] == 'undefined' ? 'en' : localStorage['language'],
-      music: false
+      music: false,
+      region: !localStorage['region'] ? 'GMS' : localStorage['region'],
+      version: !localStorage['version'] ? 'latest' : localStorage['version'],
+      maps: [],
+      versions
     }
+
+    let internalMaps = []
+    let mapPromise = axios.get(`https://labs.maplestory.io/api/${this.state.region}/${this.state.version}/map`).then(response => {
+      mapsIndexed = createFilterOptions({options: this.state.maps})
+      internalMaps = _.map(response.data, map => {
+        return {
+          label: [map.streetName, map.name].join(' - '),
+          value: map.id
+        }
+      });
+    });
+
+    if (versions.GMS.length > 1)
+      this.state.versions = versions
+    else
+      wzPromise.then(ver => this.setState({versions}))
 
     if (this.state.selectedIndex < 0) this.state.selectedIndex = false;
     this.state.focusRenderable = this.state.selectedIndex
@@ -131,7 +155,7 @@ class App extends Component {
 
       const { backgroundColor } = this.state
       const bgColorText = `${backgroundColor.rgb.r},${backgroundColor.rgb.g},${backgroundColor.rgb.b},${backgroundColor.rgb.a}`
-      character.summary = `https://labs.maplestory.io/api/gms/latest/character${ character.animating ? '/animated/' : '/' }${character.skin}/${(itemsWithEmotion.join(',') || 1102039)}/${character.action}/${character.frame}?showears=${character.mercEars}&showLefEars=${character.illiumEars}&resize=${character.zoom}&name=${character.name || ''}&flipX=${character.flipX}` + (character.includeBackground ? `&bgColor=${bgColorText}` : '')
+      character.summary = `https://labs.maplestory.io/api/${this.state.region}/${this.state.version}/character${ character.animating ? '/animated/' : '/' }${character.skin}/${(itemsWithEmotion.join(',') || 1102039)}/${character.action}/${character.frame}?showears=${character.mercEars}&showLefEars=${character.illiumEars}&resize=${character.zoom}&name=${character.name || ''}&flipX=${character.flipX}` + (character.includeBackground ? `&bgColor=${bgColorText}` : '')
       delete character.characters
       delete character.otherCharacters
       delete character.allCharacters
@@ -141,19 +165,28 @@ class App extends Component {
       if (!pet.id) pet.id = Date.now() + (index + 1)
       pet.type = 'pet'
       pet.position = pet.position || { x: 0, y: 0}
-      pet.summary = `https://labs.maplestory.io/api/gms/latest/pet/${pet.petId}/${pet.animation || 'stand0'}/${pet.frame || 0}/${_.values(pet.selectedItems).map(item => item.Id).join(',')}?resize=${pet.zoom || 1}`
+      pet.summary = `https://labs.maplestory.io/api/${this.state.region}/${this.state.version}/pet/${pet.petId}/${pet.animation || 'stand0'}/${pet.frame || 0}/${_.values(pet.selectedItems).map(item => item.Id).join(',')}?resize=${pet.zoom || 1}`
     })
 
     if ((this.state.selectedIndex + 1) > (this.state.characters.length + this.state.pets.length) || !this.state.characters.length)
       this.state.selectedIndex = false;
 
     this.updateBannerAdBlur()
-    if (maps.length != 0)
-      this.state.maps = maps
-    else
-      mapPromise.then(() => this.setState(maps))
 
     document.addEventListener("click", this.handleClick.bind(this))
+
+    if(internalMaps.length === 0) mapPromise.then(() => {
+      this.setState({maps: internalMaps})
+    })
+    else this.state.maps = internalMaps;
+  }
+
+  changeRegionVersion(region, version) {
+    localStorage['region'] = region
+    localStorage['version'] = version
+
+    // Much easier than trying to reload everything here :D
+    window.location.reload()
   }
 
   handleClick(e) {
@@ -258,7 +291,7 @@ class App extends Component {
           localized={localized}
           onSetModalOpen={this.setModalOpen.bind(this)} />
         <NotificationContainer />
-        { music ? <audio src={`//labs.maplestory.io/api/gms/latest/map/${selectedMap}/bgm`} autoPlay={true} loop={true} /> : '' }
+        { music ? <audio src={`//labs.maplestory.io/api/${this.state.region}/${this.state.version}/map/${selectedMap}/bgm`} autoPlay={true} loop={true} /> : '' }
       </div>
     )
   }
@@ -314,23 +347,39 @@ class App extends Component {
           <div className='map-select-container'>
             <VirtualizedSelect
               filterOptions={mapsIndexed}
-              isLoading={maps.length === 0}
+              isLoading={this.state.maps.length === 0}
               name='map-selection'
               searchable
               clearable
               simpleValue
               value={selectedMap}
               onChange={this.selectMap.bind(this)}
-              options={maps}
+              options={this.state.maps}
               />
           </div>
         </div>
         <label>
-        <span>{localized.playMusic}</span>
-        <Toggle
-          onChange={this.toggleMusic.bind(this)}
-          checked={this.state.music} />
-      </label>
+          <span>{localized.region}</span>
+          <select value={this.state.region} onChange={(e) => this.changeRegionVersion(e.target.value, this.state.version)}>
+            { _.keys(this.state.versions).map(versionName => <option value={versionName} key={versionName}>{versionName}</option>) }
+          </select>
+        </label>
+        <label>
+          <span>{localized.version}</span>
+          <select value={this.state.version} onChange={(e) => this.changeRegionVersion(this.state.region, e.target.value)}>
+            { this.state.versions[this.state.region].map(({mapleVersionId}) => <option value={mapleVersionId} key={mapleVersionId}>{mapleVersionId}</option>) }
+            <option value='latest' key='latest'>latest</option>
+          </select>
+        </label>
+        <label>
+          <span>Happy April Fools day! <i className='fa fa-heart' style={{color: 'red'}} /></span>
+        </label>
+        <label>
+          <span>{localized.playMusic}</span>
+          <Toggle
+            onChange={this.toggleMusic.bind(this)}
+            checked={this.state.music} />
+        </label>
       </div>
     )
   }
@@ -394,7 +443,7 @@ class App extends Component {
       selectedItems: [],
       id: Date.now(),
       type: 'pet',
-      summary: `https://labs.maplestory.io/api/gms/latest/pet/${petId}/stand0`,
+      summary: `https://labs.maplestory.io/api/${this.state.region}/${this.state.version}/pet/${petId}/stand0`,
       animation: 'stand0',
       visible: true,
       frame: 0,
@@ -446,7 +495,7 @@ class App extends Component {
       ...newProps
     }
 
-    currentPet.summary = `https://labs.maplestory.io/api/gms/latest/pet/${currentPet.petId}/${currentPet.animation || 'stand0'}/${currentPet.frame || 0}/${_.values(currentPet.selectedItems).map(item => item.Id).join(',')}?resize=${currentPet.zoom || 1}`
+    currentPet.summary = `https://labs.maplestory.io/api/${this.state.region}/${this.state.version}/pet/${currentPet.petId}/${currentPet.animation || 'stand0'}/${currentPet.frame || 0}/${_.values(currentPet.selectedItems).map(item => item.Id).join(',')}?resize=${currentPet.zoom || 1}`
 
     this.setState({
         pets: pets
@@ -479,7 +528,7 @@ class App extends Component {
     const { backgroundColor } = this.state
     const bgColorText = `${backgroundColor.rgb.r},${backgroundColor.rgb.g},${backgroundColor.rgb.b},${backgroundColor.rgb.a}`
 
-    currentCharacter.summary = `https://labs.maplestory.io/api/gms/latest/character${ currentCharacter.animating ? '/animated/' : '/' }${currentCharacter.skin}/${(itemsWithEmotion.join(',') || 1102039)}/${currentCharacter.action}/${currentCharacter.frame}?showears=${currentCharacter.mercEars}&showLefEars=${currentCharacter.illiumEars}&resize=${currentCharacter.zoom}&name=${currentCharacter.name || ''}&flipX=${currentCharacter.flipX}` + (currentCharacter.includeBackground ? `&bgColor=${bgColorText}` : '')
+    currentCharacter.summary = `https://labs.maplestory.io/api/${this.state.region}/${this.state.version}/character${ currentCharacter.animating ? '/animated/' : '/' }${currentCharacter.skin}/${(itemsWithEmotion.join(',') || 1102039)}/${currentCharacter.action}/${currentCharacter.frame}?showears=${currentCharacter.mercEars}&showLefEars=${currentCharacter.illiumEars}&resize=${currentCharacter.zoom}&name=${currentCharacter.name || ''}&flipX=${currentCharacter.flipX}` + (currentCharacter.includeBackground ? `&bgColor=${bgColorText}` : '')
 
     this.setState({
         characters: characters
@@ -502,7 +551,7 @@ class App extends Component {
       visible: true,
       position: {x: 0, y: 0},
       fhSnap: true,
-      summary: `https://labs.maplestory.io/api/gms/latest/character/2000/1102039/stand1/0?showears=false&showLefEars=false&resize=1`,
+      summary: `https://labs.maplestory.io/api/${this.state.region}/${this.state.version}/character/2000/1102039/stand1/0?showears=false&showLefEars=false&resize=1`,
     }
   }
 
@@ -589,7 +638,7 @@ class App extends Component {
 
       return {
         ...character,
-        summary: `https://labs.maplestory.io/api/gms/latest/character${ character.animating ? '/animated/' : '/' }${character.skin}/${(itemsWithEmotion.join(',') || 1102039)}/${character.action}/${character.frame}?showears=${character.mercEars}&showLefEars=${character.illiumEars}&resize=${character.zoom}&name=${character.name || ''}&flipX=${character.flipX}` + (character.includeBackground ? `&bgColor=${bgColorText}` : '')
+        summary: `https://labs.maplestory.io/api/${this.state.region}/${this.state.version}/character${ character.animating ? '/animated/' : '/' }${character.skin}/${(itemsWithEmotion.join(',') || 1102039)}/${character.action}/${character.frame}?showears=${character.mercEars}&showLefEars=${character.illiumEars}&resize=${character.zoom}&name=${character.name || ''}&flipX=${character.flipX}` + (character.includeBackground ? `&bgColor=${bgColorText}` : '')
       }
     });
 
