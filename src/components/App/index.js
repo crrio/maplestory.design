@@ -173,7 +173,7 @@ class App extends Component {
       character.flipX = character.flipX || false;
       character.name = character.name || '';
       character.includeBackground = character.includeBackground === undefined ? true : character.includeBackground
-      character.selectedItems = toCamel(character.selectedItems)
+      character.selectedItems = _.keyBy(_.values(toCamel(character.selectedItems)), (item) => item.typeInfo.subCategory)
       const itemsWithEmotion = _.values(character.selectedItems)
       .filter(item => item.id && (item.visible === undefined || item.visible))
       .map(item => {
