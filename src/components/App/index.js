@@ -25,8 +25,11 @@ import 'rc-tooltip/assets/bootstrap.css'
 import 'react-tippy/dist/tippy.css';
 import Toggle from 'react-toggle'
 
-localStorage['region'] = localStorage['region'] || 'GMS'
-localStorage['version'] = localStorage['version'] || '55'
+if (localStorage['initialized'] != 'true') {
+  localStorage['region'] = localStorage['region'] || 'GMS'
+  localStorage['version'] = localStorage['version'] || 'latest'
+  localStorage['initialized'] = 'true'
+}
 
 var creatingId = null
 const throttledErrorNotification = _.throttle(NotificationManager.error.bind(NotificationManager), 1500, { leading:true })
