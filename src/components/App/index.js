@@ -403,9 +403,6 @@ class App extends Component {
           </select>
         </label>
         <label>
-          <span>Happy April Fools day! <i className='fa fa-heart' style={{color: 'red'}} /></span>
-        </label>
-        <label>
           <span>{localized.playMusic}</span>
           <Toggle
             onChange={this.toggleMusic.bind(this)}
