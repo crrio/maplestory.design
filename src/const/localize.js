@@ -316,7 +316,9 @@ const all = {
     miscellaneous: "Miscellaneous",
     cakeVsPie: "Cake vs Pie",
     language: 'Language',
-    playMusic: 'Play Music'
+    playMusic: 'Play Music',
+    region: 'Region',
+    version: 'Version'
   },
   br: {
     maplestory: 'MapleStory',
