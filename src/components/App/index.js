@@ -34,7 +34,7 @@ if (localStorage['initialized'] != 'true') {
 var creatingId = null
 const throttledErrorNotification = _.throttle(NotificationManager.error.bind(NotificationManager), 1500, { leading:true })
 let mapsIndexed = null
-let versions = {GMS: [{region: 0, MapleVersionId: "latest", IsReady: true}]}
+let versions = {GMS: [{region: 0, MapleVersionId: "latest", IsReady: true}], KMS: [{region: 0, MapleVersionId: "latest", IsReady: true}], CMS: [{region: 0, MapleVersionId: "latest", IsReady: true}]}
 
 const regionCodeToName = ['GMS', 'JMS', 'KMS', 'TMS', 'CMS', 'SEA'];
 
@@ -72,6 +72,13 @@ let wzPromise = axios.get(`https://labs.maplestory.io/api/wz`)
     }
   })
   versions = _.groupBy(WZs, 'region')
+
+  if (!versions[localStorage['region']] || (localStorage['version'] != 'latest' && !versions[localStorage['region']][localStorage['version']])) {
+    localStorage['region'] = 'GMS'
+    localStorage['version'] = 'latest'
+    window.location.reload()
+  }
+
   console.log(versions);
   return versions;
 })
@@ -391,7 +398,7 @@ class App extends Component {
         </div>
         <label>
           <span>{localized.region}</span>
-          <select value={this.state.region} onChange={(e) => this.changeRegionVersion(e.target.value, this.state.version)}>
+          <select value={this.state.region} onChange={(e) => this.changeRegionVersion(e.target.value, "latest")}>
             { _.keys(this.state.versions).map(versionName => <option value={versionName} key={versionName}>{versionName}</option>) }
           </select>
         </label>
