@@ -52,7 +52,7 @@ class RenderCanvas extends Component {
 
       const renderable = this.props.renderables[focusRenderable]
       if (renderable)
-        this.setState({ x: -renderable.position.x + (mapData ? mapData.graphicBounds.x : 0), y: -renderable.position.y + (mapData ? mapData.graphicBounds.y : 0) })
+        this.setState({ x: -renderable.position.x + (mapData ? mapData.vrBounds.x : 0), y: -renderable.position.y + (mapData ? mapData.vrBounds.y : 0) })
     }
     if (prevProps.mapId != this.props.mapId && this.props.mapId) {
       axios.get(`https://labs.maplestory.io/api/${region}/${version}/map/${this.props.mapId}`)
@@ -69,8 +69,8 @@ class RenderCanvas extends Component {
             if (renderable)
               stateChanges = {
                 ...stateChanges,
-                x: Math.round(-renderable.position.x + (mapData ? mapData.graphicBounds.x : 0)),
-                y: Math.round(-renderable.position.y + (mapData ? mapData.graphicBounds.y : 0))
+                x: Math.round(-renderable.position.x + (mapData ? mapData.vrBounds.x : 0)),
+                y: Math.round(-renderable.position.y + (mapData ? mapData.vrBounds.y : 0))
               }
 
               localStorage['canvasX'] = stateChanges.x
@@ -90,7 +90,7 @@ class RenderCanvas extends Component {
     const styleOptions = { transform: `translate(${this.state.x}px, ${this.state.y}px) translateZ(0)` }
     if (zoom != 1) styleOptions.transform = styleOptions.transform + ` scale(${zoom})`
 
-    if (mapData) mapOrigin.transform = `translate(${-mapData.graphicBounds.x}px, ${-mapData.graphicBounds.y}px)`
+    if (mapData) mapOrigin.transform = `translate(${-mapData.vrBounds.x}px, ${-mapData.vrBounds.y}px)`
 
     return (
       <div className={'canvas-bg' + (this.state.dragging ? ' dragging' : '')} style={{ backgroundPositionX: `${this.state.x}px`, backgroundPositionY: `${this.state.y}px` }}>
@@ -113,7 +113,7 @@ class RenderCanvas extends Component {
               mapId ? <img className='map' src={`https://labs.maplestory.io/api/${region}/${version}/map/${mapId}/render`} draggable={false} onClick={this.clickCanvas.bind(this)} onError={this.mapLoadingError} /> : ''
             }
             {
-              (mapData && renderFootholds) ? <svg className='map' onClick={this.clickCanvas.bind(this)} width={mapData.graphicBounds.width} height={mapData.graphicBounds.height} viewBox={`${mapData.graphicBounds.x} ${mapData.graphicBounds.y} ${mapData.graphicBounds.width} ${mapData.graphicBounds.height}`}>{
+              (mapData && renderFootholds) ? <svg className='map' onClick={this.clickCanvas.bind(this)} width={mapData.vrBounds.width} height={mapData.vrBounds.height} viewBox={`${mapData.vrBounds.x} ${mapData.vrBounds.y} ${mapData.vrBounds.width} ${mapData.vrBounds.height}`}>{
                 ((_.values(mapData.footholds) || []).map((fh, i) =>
                   <line x1={fh.x1} x2={fh.x2} y1={fh.y1} y2={fh.y2} strokeWidth='2' stroke='black' key={'svg' + i} />
                 ))
