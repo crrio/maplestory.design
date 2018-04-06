@@ -25,10 +25,10 @@ import 'rc-tooltip/assets/bootstrap.css'
 import 'react-tippy/dist/tippy.css';
 import Toggle from 'react-toggle'
 
-if (localStorage['initialized'] != 'true') {
-  localStorage['region'] = localStorage['region'] || 'GMS'
-  localStorage['version'] = localStorage['version'] || 'latest'
-  localStorage['initialized'] = 'true'
+if (localStorage['initialized'] != '2') {
+  localStorage['region'] = 'GMS'
+  localStorage['version'] = 'latest'
+  localStorage['initialized'] = '2'
 }
 
 var creatingId = null
@@ -118,7 +118,6 @@ class App extends Component {
 
     let internalMaps = []
     let mapPromise = axios.get(`https://labs.maplestory.io/api/${this.state.region}/${this.state.version}/map`).then(response => {
-      mapsIndexed = createFilterOptions({options: this.state.maps})
       internalMaps = _.map(response.data, map => {
         return {
           label: [map.streetName, map.name].join(' - '),
@@ -212,6 +211,7 @@ class App extends Component {
     document.addEventListener("click", this.handleClick.bind(this))
 
     if(internalMaps.length === 0) mapPromise.then(() => {
+      console.log('Setting maps later')
       this.setState({maps: internalMaps})
     })
     else this.state.maps = internalMaps;
@@ -384,7 +384,7 @@ class App extends Component {
         <div>
           <div className='map-select-container'>
             <VirtualizedSelect
-              filterOptions={mapsIndexed}
+              filterOptions={createFilterOptions({options: this.state.maps})}
               isLoading={this.state.maps.length === 0}
               name='map-selection'
               searchable
