@@ -83,6 +83,18 @@ let wzPromise = axios.get(`https://labs.maplestory.io/api/wz`)
   return versions;
 })
 
+let maps = []
+let mapsFilter = null
+let mapPromise = axios.get(`https://labs.maplestory.io/api/${localStorage['region']}/${localStorage['version']}/map`).then(response => {
+      maps = _.map(response.data, map => {
+        return {
+          label: [map.streetName, map.name].join(' - '),
+          value: map.id
+        }
+      });
+      mapsFilter = createFilterOptions({options: maps})
+    });
+
 class App extends Component {
   constructor(props) {
     super(props)
@@ -112,19 +124,8 @@ class App extends Component {
       music: false,
       region: localStorage['region'] ? localStorage['region'] : 'GMS',
       version: localStorage['version'] ? localStorage['version'] : 'latest',
-      maps: [],
       versions
     }
-
-    let internalMaps = []
-    let mapPromise = axios.get(`https://labs.maplestory.io/api/${this.state.region}/${this.state.version}/map`).then(response => {
-      internalMaps = _.map(response.data, map => {
-        return {
-          label: [map.streetName, map.name].join(' - '),
-          value: map.id
-        }
-      });
-    });
 
     if (versions.GMS.length > 1)
       this.state.versions = versions
@@ -210,11 +211,8 @@ class App extends Component {
 
     document.addEventListener("click", this.handleClick.bind(this))
 
-    if(internalMaps.length === 0) mapPromise.then(() => {
-      console.log('Setting maps later')
-      this.setState({maps: internalMaps})
-    })
-    else this.state.maps = internalMaps;
+    if (maps.length) this.state.mapsLoaded = true
+    else mapPromise.then(() => setTimeout(() => this.setState({mapsLoaded : true}), 250))
   }
 
   changeRegionVersion(region, version) {
@@ -384,15 +382,15 @@ class App extends Component {
         <div>
           <div className='map-select-container'>
             <VirtualizedSelect
-              filterOptions={createFilterOptions({options: this.state.maps})}
-              isLoading={this.state.maps.length === 0}
+              filterOptions={mapsFilter}
+              isLoading={maps.length === 0}
               name='map-selection'
               searchable
               clearable
               simpleValue
               value={selectedMap}
               onChange={this.selectMap.bind(this)}
-              options={this.state.maps}
+              options={maps}
               />
           </div>
         </div>
