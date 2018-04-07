@@ -111,6 +111,8 @@ class CharacterEntry extends Component {
   customizeCharacter(character) {
     const { localized } = this.props
     const { actions, frames, emotions } = this.state
+    const isGMSRegion = localStorage['region'].toLowerCase() == 'gms'
+    const hasName = character.name && character.name.length > 0
     return (<div className='character-customizeable-options-container'>
     <div className='character-customizeable-options'>
       <div>
@@ -119,6 +121,13 @@ class CharacterEntry extends Component {
       <label>
         <span>{localized.name}</span>
         <input type='text' value={character.name} onChange={this.changeName.bind(this)} />
+      </label>
+      <label>
+        {
+          isGMSRegion && hasName ? <a href={`https://henesys.chat/#${character.skin};${_.values(character.selectedItems).map(item => item.id).join(',')};${character.name}`} target='_blank'>Play on Henesys.Chat</a>
+          : isGMSRegion ? <span>Give your character a name to play on Henesys.Chat!</span>
+          : <span>Customize your character on GMS to play on Henesys.Chat!</span>
+        }
       </label>
       <label>
         <span>{localized.expression}</span>
