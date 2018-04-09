@@ -70,7 +70,7 @@ class ItemListing extends Component {
         chair.typeInfo.category = "Character" // That way it shows up as part of the character section
         return chair
       })
-      const itemData = responses[0].data.concat(chairData)
+      const itemData = (responses[0].data || []).concat(chairData || []) || []
       const groupedHair = _.map(
         _.groupBy(
           itemData.filter(item => item.id >= 30000 && item.id <= 60000),
