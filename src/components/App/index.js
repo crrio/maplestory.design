@@ -73,7 +73,9 @@ let wzPromise = axios.get(`https://labs.maplestory.io/api/wz`)
   })
   versions = _.groupBy(WZs, 'region')
 
-  if (!versions[localStorage['region']] || (localStorage['version'] != 'latest' && !versions[localStorage['region']][localStorage['version']])) {
+  let region = localStorage['region'], version = localStorage['version']
+
+  if (!region || (version != 'latest' && _.findIndex(versions[region], ver => ver.mapleVersionId == version) == -1)) {
     localStorage['region'] = 'GMS'
     localStorage['version'] = 'latest'
     window.location.reload()
