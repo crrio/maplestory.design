@@ -317,6 +317,8 @@ class App extends Component {
           (selectedIndex !== false && !_.isEmpty(renderables[selectedIndex].selectedItems) ? <EquippedItems
             equippedItems={renderables[selectedIndex].selectedItems}
             onRemoveItem={this.userRemovedItem.bind(this)}
+            name={renderables[selectedIndex].name}
+            skinId={renderables[selectedIndex].skin}
             onUpdateItem={this.updateItem.bind(this)}
             localized={localized}
             onRemoveItems={this.userRemovedItems.bind(this)} /> : '')
