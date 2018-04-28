@@ -34,7 +34,7 @@ if (localStorage['initialized'] != '2') {
 var creatingId = null
 const throttledErrorNotification = _.throttle(NotificationManager.error.bind(NotificationManager), 1500, { leading:true })
 let mapsIndexed = null
-let versions = {GMS: [{region: 0, MapleVersionId: "latest", IsReady: true}], KMS: [{region: 0, MapleVersionId: "latest", IsReady: true}], CMS: [{region: 0, MapleVersionId: "latest", IsReady: true}]}
+let versions = {GMS: [{region: 0, MapleVersionId: "latest", IsReady: true}], KMS: [{region: 0, MapleVersionId: "latest", IsReady: true}], CMS: [{region: 0, MapleVersionId: "latest", IsReady: true}], JMS: [{region: 0, MapleVersionId: "latest", IsReady: true}]}
 
 const regionCodeToName = ['GMS', 'JMS', 'KMS', 'TMS', 'CMS', 'SEA'];
 
