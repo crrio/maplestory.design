@@ -39,7 +39,7 @@ class EquippedItems extends Component {
             _.map(equippedItems, item => {
               return (<Tooltip html={this.customizeItem(item)} position='right' interactive={true} theme='light' distance={250} arrow={true} key={item.id}>
                 <div className='equipped-items-item'>
-                  <img src={`https://labs.maplestory.io/api/gms/latest/item/${item.id}/icon`} alt={item.name} />
+                  <img src={`https://labs.maplestory.io/api/${localStorage['region']}/${localStorage['version']}/item/${item.id}/icon`} alt={item.name} />
                   <div className='equipped-items-item-meta'>
                     <div className='equipped-items-item-meta-name'><a href={'https://maplestory.wiki/item/' + item.id} target='_blank'>{item.name}</a></div>
                     <div className='equipped-items-item-meta-category'>{item.typeInfo.subCategory}</div>

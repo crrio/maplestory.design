@@ -10,7 +10,7 @@ import 'react-tippy/dist/tippy.css';
 import RcTooltip from 'rc-tooltip'
 import Slider from 'rc-slider'
 
-const petLoader = axios.get(`https://labs.maplestory.io/api/gms/latest/pet`)
+const petLoader = axios.get(`https://labs.maplestory.io/api/${localStorage['region']}/${localStorage['version']}/pet`)
   .then(petResp =>
     {
       let petPairs = _.toPairs(petResp.data)
@@ -33,7 +33,7 @@ class PetEntry extends Component {
     }
 
     // Populate true action list
-    axios.get(`https://labs.maplestory.io/api/gms/latest/pet/actions/${(props.pet || {}).petId || 5000000}`)
+    axios.get(`https://labs.maplestory.io/api/${localStorage['region']}/${localStorage['version']}/pet/actions/${(props.pet || {}).petId || 5000000}`)
       .then(response => this.setState({actions: _.sortBy(_.keys(response.data), a => a)}))
     if (pets.length > 0) this.state.petsLoaded = true;
     else petLoader.then(() => this.setState({ petsLoaded: true }))
@@ -43,7 +43,7 @@ class PetEntry extends Component {
     if (prevProps.pet && this.props.pet && prevProps.pet.petId == this.props.pet.petId) return
     const { pet: { petId } } = this.props
 
-    axios.get(`https://labs.maplestory.io/api/gms/latest/pet/actions/${petId || 5000000}`)
+    axios.get(`https://labs.maplestory.io/api/${localStorage['region']}/${localStorage['version']}/pet/actions/${petId || 5000000}`)
       .then(response => this.setState({actions: _.sortBy(_.keys(response.data), a => a)}))
   }
 

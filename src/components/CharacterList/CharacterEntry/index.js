@@ -66,7 +66,7 @@ class CharacterEntry extends Component {
     });
 
     const { tryCount } = this.state
-    const link = `https://labs.maplestory.io/api/gms/latest/character/detailed/${character.skin}/${(itemsWithEmotion.join(',') || 1102039)}/${character.action}/0?showears=${character.mercEars}&showLefEars=${character.illiumEars}&resize=${character.zoom}&tryCount=${tryCount}&flipX=${character.flipX}&name=${character.name}`
+    const link = `https://labs.maplestory.io/api/${localStorage['region']}/${localStorage['version']}/character/detailed/${character.skin}/${(itemsWithEmotion.join(',') || 1102039)}/${character.action}/0?showears=${character.mercEars}&showLefEars=${character.illiumEars}&resize=${character.zoom}&tryCount=${tryCount}&flipX=${character.flipX}&name=${character.name}`
 
     if (isSync) {
       this.state.linkUsed = link
@@ -225,7 +225,7 @@ class CharacterEntry extends Component {
         <Toggle onChange={this.toggleLock.bind(this)} checked={character.locked} />
       </label>
       <br />
-      <a href={`https://labs.maplestory.io/api/gms/latest/character/download/${character.skin}/${_.map(character.selectedItems, i => i.hue ? `${i.id};${i.hue}` : i.id).join(',')}?showears=${character.mercEars}&showLefEars=${character.illiumEars}`} target='_blank'  rel="noopener noreferrer">
+      <a href={`https://labs.maplestory.io/api/${localStorage['region']}/${localStorage['version']}/character/download/${character.skin}/${_.map(character.selectedItems, i => i.hue ? `${i.id};${i.hue}` : i.id).join(',')}?showears=${character.mercEars}&showLefEars=${character.illiumEars}`} target='_blank'  rel="noopener noreferrer">
         <div className='download-bar bg-blue'>
           <div className='equipped-items-item-meta'>
             <div className='equipped-items-item-meta-name text-white'>{localized.downloadSpriteSheet}</div>
@@ -234,7 +234,7 @@ class CharacterEntry extends Component {
         </div>
       </a>
       <div className="flex">
-        <a href={`https://labs.maplestory.io/api/gms/latest/character/download/${character.skin}/${_.map(character.selectedItems, i => i.hue ? `${i.id};${i.hue}` : i.id).join(',')}?showears=${character.mercEars}&showLefEars=${character.illiumEars}&format=1`} target='_blank'  rel="noopener noreferrer">
+        <a href={`https://labs.maplestory.io/api/${localStorage['region']}/${localStorage['version']}/character/download/${character.skin}/${_.map(character.selectedItems, i => i.hue ? `${i.id};${i.hue}` : i.id).join(',')}?showears=${character.mercEars}&showLefEars=${character.illiumEars}&format=1`} target='_blank'  rel="noopener noreferrer">
           <div className='download-bar bg-blue'>
             <div className='equipped-items-item-meta'>
               <div className='equipped-items-item-meta-name text-white'>{localized.downloadLayeredSpriteSheet}</div>
