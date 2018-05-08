@@ -66,7 +66,7 @@ class CharacterEntry extends Component {
     });
 
     const { tryCount } = this.state
-    const link = `https://labs.maplestory.io/api/${localStorage['region']}/${localStorage['version']}/character/detailed/${character.skin}/${(itemsWithEmotion.join(',') || 1102039)}/${character.action}/0?showears=${character.mercEars}&showLefEars=${character.illiumEars}&resize=${character.zoom}&tryCount=${tryCount}&flipX=${character.flipX}&name=${character.name}`
+    const link = `https://labs.maplestory.io/api/${localStorage['region']}/${localStorage['version']}/character/detailed/${character.skin}/${(itemsWithEmotion.join(',') || 1102039)}/${character.action}/0?showears=${character.mercEars}&showLefEars=${character.illiumEars}&resize=${character.zoom}&tryCount=${tryCount}&flipX=${character.flipX}&name=${encodeURI(character.name || '')}`
 
     if (isSync) {
       this.state.linkUsed = link
