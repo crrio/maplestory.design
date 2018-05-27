@@ -73,7 +73,7 @@ class PetEntry extends Component {
         <select onChange={this.changePetId.bind(this)} value={pet.petId}>
           {
             pets.map(a => (
-              <option value={a.petId} key={'petSelect' + a.petId}>{a.name}</option>
+              <option value={a.petId} key={'petSelect' + a.petId}>{a.name.value}</option>
             ))
           }
         </select>
