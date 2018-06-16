@@ -25,4 +25,4 @@ kubernetes_deploy:
         name: maplestory.design
         url: https://maplestory.design
     script:
-        - ~/kubectl set image deployment/design design=registry.crr.io/${CI_PROJECT_PATH}:${CI_COMMIT_SHA:0:8} --namespace=design
+        - ~/kubectl set image deployment/maplestory-design maplestory-design=registry.crr.io/${CI_PROJECT_PATH}:${CI_COMMIT_SHA:0:8} --namespace=maplestory-public
