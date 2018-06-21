@@ -4,8 +4,7 @@ stages:
 
 docker_image:
     stage: image
-    tags:
-        - docker  
+    image: docker:stable
     services:
         - docker:dind
     script:
