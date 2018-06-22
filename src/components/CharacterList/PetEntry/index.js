@@ -13,12 +13,11 @@ import Slider from 'rc-slider'
 const petLoader = axios.get(`https://labs.maplestory.io/api/${localStorage['region']}/${localStorage['version']}/pet`)
   .then(petResp =>
     {
-      let petPairs = _.toPairs(petResp.data)
-      let uniqPets = _.uniqBy(petPairs, pet => pet[1])
+      let uniqPets = _.uniqBy(petResp.data, pet => pet.key)
       pets = uniqPets.map(pet => {
         return {
-          petId: pet[0],
-          name: pet[1]
+          petId: pet.key,
+          name: pet.value
         }
       })
     }) // For some reason the standard [].map doesn't work here. :(
@@ -73,7 +72,7 @@ class PetEntry extends Component {
         <select onChange={this.changePetId.bind(this)} value={pet.petId}>
           {
             pets.map(a => (
-              <option value={a.petId} key={'petSelect' + a.petId}>{a.name.value}</option>
+              <option value={a.petId} key={'petSelect' + a.petId}>{a.name}</option>
             ))
           }
         </select>
