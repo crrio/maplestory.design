@@ -36,8 +36,8 @@ let cellMeasurerCache = null
 const region = !localStorage['region'] ? 'GMS' : localStorage['region']
 const version = !localStorage['version'] ? 'latest' : localStorage['version']
 
-const itemListPromise = axios.get(`https://labs.maplestory.io/api/${region}/${version}/item/category/equip`);
-const chairListPromise = axios.get(`https://labs.maplestory.io/api/${region}/${version}/item/category/setup`);
+const itemListPromise = axios.get(`https://maplestory.io/api/${region}/${version}/item/category/equip`);
+const chairListPromise = axios.get(`https://maplestory.io/api/${region}/${version}/item/category/setup`);
 
 class ItemListing extends Component {
   constructor(props) {
@@ -333,7 +333,7 @@ class ItemListing extends Component {
 
   itemIcon(item, hideSimilar) {
     return (<img
-      src={`https://labs.maplestory.io/api/${region}/${version}/item/${item.id}/icon`}
+      src={`https://maplestory.io/api/${region}/${version}/item/${item.id}/icon`}
       onClick={this.selectItem.bind(this, item)}
       alt={item.name}
       title={item.name}

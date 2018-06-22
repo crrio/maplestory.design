@@ -34,7 +34,13 @@ if (localStorage['initialized'] != '2') {
 var creatingId = null
 const throttledErrorNotification = _.throttle(NotificationManager.error.bind(NotificationManager), 1500, { leading:true })
 let mapsIndexed = null
-let versions = {GMS: [{region: 0, MapleVersionId: "latest", IsReady: true}], KMS: [{region: 0, MapleVersionId: "latest", IsReady: true}], CMS: [{region: 0, MapleVersionId: "latest", IsReady: true}], JMS: [{region: 0, MapleVersionId: "latest", IsReady: true}]}
+let versions = {
+  GMS: [{region: 0, MapleVersionId: "latest", IsReady: true}], 
+  KMS: [{region: 0, MapleVersionId: "latest", IsReady: true}], 
+  CMS: [{region: 0, MapleVersionId: "latest", IsReady: true}], 
+  JMS: [{region: 0, MapleVersionId: "latest", IsReady: true}], 
+  SEA: [{region: 0, MapleVersionId: "latest", IsReady: true}]
+}
 
 const regionCodeToName = ['GMS', 'JMS', 'KMS', 'TMS', 'CMS', 'SEA'];
 
@@ -63,7 +69,7 @@ function toCamel(o) {
   return newO
 }
 
-let wzPromise = axios.get(`https://labs.maplestory.io/api/wz`)
+let wzPromise = axios.get(`https://maplestory.io/api/wz`)
 .then(response => {
   let WZs = _.map(response.data.filter(wzEntry => wzEntry.isReady), wzEntry => {
     return {
@@ -87,7 +93,7 @@ let wzPromise = axios.get(`https://labs.maplestory.io/api/wz`)
 
 let maps = []
 let mapsFilter = null
-let mapPromise = axios.get(`https://labs.maplestory.io/api/${localStorage['region']}/${localStorage['version']}/map`).then(response => {
+let mapPromise = axios.get(`https://maplestory.io/api/${localStorage['region']}/${localStorage['version']}/map`).then(response => {
       maps = _.map(response.data, map => {
         return {
           label: [map.streetName, map.name].join(' - '),
@@ -193,7 +199,7 @@ class App extends Component {
 
       const { backgroundColor } = this.state
       const bgColorText = `${backgroundColor.rgb.r},${backgroundColor.rgb.g},${backgroundColor.rgb.b},${backgroundColor.rgb.a}`
-      character.summary = `https://labs.maplestory.io/api/${this.state.region}/${this.state.version}/character${ character.animating ? '/animated/' : '/' }${character.skin}/${(itemsWithEmotion.join(',') || 1102039)}/${character.action}/${character.frame}?showears=${character.mercEars}&showLefEars=${character.illiumEars}&resize=${character.zoom}&name=${encodeURI(character.name || '')}&flipX=${character.flipX}` + (character.includeBackground ? `&bgColor=${bgColorText}` : '')
+      character.summary = `https://maplestory.io/api/${this.state.region}/${this.state.version}/character${ character.animating ? '/animated/' : '/' }${character.skin}/${(itemsWithEmotion.join(',') || 1102039)}/${character.action}/${character.frame}?showears=${character.mercEars}&showLefEars=${character.illiumEars}&resize=${character.zoom}&name=${encodeURI(character.name || '')}&flipX=${character.flipX}` + (character.includeBackground ? `&bgColor=${bgColorText}` : '')
       delete character.characters
       delete character.otherCharacters
       delete character.allCharacters
@@ -203,7 +209,7 @@ class App extends Component {
       if (!pet.id) pet.id = Date.now() + (index + 1)
       pet.type = 'pet'
       pet.position = pet.position || { x: 0, y: 0}
-      pet.summary = `https://labs.maplestory.io/api/${this.state.region}/${this.state.version}/pet/${pet.petId}/${pet.animation || 'stand0'}/${pet.frame || 0}/${_.values(pet.selectedItems).map(item => item.id).join(',')}?resize=${pet.zoom || 1}`
+      pet.summary = `https://maplestory.io/api/${this.state.region}/${this.state.version}/pet/${pet.petId}/${pet.animation || 'stand0'}/${pet.frame || 0}/${_.values(pet.selectedItems).map(item => item.id).join(',')}?resize=${pet.zoom || 1}`
     })
 
     if ((this.state.selectedIndex + 1) > (this.state.characters.length + this.state.pets.length) || !this.state.characters.length)
@@ -329,7 +335,7 @@ class App extends Component {
           localized={localized}
           onSetModalOpen={this.setModalOpen.bind(this)} />
         <NotificationContainer />
-        { music ? <audio src={`//labs.maplestory.io/api/${this.state.region}/${this.state.version}/map/${selectedMap}/bgm`} autoPlay={true} loop={true} /> : '' }
+        { music ? <audio src={`//maplestory.io/api/${this.state.region}/${this.state.version}/map/${selectedMap}/bgm`} autoPlay={true} loop={true} /> : '' }
       </div>
     )
   }
@@ -480,7 +486,7 @@ class App extends Component {
       selectedItems: [],
       id: Date.now(),
       type: 'pet',
-      summary: `https://labs.maplestory.io/api/${this.state.region}/${this.state.version}/pet/${petId}/stand0`,
+      summary: `https://maplestory.io/api/${this.state.region}/${this.state.version}/pet/${petId}/stand0`,
       animation: 'stand0',
       visible: true,
       frame: 0,
@@ -532,7 +538,7 @@ class App extends Component {
       ...newProps
     }
 
-    currentPet.summary = `https://labs.maplestory.io/api/${this.state.region}/${this.state.version}/pet/${currentPet.petId}/${currentPet.animation || 'stand0'}/${currentPet.frame || 0}/${_.values(currentPet.selectedItems).map(item => item.id).join(',')}?resize=${currentPet.zoom || 1}`
+    currentPet.summary = `https://maplestory.io/api/${this.state.region}/${this.state.version}/pet/${currentPet.petId}/${currentPet.animation || 'stand0'}/${currentPet.frame || 0}/${_.values(currentPet.selectedItems).map(item => item.id).join(',')}?resize=${currentPet.zoom || 1}`
 
     this.setState({
         pets: pets
@@ -565,7 +571,7 @@ class App extends Component {
     const { backgroundColor } = this.state
     const bgColorText = `${backgroundColor.rgb.r},${backgroundColor.rgb.g},${backgroundColor.rgb.b},${backgroundColor.rgb.a}`
 
-    currentCharacter.summary = `https://labs.maplestory.io/api/${this.state.region}/${this.state.version}/character${ currentCharacter.animating ? '/animated/' : '/' }${currentCharacter.skin}/${(itemsWithEmotion.join(',') || 1102039)}/${currentCharacter.action}/${currentCharacter.frame}?showears=${currentCharacter.mercEars}&showLefEars=${currentCharacter.illiumEars}&resize=${currentCharacter.zoom}&name=${encodeURI(character.name || '')}&flipX=${currentCharacter.flipX}` + (currentCharacter.includeBackground ? `&bgColor=${bgColorText}` : '')
+    currentCharacter.summary = `https://maplestory.io/api/${this.state.region}/${this.state.version}/character${ currentCharacter.animating ? '/animated/' : '/' }${currentCharacter.skin}/${(itemsWithEmotion.join(',') || 1102039)}/${currentCharacter.action}/${currentCharacter.frame}?showears=${currentCharacter.mercEars}&showLefEars=${currentCharacter.illiumEars}&resize=${currentCharacter.zoom}&name=${encodeURI(character.name || '')}&flipX=${currentCharacter.flipX}` + (currentCharacter.includeBackground ? `&bgColor=${bgColorText}` : '')
 
     this.setState({
         characters: characters
@@ -588,7 +594,7 @@ class App extends Component {
       visible: true,
       position: {x: 0, y: 0},
       fhSnap: true,
-      summary: `https://labs.maplestory.io/api/${this.state.region}/${this.state.version}/character/2000/1102039/stand1/0?showears=false&showLefEars=false&resize=1`,
+      summary: `https://maplestory.io/api/${this.state.region}/${this.state.version}/character/2000/1102039/stand1/0?showears=false&showLefEars=false&resize=1`,
     }
   }
 
@@ -675,7 +681,7 @@ class App extends Component {
 
       return {
         ...character,
-        summary: `https://labs.maplestory.io/api/${this.state.region}/${this.state.version}/character${ character.animating ? '/animated/' : '/' }${character.skin}/${(itemsWithEmotion.join(',') || 1102039)}/${character.action}/${character.frame}?showears=${character.mercEars}&showLefEars=${character.illiumEars}&resize=${character.zoom}&name=${encodeURI(character.name || '')}&flipX=${character.flipX}` + (character.includeBackground ? `&bgColor=${bgColorText}` : '')
+        summary: `https://maplestory.io/api/${this.state.region}/${this.state.version}/character${ character.animating ? '/animated/' : '/' }${character.skin}/${(itemsWithEmotion.join(',') || 1102039)}/${character.action}/${character.frame}?showears=${character.mercEars}&showLefEars=${character.illiumEars}&resize=${character.zoom}&name=${encodeURI(character.name || '')}&flipX=${character.flipX}` + (character.includeBackground ? `&bgColor=${bgColorText}` : '')
       }
     });
 

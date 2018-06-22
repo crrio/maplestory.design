@@ -40,7 +40,7 @@ class RenderCanvas extends Component {
     }
 
     if (props.mapId) {
-      axios.get(`https://labs.maplestory.io/api/${region}/${version}/map/${props.mapId}`)
+      axios.get(`https://maplestory.io/api/${region}/${version}/map/${props.mapId}`)
         .then(response => this.setState({mapData: response.data}))
     }
   }
@@ -55,7 +55,7 @@ class RenderCanvas extends Component {
         this.setState({ x: -renderable.position.x + (mapData ? mapData.vrBounds.x : 0), y: -renderable.position.y + (mapData ? mapData.vrBounds.y : 0) })
     }
     if (prevProps.mapId != this.props.mapId && this.props.mapId) {
-      axios.get(`https://labs.maplestory.io/api/${region}/${version}/map/${this.props.mapId}`)
+      axios.get(`https://maplestory.io/api/${region}/${version}/map/${this.props.mapId}`)
         .then(response => {
           let stateChanges = {
             mapData: response.data
@@ -110,7 +110,7 @@ class RenderCanvas extends Component {
           <div className={'canvas-characters' + (this.state.dragging ? ' dragging' : '')} onClick={this.clickCanvas.bind(this)} style={{ backgroundColor }}>
             <div className={'renderables-container' + (this.state.dragging ? ' dragging' : '')} style={styleOptions}>
             {
-              mapId ? <img className='map' src={`https://labs.maplestory.io/api/${region}/${version}/map/${mapId}/render`} draggable={false} onClick={this.clickCanvas.bind(this)} onError={this.mapLoadingError} /> : ''
+              mapId ? <img className='map' src={`https://maplestory.io/api/${region}/${version}/map/${mapId}/render`} draggable={false} onClick={this.clickCanvas.bind(this)} onError={this.mapLoadingError} /> : ''
             }
             {
               (mapData && renderFootholds) ? <svg className='map' onClick={this.clickCanvas.bind(this)} width={mapData.vrBounds.width} height={mapData.vrBounds.height} viewBox={`${mapData.vrBounds.x} ${mapData.vrBounds.y} ${mapData.vrBounds.width} ${mapData.vrBounds.height}`}>{

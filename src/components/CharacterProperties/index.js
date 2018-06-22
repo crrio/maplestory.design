@@ -38,7 +38,7 @@ class CharacterProperties extends Component {
     }
 
     // Populate true action list
-    axios.get(`https://labs.maplestory.io/api/gms/latest/character/actions/1040004`)
+    axios.get(`https://maplestory.io/api/gms/latest/character/actions/1040004`)
       .then(response => this.setState({actions: _.sortBy(response.data, a => a)}))
   }
 
@@ -47,7 +47,7 @@ class CharacterProperties extends Component {
     const { equippedItems } = this.props
 
     const itemIds = _.values(equippedItems).map(item => item.id)
-    axios.get(`https://labs.maplestory.io/api/gms/latest/character/actions/${itemIds.join(',')}`)
+    axios.get(`https://maplestory.io/api/gms/latest/character/actions/${itemIds.join(',')}`)
       .then(response => this.setState({actions: _.sortBy(response.data, a => a)}))
   }
 
