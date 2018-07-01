@@ -31,6 +31,15 @@ if (localStorage['initialized'] != '2') {
   localStorage['initialized'] = '2'
 }
 
+if (!localStorage['language']) {
+  if (navigator.language.startsWith('ko')) localStorage['language'] = 'kr'
+  else if (navigator.language.startsWith('ja')) localStorage['language'] = 'jp'
+  else if (navigator.language.startsWith('zh')) localStorage['language'] = 'ch'
+  else if (navigator.language.startsWith('nl')) localStorage['language'] = 'nl'
+  else if (navigator.language.startsWith('pt')) localStorage['language'] = 'br'
+  else localStorage['language'] = 'en'
+}
+
 var creatingId = null
 const throttledErrorNotification = _.throttle(NotificationManager.error.bind(NotificationManager), 1500, { leading:true })
 let mapsIndexed = null
