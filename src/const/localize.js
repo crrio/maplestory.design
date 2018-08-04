@@ -318,7 +318,8 @@ const all = {
     language: 'Language',
     playMusic: 'Play Music',
     region: 'Region',
-    version: 'Version'
+    version: 'Version',
+    clone: 'Clone'
   },
   br: {
     maplestory: 'MapleStory',
