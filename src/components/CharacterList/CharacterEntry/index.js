@@ -225,6 +225,7 @@ class CharacterEntry extends Component {
         <Toggle onChange={this.toggleLock.bind(this)} checked={character.locked} />
       </label>
       <br />
+      <div className='clone-btn' onClick={this.onClone.bind(this)}>Clone</div>
       <a href={`https://maplestory.io/api/${localStorage['region']}/${localStorage['version']}/character/download/${character.skin}/${_.map(character.selectedItems, i => i.hue ? `${i.id};${i.hue}` : i.id).join(',')}?showears=${character.mercEars}&showLefEars=${character.illiumEars}`} target='_blank'  rel="noopener noreferrer">
         <div className='download-bar bg-blue'>
           <div className='equipped-items-item-meta'>
@@ -274,6 +275,10 @@ class CharacterEntry extends Component {
 
   deleteCharacter() {
     this.props.onDeleteCharacter(this.props.character)
+  }
+
+  onClone() {
+    this.props.onClone(this.props.character)
   }
 
   changeSkin(e) {

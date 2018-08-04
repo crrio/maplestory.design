@@ -317,6 +317,7 @@ class App extends Component {
           onAddCharacter={this.addCharacter.bind(this)}
           onAddPet={this.addPet.bind(this)}
           onDeleteCharacter={this.removeCharacter.bind(this)}
+          onCloneCharacter={this.cloneCharacter.bind(this)}
           onDeletePet={this.removePet.bind(this)}
           localized={localized}
           onUpdateSelectedCharacter={function (renderable) {
@@ -517,6 +518,27 @@ class App extends Component {
     localStorage['characters'] = JSON.stringify(characters)
     localStorage['selectedIndex'] = false
     localStorage['zoom'] = 1
+  }
+
+  cloneCharacter(character) {
+    let characters = [
+      ...this.state.characters
+    ]
+
+    let indexOfCharacter = characters.indexOf(character)
+    characters.splice(indexOfCharacter + 1, 0, { 
+      ...character, 
+      id: Date.now(),
+      position: {
+        x: character.position.x + 100,
+        y: character.position.y
+      }
+    })
+    let newCharacterIndex = indexOfCharacter + 1
+
+    this.setState({ characters, selectedIndex: newCharacterIndex, focusRenderable: newCharacterIndex + 1 })
+    localStorage['selectedIndex'] = newCharacterIndex
+    localStorage['characters'] = JSON.stringify(characters)
   }
 
   userUpdateSelectedRenderable(renderable, callback) {

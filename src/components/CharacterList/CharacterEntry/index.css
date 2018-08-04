@@ -43,3 +43,19 @@
   max-height: 400px;
   padding: 0 16px 0 0;
 }
+
+.clone-btn {
+  line-height: 16px;
+  margin: 4px 0 8px auto;
+  padding: 4px;
+  box-shadow: 0 0 1px rgba(0, 0, 0, 0.2);
+  width: 100px;
+  color: white;
+  background-color: #42a5f5;
+  border-bottom: 4px solid #488ac7;
+  cursor: pointer;
+}
+
+.clone-btn:hover {
+  border-bottom: 0px none transparent;
+}

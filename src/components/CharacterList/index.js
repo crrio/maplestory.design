@@ -21,6 +21,7 @@ class CharacterList extends Component {
                 onUpdateCharacter={this.props.onUpdateCharacter}
                 key={'character' + i}
                 localized={localized}
+                onClone={this.props.onCloneCharacter}
                 onDeleteCharacter={this.props.onDeleteCharacter} />)
             } else if (c.type == 'pet') {
               return (<PetEntry
