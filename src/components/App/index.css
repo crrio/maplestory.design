@@ -304,3 +304,11 @@ body > div:not(.tippy-popper){ /* kms, this freaking rule. :< */
   justify-content: center;
   align-items: center;
 }
+
+.map-select-container .Select-menu {
+  max-height: 398px;
+}
+
+.map-select-container .Select-menu-outer {
+  max-height: 400px;
+}
