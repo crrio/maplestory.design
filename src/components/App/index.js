@@ -411,18 +411,18 @@ class App extends Component {
               value={selectedMap}
               onChange={this.selectMap.bind(this)}
               options={maps}
-              maxHeight={800}
+              maxHeight={400}
               styles={{
                 menuList: (styles, {data}) => {
                   return {
                     ...styles,
-                    height: '800px'
+                    height: '400px'
                   }
                 },
                 menu: (styles, {data}) => {
                   return {
                     ...styles,
-                    height: '800px'
+                    height: '400px'
                   }
                 }
               }}
