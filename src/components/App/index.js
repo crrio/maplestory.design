@@ -46,6 +46,7 @@ let mapsIndexed = null
 let versions = {
   GMS: [{region: 0, MapleVersionId: "latest", IsReady: true}], 
   KMS: [{region: 0, MapleVersionId: "latest", IsReady: true}], 
+  TMS: [{region: 0, MapleVersionId: "latest", IsReady: true}], 
   CMS: [{region: 0, MapleVersionId: "latest", IsReady: true}], 
   JMS: [{region: 0, MapleVersionId: "latest", IsReady: true}], 
   SEA: [{region: 0, MapleVersionId: "latest", IsReady: true}]
