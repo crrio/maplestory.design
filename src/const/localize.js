@@ -319,7 +319,9 @@ const all = {
     playMusic: 'Play Music',
     region: 'Region',
     version: 'Version',
-    clone: 'Clone'
+    clone: 'Clone',
+    downloadMinimalSpriteSheet: 'Download Minimal Spritesheet',
+    downloadMinimalLayeredSpriteSheet: 'Download Minimal Layered Spritesheet',
   },
   br: {
     maplestory: 'MapleStory',

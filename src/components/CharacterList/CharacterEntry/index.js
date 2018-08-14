@@ -234,8 +234,16 @@ class CharacterEntry extends Component {
           </div>
         </div>
       </a>
+      <a href={`https://maplestory.io/api/${localStorage['region']}/${localStorage['version']}/character/download/${character.skin}/${_.map(character.selectedItems, i => i.hue ? `${i.id};${i.hue}` : i.id).join(',')}?showears=${character.mercEars}&showLefEars=${character.illiumEars}&format=2`} target='_blank'  rel="noopener noreferrer">
+        <div className='download-bar bg-blue'>
+          <div className='equipped-items-item-meta'>
+            <div className='equipped-items-item-meta-name text-white'>{localized.downloadMinimalSpriteSheet}</div>
+            <div className='equipped-items-item-meta-category text-white'>({localized.willDownloadZip})</div>
+          </div>
+        </div>
+      </a>
       <div className="flex">
-        <a href={`https://maplestory.io/api/${localStorage['region']}/${localStorage['version']}/character/download/${character.skin}/${_.map(character.selectedItems, i => i.hue ? `${i.id};${i.hue}` : i.id).join(',')}?showears=${character.mercEars}&showLefEars=${character.illiumEars}&format=1`} target='_blank'  rel="noopener noreferrer">
+        <a className='layered-link' href={`https://maplestory.io/api/${localStorage['region']}/${localStorage['version']}/character/download/${character.skin}/${_.map(character.selectedItems, i => i.hue ? `${i.id};${i.hue}` : i.id).join(',')}?showears=${character.mercEars}&showLefEars=${character.illiumEars}&format=1`} target='_blank'  rel="noopener noreferrer">
           <div className='download-bar bg-blue'>
             <div className='equipped-items-item-meta'>
               <div className='equipped-items-item-meta-name text-white'>{localized.downloadLayeredSpriteSheet}</div>
@@ -245,7 +253,23 @@ class CharacterEntry extends Component {
           </div>
         </a>
         <a href="https://forums.getpaint.net/topic/31996-zip-archive-filetype-plugin-zip/" className='flex-column pdn-button'  target='_blank'  rel="noopener noreferrer">
-          <div className='download-bar bg-red text-white'>
+          <div className='download-bar bg-red text-white pdn-link'>
+            PDN
+          </div>
+        </a>
+      </div>
+      <div className="flex">
+        <a className='layered-link' href={`https://maplestory.io/api/${localStorage['region']}/${localStorage['version']}/character/download/${character.skin}/${_.map(character.selectedItems, i => i.hue ? `${i.id};${i.hue}` : i.id).join(',')}?showears=${character.mercEars}&showLefEars=${character.illiumEars}&format=3`} target='_blank'  rel="noopener noreferrer">
+          <div className='download-bar bg-blue'>
+            <div className='equipped-items-item-meta'>
+              <div className='equipped-items-item-meta-name text-white'>{localized.downloadMinimalLayeredSpriteSheet}</div>
+              <div className='equipped-items-item-meta-category text-white'>({localized.willDownloadZip})</div>
+              <div className='equipped-items-item-meta-category text-white'>{localized.requiresPDNPlugin} &gt;</div>
+            </div>
+          </div>
+        </a>
+        <a href="https://forums.getpaint.net/topic/31996-zip-archive-filetype-plugin-zip/" className='flex-column pdn-button'  target='_blank'  rel="noopener noreferrer">
+          <div className='download-bar bg-red text-white pdn-link'>
             PDN
           </div>
         </a>

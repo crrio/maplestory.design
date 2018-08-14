@@ -59,3 +59,11 @@
 .clone-btn:hover {
   border-bottom: 0px none transparent;
 }
+
+.layered-link {
+  flex-grow: 1;
+}
+
+.pdn-link {
+  min-width: 55px;
+}
