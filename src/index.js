@@ -24,8 +24,8 @@ window.generateAvatarLink = function (character) {
 
   let itemEntriesPayload = JSON.stringify([
     ...itemEntries,
-    { itemId: character.skin },
-    { itemId: character.skin + 10000 }
+    { itemId: Number(character.skin) },
+    { itemId: Number(character.skin) + 10000 }
   ])
   itemEntriesPayload = encodeURIComponent(itemEntriesPayload.substr(1, itemEntriesPayload.length - 2))
   return `https://maplestory.io/api/character/${itemEntriesPayload}/${character.action}/${character.frame}?showears=${character.mercEars}&showLefEars=${character.illiumEars}&resize=${character.zoom}&name=${encodeURI(character.name || '')}&flipX=${character.flipX}` + (character.includeBackground ? `&bgColor=${bgColorText}` : '')
