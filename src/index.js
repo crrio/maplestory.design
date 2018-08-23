@@ -5,17 +5,17 @@ import registerServiceWorker, { unregister } from './registerServiceWorker';
 import './index.css';
 
 window.generateAvatarLink = function (character) {
-  let itemEntries = Object.values(character.selectedItems).map(c => { 
+  let itemEntries = Object.values(character.selectedItems).filter(item => item.id && (item.visible === undefined || item.visible)).map(item => { 
     return { 
-      itemId: Number(c.id), 
-      region: c.region || window.localStorage["region"], 
-      version: c.version || window.localStorage["version"],
-      hue: c.hue,
-      brightness: c.brightness === undefined ? 1 : c.brightness,
-      saturation: c.saturation === undefined ? 1 : c.saturation,
-      contrast: c.contrast === undefined ? 1 : c.contrast,
-      alpha: c.alpha === undefined ? 1 : c.alpha,
-      animationName: c.itemId >= 20000 && c.itemId < 30000 ? character.emotion : character.action
+      itemId: Number(item.id), 
+      region: item.region || window.localStorage["region"], 
+      version: item.version || window.localStorage["version"],
+      hue: item.hue,
+      brightness: item.brightness === undefined ? 1 : item.brightness,
+      saturation: item.saturation === undefined ? 1 : item.saturation,
+      contrast: item.contrast === undefined ? 1 : item.contrast,
+      alpha: item.alpha === undefined ? 1 : item.alpha,
+      animationName: item.itemId >= 20000 && item.itemId < 30000 ? character.emotion : character.action
     } 
   })
 
