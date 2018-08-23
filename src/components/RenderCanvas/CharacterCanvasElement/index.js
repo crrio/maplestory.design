@@ -59,7 +59,7 @@ class CharacterCanvasElement extends Component {
   }
 
   render() {
-    const { character, onUpdateRenderablePosition, summary, onStart, onStop, onClick, selected } = this.props
+    const { character, onUpdateRenderablePosition, onStart, onStop, onClick, selected } = this.props
     const { zoom } = character
     const { details } = this.state
     const styling = {
@@ -81,7 +81,7 @@ class CharacterCanvasElement extends Component {
         <div className={selected ? 'selected-canvas-element' : ''} style={styling}>
          {
             details ? (<img
-              src={character.summary}
+              src={window.generateAvatarLink(character)}
               alt=''
               className='renderable-instance'
               draggable={false}

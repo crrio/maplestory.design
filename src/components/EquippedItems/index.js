@@ -71,6 +71,26 @@ class EquippedItems extends Component {
     this.props.onUpdateItem(item, {hue: newHue});
   }
 
+  updateItemContrast(item, newContrast) {
+    if(newContrast.target) newContrast = newContrast.target.value
+    this.props.onUpdateItem(item, {contrast: newContrast})
+  }
+
+  updateItemBrightness(item, newBrightness) {
+    if(newBrightness.target) newBrightness = newBrightness.target.value
+    this.props.onUpdateItem(item, {brightness: newBrightness})
+  }
+
+  updateItemAlpha(item, newAlpha) {
+    if(newAlpha.target) newAlpha = newAlpha.target.value
+    this.props.onUpdateItem(item, {alpha: newAlpha})
+  }
+
+  updateItemSaturation(item, newSaturation) {
+    if(newSaturation.target) newSaturation = newSaturation.target.value
+    this.props.onUpdateItem(item, {saturation: newSaturation})
+  }
+
   customizeItem(item) {
     return (<div className='customizing-item'>
       <span>
@@ -82,6 +102,50 @@ class EquippedItems extends Component {
           max={360}
           handle={handle}
           onChange={this.updateItemHue.bind(this, item)} />
+      </span>
+      <span>
+        <span className='flex'>Contrast<input type='number' className='contrast-picker-value' value={item.contrast === undefined ? 1 : item.contrast} onChange={this.updateItemContrast.bind(this, item)} /></span>
+        <Slider
+          className='contrast-picker'
+          value={item.contrast === undefined ? 1 : item.contrast}
+          min={0}
+          step={0.1}
+          max={10}
+          handle={handle}
+          onChange={this.updateItemContrast.bind(this, item)} />
+      </span>
+      <span>
+        <span className='flex'>Brightness<input type='number' className='brightness-picker-value' value={item.brightness === undefined ? 1 : item.brightness} onChange={this.updateItemBrightness.bind(this, item)} /></span>
+        <Slider
+          className='brightness-picker'
+          value={item.brightness === undefined ? 1 : item.brightness}
+          min={0}
+          step={0.1}
+          max={10}
+          handle={handle}
+          onChange={this.updateItemBrightness.bind(this, item)} />
+      </span>
+      <span>
+        <span className='flex'>Saturation<input type='number' className='saturation-picker-value' value={item.saturation === undefined ? 1 : item.saturation} onChange={this.updateItemSaturation.bind(this, item)} /></span>
+        <Slider
+          className='saturation-picker'
+          value={item.saturation === undefined ? 1 : item.saturation}
+          min={0}
+          step={0.1}
+          max={10}
+          handle={handle}
+          onChange={this.updateItemSaturation.bind(this, item)} />
+      </span>
+      <span>
+        <span className='flex'>Alpha<input type='number' className='alpha-picker-value' value={item.alpha === undefined ? 1 : item.alpha} onChange={this.updateItemAlpha.bind(this, item)} /></span>
+        <Slider
+          className='alpha-picker'
+          value={item.alpha === undefined ? 1 : item.alpha}
+          min={0}
+          step={0.1}
+          max={1}
+          handle={handle}
+          onChange={this.updateItemAlpha.bind(this, item)} />
       </span>
       <label>
         <span>Visible</span>

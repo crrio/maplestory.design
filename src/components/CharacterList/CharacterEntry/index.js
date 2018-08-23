@@ -101,7 +101,7 @@ class CharacterEntry extends Component {
         <div
           className={'character ' + (character.visible ? 'disabled ' : 'enabled ') + (isSelected ? 'active' : 'inactive')}
           style={{
-            backgroundImage: 'url('+character.summary+')'
+            backgroundImage: 'url('+window.generateAvatarLink(character)+')'
           }}
           {...otherProps}>&nbsp;</div>
       </Tooltip>

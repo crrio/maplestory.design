@@ -199,17 +199,6 @@ class App extends Component {
       character.name = character.name || '';
       character.includeBackground = character.includeBackground === undefined ? true : character.includeBackground
       character.selectedItems = _.keyBy(_.values(toCamel(character.selectedItems)), (item) => item.typeInfo.subCategory)
-      const itemsWithEmotion = _.values(character.selectedItems)
-      .filter(item => item.id && (item.visible === undefined || item.visible))
-      .map(item => {
-        var itemEntry = item.id >= 20000 && item.id <= 29999 ? `${item.id}:${character.emotion}` : item.id
-        if (item.hue) itemEntry = itemEntry + ';' + item.hue
-        return itemEntry
-      });
-
-      const { backgroundColor } = this.state
-      const bgColorText = `${backgroundColor.rgb.r},${backgroundColor.rgb.g},${backgroundColor.rgb.b},${backgroundColor.rgb.a}`
-      character.summary = `https://maplestory.io/api/${this.state.region}/${this.state.version}/character${ character.animating ? '/animated/' : '/' }${character.skin}/${(itemsWithEmotion.join(',') || 1102039)}/${character.action}/${character.frame}?showears=${character.mercEars}&showLefEars=${character.illiumEars}&resize=${character.zoom}&name=${encodeURI(character.name || '')}&flipX=${character.flipX}` + (character.includeBackground ? `&bgColor=${bgColorText}` : '')
       delete character.characters
       delete character.otherCharacters
       delete character.allCharacters
@@ -617,8 +606,6 @@ class App extends Component {
 
     const { backgroundColor } = this.state
     const bgColorText = `${backgroundColor.rgb.r},${backgroundColor.rgb.g},${backgroundColor.rgb.b},${backgroundColor.rgb.a}`
-
-    currentCharacter.summary = `https://maplestory.io/api/${this.state.region}/${this.state.version}/character${ currentCharacter.animating ? '/animated/' : '/' }${currentCharacter.skin}/${(itemsWithEmotion.join(',') || 1102039)}/${currentCharacter.action}/${currentCharacter.frame}?showears=${currentCharacter.mercEars}&showLefEars=${currentCharacter.illiumEars}&resize=${currentCharacter.zoom}&name=${encodeURI(character.name || '')}&flipX=${currentCharacter.flipX}` + (currentCharacter.includeBackground ? `&bgColor=${bgColorText}` : '')
 
     this.setState({
         characters: characters

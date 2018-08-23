@@ -153,7 +153,6 @@ class RenderCanvas extends Component {
       }).bind(this)}
       onUpdateRenderablePosition={this.handleRenderableElementMovement.bind(this, renderable)}
       character={renderable}
-      summary={renderable.summary}
       selected={selectedRenderable === index}
       localized={this.props.localized}
       key={'canvas' + renderable.id} />
