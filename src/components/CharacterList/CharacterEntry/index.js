@@ -226,7 +226,7 @@ class CharacterEntry extends Component {
       </label>
       <br />
       <div className='clone-btn' onClick={this.onClone.bind(this)}>{localized.clone}</div>
-      <a href={`https://maplestory.io/api/${localStorage['region']}/${localStorage['version']}/character/download/${character.skin}/${_.map(character.selectedItems, i => i.hue ? `${i.id};${i.hue}` : i.id).join(',')}?showears=${character.mercEars}&showLefEars=${character.illiumEars}`} target='_blank'  rel="noopener noreferrer">
+      <a href={`${window.generateAvatarLink(character, 'download')}`} target='_blank'  rel="noopener noreferrer">
         <div className='download-bar bg-blue'>
           <div className='equipped-items-item-meta'>
             <div className='equipped-items-item-meta-name text-white'>{localized.downloadSpriteSheet}</div>
@@ -234,7 +234,7 @@ class CharacterEntry extends Component {
           </div>
         </div>
       </a>
-      <a href={`https://maplestory.io/api/${localStorage['region']}/${localStorage['version']}/character/download/${character.skin}/${_.map(character.selectedItems, i => i.hue ? `${i.id};${i.hue}` : i.id).join(',')}?showears=${character.mercEars}&showLefEars=${character.illiumEars}&format=2`} target='_blank'  rel="noopener noreferrer">
+      <a href={`${window.generateAvatarLink(character, 'download')}&format=2`} target='_blank'  rel="noopener noreferrer">
         <div className='download-bar bg-blue'>
           <div className='equipped-items-item-meta'>
             <div className='equipped-items-item-meta-name text-white'>{localized.downloadMinimalSpriteSheet}</div>
@@ -243,7 +243,7 @@ class CharacterEntry extends Component {
         </div>
       </a>
       <div className="flex">
-        <a className='layered-link' href={`https://maplestory.io/api/${localStorage['region']}/${localStorage['version']}/character/download/${character.skin}/${_.map(character.selectedItems, i => i.hue ? `${i.id};${i.hue}` : i.id).join(',')}?showears=${character.mercEars}&showLefEars=${character.illiumEars}&format=1`} target='_blank'  rel="noopener noreferrer">
+        <a className='layered-link' href={`${window.generateAvatarLink(character, 'download')}&format=1`} target='_blank'  rel="noopener noreferrer">
           <div className='download-bar bg-blue'>
             <div className='equipped-items-item-meta'>
               <div className='equipped-items-item-meta-name text-white'>{localized.downloadLayeredSpriteSheet}</div>
@@ -259,7 +259,7 @@ class CharacterEntry extends Component {
         </a>
       </div>
       <div className="flex">
-        <a className='layered-link' href={`https://maplestory.io/api/${localStorage['region']}/${localStorage['version']}/character/download/${character.skin}/${_.map(character.selectedItems, i => i.hue ? `${i.id};${i.hue}` : i.id).join(',')}?showears=${character.mercEars}&showLefEars=${character.illiumEars}&format=3`} target='_blank'  rel="noopener noreferrer">
+        <a className='layered-link' href={`${window.generateAvatarLink(character, 'download')}&format=3`} target='_blank'  rel="noopener noreferrer">
           <div className='download-bar bg-blue'>
             <div className='equipped-items-item-meta'>
               <div className='equipped-items-item-meta-name text-white'>{localized.downloadMinimalLayeredSpriteSheet}</div>

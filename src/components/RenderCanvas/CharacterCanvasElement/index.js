@@ -81,7 +81,7 @@ class CharacterCanvasElement extends Component {
         <div className={selected ? 'selected-canvas-element' : ''} style={styling}>
          {
             details ? (<img
-              src={window.generateAvatarLink(character)}
+              src={window.generateAvatarLink(character, character.animating ? `${character.action || 'stand1'}/animated` : '')}
               alt=''
               className='renderable-instance'
               draggable={false}

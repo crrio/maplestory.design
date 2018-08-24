@@ -4,7 +4,7 @@ import App from './components/App';
 import registerServiceWorker, { unregister } from './registerServiceWorker';
 import './index.css';
 
-window.generateAvatarLink = function (character) {
+window.generateAvatarLink = function (character, linkType) {
   let itemEntries = Object.values(character.selectedItems).filter(item => item.id && (item.visible === undefined || item.visible)).map(item => { 
     return { 
       itemId: Number(item.id), 
@@ -28,7 +28,7 @@ window.generateAvatarLink = function (character) {
     { itemId: Number(character.skin) + 10000 }
   ])
   itemEntriesPayload = encodeURIComponent(itemEntriesPayload.substr(1, itemEntriesPayload.length - 2))
-  return `https://maplestory.io/api/character/${itemEntriesPayload}/${character.action}/${character.frame}?showears=${character.mercEars}&showLefEars=${character.illiumEars}&resize=${character.zoom}&name=${encodeURI(character.name || '')}&flipX=${character.flipX}` + (character.includeBackground ? `&bgColor=${bgColorText}` : '')
+  return `https://maplestory.io/api/character/${itemEntriesPayload}/${linkType ? linkType : (`${character.action}/${character.frame}`)}?showears=${character.mercEars}&showLefEars=${character.illiumEars}&resize=${character.zoom}&name=${encodeURI(character.name || '')}&flipX=${character.flipX}` + (character.includeBackground ? `&bgColor=${bgColorText}` : '')
 }
 
 const isOnDev = window.location.host.indexOf('.dev') !== -1

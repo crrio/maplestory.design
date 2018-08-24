@@ -714,8 +714,7 @@ class App extends Component {
       });
 
       return {
-        ...character,
-        summary: `https://maplestory.io/api/${this.state.region}/${this.state.version}/character${ character.animating ? '/animated/' : '/' }${character.skin}/${(itemsWithEmotion.join(',') || 1102039)}/${character.action}/${character.frame}?showears=${character.mercEars}&showLefEars=${character.illiumEars}&resize=${character.zoom}&name=${encodeURI(character.name || '')}&flipX=${character.flipX}` + (character.includeBackground ? `&bgColor=${bgColorText}` : '')
+        ...character
       }
     });
 
