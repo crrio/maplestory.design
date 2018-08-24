@@ -15,7 +15,7 @@ window.generateAvatarLink = function (character, linkType) {
       saturation: item.saturation === undefined ? 1 : item.saturation,
       contrast: item.contrast === undefined ? 1 : item.contrast,
       alpha: item.alpha === undefined ? 1 : item.alpha,
-      animationName: item.itemId >= 20000 && item.itemId < 30000 ? character.emotion : character.action
+      animationName: (item.id >= 20000 && item.id < 30000) || (item.id >= 1010000 && item.id < 1020000) ? character.emotion : character.action
     } 
   })
 
