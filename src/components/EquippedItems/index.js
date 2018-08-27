@@ -91,6 +91,16 @@ class EquippedItems extends Component {
     this.props.onUpdateItem(item, {saturation: newSaturation})
   }
 
+  updateItemISlot(item, newISlot) {
+    if(newISlot.target) newISlot = newISlot.target.value
+    this.props.onUpdateItem(item, {islot: newISlot})
+  }
+
+  updateItemVSlot(item, newVSlot) {
+    if(newVSlot.target) newVSlot = newVSlot.target.value
+    this.props.onUpdateItem(item, {vslot: newVSlot})
+  }
+
   customizeItem(item) {
     return (<div className='customizing-item'>
       <span>
@@ -146,6 +156,24 @@ class EquippedItems extends Component {
           max={1}
           handle={handle}
           onChange={this.updateItemAlpha.bind(this, item)} />
+      </span>
+      <span>
+        <span className='flex item-property'>
+          ISlot
+          <input
+            className='item-islot'
+            value={item.islot}
+            onChange={this.updateItemISlot.bind(this, item)} />
+        </span>
+      </span>
+      <span>
+        <span className='flex item-property'>
+          VSlot
+          <input
+            className='item-vslot'
+            value={item.vslot}
+            onChange={this.updateItemVSlot.bind(this, item)} />
+        </span>
       </span>
       <label>
         <span>Visible</span>

@@ -6,17 +6,22 @@ import './index.css';
 
 window.generateAvatarLink = function (character, linkType) {
   let itemEntries = Object.values(character.selectedItems).filter(item => item.id && (item.visible === undefined || item.visible)).map(item => { 
-    return { 
-      itemId: Number(item.id), 
-      region: item.region || window.localStorage["region"], 
-      version: item.version || window.localStorage["version"],
-      hue: item.hue,
-      brightness: item.brightness === undefined ? 1 : item.brightness,
-      saturation: item.saturation === undefined ? 1 : item.saturation,
-      contrast: item.contrast === undefined ? 1 : item.contrast,
-      alpha: item.alpha === undefined ? 1 : item.alpha,
-      animationName: (item.id >= 20000 && item.id < 30000) || (item.id >= 1010000 && item.id < 1020000) ? character.emotion : character.action
-    } 
+    let itemEntry = { 
+      itemId: Number(item.id)
+    }
+
+    if ((item.id >= 20000 && item.id < 30000) || (item.id >= 1010000 && item.id < 1020000)) itemEntry.animationName = character.emotion
+    if (item.region && item.region.toLower() != 'gms') itemEntry.region = item.region
+    if (item.version && item.version.toLower() != 'latest') itemEntry.version = item.version
+    if (item.hue) itemEntry.hue = item.hue
+    if (item.saturation != 1) itemEntry.saturation = item.saturation
+    if (item.contrast != 1) itemEntry.contrast = item.contrast
+    if (item.brightness != 1) itemEntry.brightness = item.brightness
+    if (item.alpha != 1) itemEntry.alpha = item.alpha
+    if (item.islot) itemEntry.islot = item.islot
+    if (item.vslot) itemEntry.vslot = item.vslot
+
+    return itemEntry
   })
 
   let backgroundColor = JSON.parse(localStorage['backgroundColor'] || false) || {"hsl":{"h":0,"s":0,"l":0,"a":0},"hex":"transparent","rgb":{"r":0,"g":0,"b":0,"a":0},"hsv":{"h":0,"s":0,"v":0,"a":0},"oldHue":0,"source":"rgb"}
