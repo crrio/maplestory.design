@@ -11,8 +11,8 @@ window.generateAvatarLink = function (character, linkType) {
     }
 
     if ((item.id >= 20000 && item.id < 30000) || (item.id >= 1010000 && item.id < 1020000)) itemEntry.animationName = character.emotion
-    if (item.region && item.region.toLower() != 'gms') itemEntry.region = item.region
-    if (item.version && item.version.toLower() != 'latest') itemEntry.version = item.version
+    if (item.region && item.region.toLowerCase() != 'gms') itemEntry.region = item.region
+    if (item.version && item.version.toLowerCase() != 'latest') itemEntry.version = item.version
     if (item.hue) itemEntry.hue = item.hue
     if (item.saturation != 1) itemEntry.saturation = item.saturation
     if (item.contrast != 1) itemEntry.contrast = item.contrast
@@ -29,8 +29,8 @@ window.generateAvatarLink = function (character, linkType) {
 
   let itemEntriesPayload = JSON.stringify([
     ...itemEntries,
-    { itemId: Number(character.skin) },
-    { itemId: Number(character.skin) + 10000 }
+    { itemId: Number(character.skin), region: localStorage['region'], version: localStorage['version'] },
+    { itemId: Number(character.skin) + 10000, region: localStorage['region'], version: localStorage['version'] }
   ])
   itemEntriesPayload = encodeURIComponent(itemEntriesPayload.substr(1, itemEntriesPayload.length - 2))
   return `https://maplestory.io/api/character/${itemEntriesPayload}/${linkType ? linkType : (`${character.action}/${character.frame}`)}?showears=${character.mercEars}&showLefEars=${character.illiumEars}&showHighLefEars=${character.highFloraEars}&resize=${character.zoom}&name=${encodeURI(character.name || '')}&flipX=${character.flipX}` + (character.includeBackground ? `&bgColor=${bgColorText}` : '')

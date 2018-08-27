@@ -191,7 +191,12 @@ class App extends Component {
       character.flipX = character.flipX || false;
       character.name = character.name || '';
       character.includeBackground = character.includeBackground === undefined ? true : character.includeBackground
-      character.selectedItems = _.keyBy(_.values(toCamel(character.selectedItems)), (item) => item.typeInfo.subCategory)
+      let characterItems = _.values(toCamel(character.selectedItems)).map(item => {
+        if (!item.region) item.region = localStorage['region']
+        if (!item.version) item.version = localStorage['version']
+        return item
+      })
+      character.selectedItems = _.keyBy(characterItems, (item) => item.typeInfo.subCategory)
       delete character.characters
       delete character.otherCharacters
       delete character.allCharacters
