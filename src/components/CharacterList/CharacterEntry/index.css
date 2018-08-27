@@ -67,3 +67,47 @@
 .pdn-link {
   min-width: 55px;
 }
+
+.character-properties {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 64px;
+  background: #488AC7;
+  display: flex;
+  padding: 0 16px;
+  color: white;
+  font-size: 16px;
+  align-items: center;
+  z-index: 2;
+}
+
+.character-properties > span {
+  height: 24px;
+  font-size: 24px;
+  margin: 0 64px 0 0;
+}
+
+.character-properties a {
+  color: white;
+}
+
+.facial-expression, .action, .skin, .disclaimer {
+  display: flex;
+  flex-direction: column;
+  margin: 0 16px;
+}
+
+.flex {
+  display: flex;
+}
+
+.flex-column {
+  flex-direction: column;
+}
+
+.zoom, .merc-ears {
+  display: flex;
+  align-items: center;
+}

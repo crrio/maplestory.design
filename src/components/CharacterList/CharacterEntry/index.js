@@ -172,6 +172,12 @@ class CharacterEntry extends Component {
           checked={character.illiumEars} />
       </label>
       <label>
+        <span>{localized.highFloraEars}</span>
+        <Toggle
+          onChange={this.changeHighFloraEars.bind(this)}
+          checked={character.highFloraEars} />
+      </label>
+      <label>
         <span>{localized.mercEars}</span>
         <Toggle
           onChange={this.changeMercEars.bind(this)}
@@ -319,6 +325,10 @@ class CharacterEntry extends Component {
 
   changeMercEars(e) {
     this.props.onUpdateCharacter(this.props.character, { mercEars: e.target.checked });
+  }
+
+  changeHighFloraEars(e) {
+    this.props.onUpdateCharacter(this.props.character, { highFloraEars: e.target.checked });
   }
 
   changeIlliumEars(e) {

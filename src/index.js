@@ -28,7 +28,7 @@ window.generateAvatarLink = function (character, linkType) {
     { itemId: Number(character.skin) + 10000 }
   ])
   itemEntriesPayload = encodeURIComponent(itemEntriesPayload.substr(1, itemEntriesPayload.length - 2))
-  return `https://maplestory.io/api/character/${itemEntriesPayload}/${linkType ? linkType : (`${character.action}/${character.frame}`)}?showears=${character.mercEars}&showLefEars=${character.illiumEars}&resize=${character.zoom}&name=${encodeURI(character.name || '')}&flipX=${character.flipX}` + (character.includeBackground ? `&bgColor=${bgColorText}` : '')
+  return `https://maplestory.io/api/character/${itemEntriesPayload}/${linkType ? linkType : (`${character.action}/${character.frame}`)}?showears=${character.mercEars}&showLefEars=${character.illiumEars}&showHighLefEars=${character.highFloraEars}&resize=${character.zoom}&name=${encodeURI(character.name || '')}&flipX=${character.flipX}` + (character.includeBackground ? `&bgColor=${bgColorText}` : '')
 }
 
 const isOnDev = window.location.host.indexOf('.dev') !== -1

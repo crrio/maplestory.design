@@ -2,7 +2,6 @@ import React, { Component } from 'react'
 import './index.css'
 import ItemListing from '../ItemListing'
 import EquippedItems from '../EquippedItems'
-import CharacterProperties from '../CharacterProperties'
 import _ from 'lodash'
 import IntroModal from '../IntroModal'
 import CharacterList from '../CharacterList'
@@ -123,13 +122,7 @@ class App extends Component {
 
     // Try to recover any existing state
     this.state = {
-      selectedItems: JSON.parse((localStorage || [])['selectedItems'] || '{}'),
-      skin: Number(localStorage['skin']) || 2000,
       isModalOpen: isOpen,
-      zoom: Number(localStorage['zoom']) || 1,
-      frame: Number(localStorage['frame']) || 0,
-      mercEars: localStorage['mercEars'] == "true" || localStorage['mercEars'] === true,
-      illiumEars: localStorage['illiumEars'] == "true" || localStorage['illiumEars'] === true,
       characters: JSON.parse(localStorage['characters'] || 'false') || [false],
       pets: JSON.parse(localStorage['pets'] || 'false') || [],
       selectedIndex: JSON.parse(localStorage['selectedIndex'] || 'false') || 0,
