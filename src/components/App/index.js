@@ -646,6 +646,9 @@ class App extends Component {
     if (this.state.selectedIndex+1 > this.state.characters.length) selectedRenderable = this.state.pets[this.state.selectedIndex - this.state.characters.length]
     else selectedRenderable = this.state.characters[this.state.selectedIndex]
 
+    item.region = localStorage['region']
+    item.version = localStorage['version']
+
     let selectedItems = {
       ...selectedRenderable.selectedItems,
     }
