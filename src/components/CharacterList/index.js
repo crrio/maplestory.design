@@ -38,6 +38,7 @@ class CharacterList extends Component {
           <Tooltip html={this.renderAddList()} position='bottom' theme='light' interactive={true} >
             <div className='add'><span>+</span>
           </div></Tooltip>
+          <input type='file' id='importFile' style={{display: 'none'}} onChange={this.props.onImportCharacter.bind(this)} />
         </div>
       </div>
     )
@@ -48,7 +49,12 @@ class CharacterList extends Component {
       <li>Add:</li>
       <li className='clickable' onClick={this.props.onAddPet}>{this.props.localized.pet}</li>
       <li className='clickable' onClick={this.props.onAddCharacter}>{this.props.localized.character}</li>
+      <li className='clickable' onClick={this.onOpenImportCharacter}>{this.props.localized.importCharacter}</li>
     </ul>);
+  }
+
+  onOpenImportCharacter() {
+    document.getElementById('importFile').click()
   }
 
   clickCharacter(character, e) {

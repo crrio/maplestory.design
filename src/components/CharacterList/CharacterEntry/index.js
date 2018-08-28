@@ -231,7 +231,10 @@ class CharacterEntry extends Component {
         <Toggle onChange={this.toggleLock.bind(this)} checked={character.locked} />
       </label>
       <br />
-      <div className='clone-btn' onClick={this.onClone.bind(this)}>{localized.clone}</div>
+      <div className='flex'>
+        <div className='clone-btn' onClick={this.onClone.bind(this)}>{localized.clone}</div>
+        <div className='clone-btn' onClick={this.onExport.bind(this)}>{localized.export}</div>
+      </div>
       <a href={`${window.generateAvatarLink(character, 'download')}`} target='_blank'  rel="noopener noreferrer">
         <div className='download-bar bg-blue'>
           <div className='equipped-items-item-meta'>
@@ -309,6 +312,25 @@ class CharacterEntry extends Component {
 
   onClone() {
     this.props.onClone(this.props.character)
+  }
+
+  onExport() {
+    const a = document.createElement('a')
+    a.style = 'display: none;'
+    document.body.appendChild(a)
+
+    const payload = JSON.stringify(this.props.character, null, 2),
+      blob = new Blob([payload], {type: 'octet/stream'}),
+      url = window.URL.createObjectURL(blob)
+    a.href = url
+    if (this.props.character.name)
+      a.download = this.props.character.name + '-data.json'
+    else
+      a.download = 'character-data.json'
+    a.click()
+
+    window.URL.revokeObjectURL(url)
+    a.remove()
   }
 
   changeSkin(e) {

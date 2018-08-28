@@ -323,6 +323,8 @@ const all = {
     clone: 'Clone',
     downloadMinimalSpriteSheet: 'Download Minimal Spritesheet',
     downloadMinimalLayeredSpriteSheet: 'Download Minimal Layered Spritesheet',
+    export: 'Export',
+    importCharacter: 'Import Character'
   },
   br: {
     maplestory: 'MapleStory',

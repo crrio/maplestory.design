@@ -304,6 +304,7 @@ class App extends Component {
           selectedIndex={selectedIndex}
           onAddCharacter={this.addCharacter.bind(this)}
           onAddPet={this.addPet.bind(this)}
+          onImportCharacter={this.importCharacter.bind(this)}
           onDeleteCharacter={this.removeCharacter.bind(this)}
           onCloneCharacter={this.cloneCharacter.bind(this)}
           onDeletePet={this.removePet.bind(this)}
@@ -510,6 +511,33 @@ class App extends Component {
       fhSnap: true,
       position: { x:0, y:0 }
     }
+  }
+
+  importCharacter(e) {
+    let filePath = e.target.value
+    let extension = filePath.substr(filePath.lastIndexOf('.') + 1).toLowerCase()
+    if (extension != 'json') {
+      console.warn('Not valid JSON file')
+      return
+    }
+
+    let reader = new FileReader()
+    reader.onload = function (ev) {
+      let payload = ev.target.result
+      let jsonPayload = atob(payload.substr(payload.indexOf('base64,') + 7))
+
+      let characters = [
+        ...this.state.characters,
+        JSON.parse(jsonPayload)
+      ]
+      this.setState({
+        characters,
+        selectedIndex: this.state.characters.length
+      })
+      localStorage['characters'] = JSON.stringify(characters)
+    }.bind(this)
+
+    reader.readAsDataURL(e.target.files[0])
   }
 
   addCharacter() {
