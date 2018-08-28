@@ -523,9 +523,13 @@ class App extends Component {
       let payload = ev.target.result
       let jsonPayload = atob(payload.substr(payload.indexOf('base64,') + 7))
 
+      let data = JSON.parse(jsonPayload)
+
+      if (!data.id || data.type != 'character' || !data.selectedItems) return
+
       let characters = [
         ...this.state.characters,
-        JSON.parse(jsonPayload)
+        data
       ]
       this.setState({
         characters,
@@ -653,8 +657,7 @@ class App extends Component {
       selectedItems: [],
       visible: true,
       position: {x: 0, y: 0},
-      fhSnap: true,
-      summary: `https://maplestory.io/api/${this.state.region}/${this.state.version}/character/2000/1102039/stand1/0?showears=false&showLefEars=false&resize=1`,
+      fhSnap: true
     }
   }
 
