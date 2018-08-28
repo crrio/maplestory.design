@@ -527,6 +527,8 @@ class App extends Component {
 
       if (!data.id || data.type != 'character' || !data.selectedItems) return
 
+      data.id = Date.now()
+
       let characters = [
         ...this.state.characters,
         data
