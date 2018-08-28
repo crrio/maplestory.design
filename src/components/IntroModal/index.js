@@ -2,6 +2,8 @@ import React, { Component } from 'react'
 import './index.css'
 import Modal from 'react-modal'
 
+let chosenAvatar = null;
+
 class IntroModal extends Component {
   render() {
     return (
@@ -44,11 +46,15 @@ class IntroModal extends Component {
       '2001/20305,30130,1050118', // Dray86 (Maple Kombat)
       '2000/1004776,21645,35707,1042245,1062232', // Paul (Artist and Logo designer)
       '2001/23855,1010004,1042046,33040,1062040,1072234,1102059,1082162,1402010' // Austin (Character API help + developer)
-    ]
+    ].map(avatar => `https://maplestory.io/api/gms/latest/character/center/${avatar}/sit/0`).concat(
+      [
+        'https://maplestory.io/api/character/%7B%22itemId%22%3A1003404%7D%2C%7B%22itemId%22%3A23417%2C%22animationName%22%3A%22default%22%7D%2C%7B%22itemId%22%3A33140%7D%2C%7B%22itemId%22%3A1042151%2C%22hue%22%3A340%7D%2C%7B%22itemId%22%3A1062157%2C%22saturation%22%3A0%7D%2C%7B%22itemId%22%3A2000%2C%22region%22%3A%22GMS%22%2C%22version%22%3A%22latest%22%7D%2C%7B%22itemId%22%3A12000%2C%22region%22%3A%22GMS%22%2C%22version%22%3A%22latest%22%7D/sit/0?showears=false&showLefEars=false&showHighLefEars=undefined&resize=1&name=&flipX=false&bgColor=0,0,0,0'
+      ]
+    )
 
-    const chosenAvatar = knownAvatars[Math.floor(Math.random() * knownAvatars.length)]
+    if (!chosenAvatar) chosenAvatar = knownAvatars[Math.floor(Math.random() * knownAvatars.length)]
 
-    return (<img src={`https://maplestory.io/api/gms/latest/character/center/${chosenAvatar}/sit/0`} alt={`avatar`} />)
+    return (<img src={chosenAvatar} alt={`avatar`} />)
   }
 }
 
