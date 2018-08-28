@@ -31,7 +31,7 @@
 .item-listing-content {
   display: flex;
   flex-grow: 1;
-  max-height: calc(100% - 37px);
+  max-height: calc(100% - 75px);
 }
 
 .item-listing-categories {

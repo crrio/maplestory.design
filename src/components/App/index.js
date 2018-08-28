@@ -437,9 +437,6 @@ class App extends Component {
             onChange={this.toggleMusic.bind(this)}
             checked={this.state.music} />
         </label>
-        <label>
-          <a href='https://www.youtube.com/watch?v=zRqwYiTHqsU' target='_blank'>Memes</a>
-        </label>
       </div>
     )
   }
