@@ -279,6 +279,7 @@ class App extends Component {
           </span>
           <ul className="Nav-right">
             <li className='settings-cog'><Tooltip html={this.renderSettings()} delay={[100, 300]} position={'top'} interactive={true} theme='light' arrow={true}><FontAwesome name='cog' /></Tooltip></li>
+            <li><a href="https://www.patreon.com/Crrio" target="_blank" rel="noopener noreferrer">Patreon</a></li>
             <li><a href="//medium.com/crrio/tagged/maplestory-design" target="_blank" rel="noopener noreferrer">Blog</a></li>
             <li><a href="https://discord.gg/D65Grk9" target="_blank" rel="noopener noreferrer">Discord</a></li>
           </ul>
