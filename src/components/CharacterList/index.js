@@ -38,7 +38,7 @@ class CharacterList extends Component {
           <Tooltip html={this.renderAddList()} position='bottom' theme='light' interactive={true} >
             <div className='add'><span>+</span>
           </div></Tooltip>
-          <input type='file' id='importFile' style={{display: 'none'}} onChange={this.props.onImportCharacter.bind(this)} />
+          <input type='file' id='importFile' style={{display: 'none'}} onChange={this.props.onImportCharacter.bind(this)} multiple />
         </div>
       </div>
     )

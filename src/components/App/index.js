@@ -437,6 +437,9 @@ class App extends Component {
             onChange={this.toggleMusic.bind(this)}
             checked={this.state.music} />
         </label>
+        <label>
+          <a href='#' onClick={this.exportAllCharacters.bind(this)}>Export All Characters</a>
+        </label>
       </div>
     )
   }
@@ -444,6 +447,27 @@ class App extends Component {
   toggleMusic(e) {
     this.setState({
       music: !this.state.music
+    })
+  }
+
+  exportAllCharacters() {
+    this.state.characters.forEach(character => {
+      const a = document.createElement('a')
+      a.style = 'display: none;'
+      document.body.appendChild(a)
+  
+      const payload = JSON.stringify(character, null, 2),
+        blob = new Blob([payload], {type: 'octet/stream'}),
+        url = window.URL.createObjectURL(blob)
+      a.href = url
+      if (character.name)
+        a.download = character.name + '-data.json'
+      else
+        a.download = 'character-data.json'
+      a.click()
+  
+      window.URL.revokeObjectURL(url)
+      a.remove()
     })
   }
 
@@ -511,36 +535,45 @@ class App extends Component {
   }
 
   importCharacter(e) {
-    let filePath = e.target.value
-    let extension = filePath.substr(filePath.lastIndexOf('.') + 1).toLowerCase()
-    if (extension != 'json') {
-      console.warn('Not valid JSON file')
-      return
-    }
-
-    let reader = new FileReader()
-    reader.onload = function (ev) {
-      let payload = ev.target.result
-      let jsonPayload = atob(payload.substr(payload.indexOf('base64,') + 7))
-
-      let data = JSON.parse(jsonPayload)
-
-      if (!data.id || data.type != 'character' || !data.selectedItems) return
-
-      data.id = Date.now()
-
-      let characters = [
-        ...this.state.characters,
-        data
-      ]
-      this.setState({
-        characters,
-        selectedIndex: this.state.characters.length
+    let target = e.target
+    let importAll = Array.prototype.map.call(target.files, file => {
+      return new Promise((res, rej) => {
+        let extension = file.name.substr(file.name.lastIndexOf('.') + 1).toLowerCase()
+        if (extension != 'json') {
+          console.warn('Not valid JSON file')
+          return
+        }
+    
+        let reader = new FileReader()
+        reader.onload = function (ev) {
+          let payload = ev.target.result
+          let jsonPayload = atob(payload.substr(payload.indexOf('base64,') + 7))
+    
+          let data = JSON.parse(jsonPayload)
+    
+          res()
+          if (!data.id || data.type != 'character' || !data.selectedItems) return
+    
+          data.id = Date.now()
+    
+          let characters = [
+            ...this.state.characters,
+            data
+          ]
+          this.setState({
+            characters,
+            selectedIndex: this.state.characters.length
+          })
+          localStorage['characters'] = JSON.stringify(characters)
+        }.bind(this)
+    
+        reader.readAsDataURL(file)
       })
-      localStorage['characters'] = JSON.stringify(characters)
-    }.bind(this)
+    })
 
-    reader.readAsDataURL(e.target.files[0])
+    Promise.all(importAll).then(() => {
+      target.value = ''
+    })
   }
 
   addCharacter() {
