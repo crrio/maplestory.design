@@ -548,9 +548,7 @@ class App extends Component {
         let reader = new FileReader()
         reader.onload = function (ev) {
           let payload = ev.target.result
-          let jsonPayload = atob(payload.substr(payload.indexOf('base64,') + 7))
-    
-          let data = JSON.parse(jsonPayload)
+          let data = JSON.parse(payload)
     
           res()
           if (!data.id || data.type != 'character' || !data.selectedItems) return
@@ -568,7 +566,7 @@ class App extends Component {
           localStorage['characters'] = JSON.stringify(characters)
         }.bind(this)
     
-        reader.readAsDataURL(file)
+        reader.readAsText(file, 'UTF8')
       })
     })
 
