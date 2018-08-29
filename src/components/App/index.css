@@ -312,3 +312,9 @@ body > div:not(.tippy-popper){ /* kms, this freaking rule. :< */
 .map-select-container .Select-menu-outer {
   max-height: 400px;
 }
+
+.App-header .Nav-right li a.patreon-link {
+  color: hotpink;
+  font-weight: 800;
+  text-shadow: 0 0 4px red;
+}
