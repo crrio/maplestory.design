@@ -32,6 +32,7 @@ class GenericCanvasElement extends Component {
             draggable={false}
             onClick={onClick}
             onError={this.showError.bind(this)}
+            id={renderable.id}
             style={{
               position: 'relative',
               touchAction: 'none',

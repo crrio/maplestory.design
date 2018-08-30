@@ -88,6 +88,9 @@ class CharacterCanvasElement extends Component {
               onClick={onClick}
               onError={this.showError.bind(this)}
               style={imgStyle}
+              id={character.id}
+              data-offset-x={details.item2.feetCenter.x}
+              data-offset-y={details.item2.feetCenter.y}
               />) : <div className='loading-character'>&nbsp;</div>
          }
         </div>
