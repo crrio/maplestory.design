@@ -264,8 +264,6 @@ class App extends Component {
     } = this.state
     this.updateBannerAdBlur()
 
-    console.log(this.state.selectedIndex)
-
     const localized = Localize.getLocalized(language)
 
     const bgColorText = `rgba(${backgroundColor.rgb.r}, ${backgroundColor.rgb.g}, ${backgroundColor.rgb.b}, ${backgroundColor.rgb.a})`
