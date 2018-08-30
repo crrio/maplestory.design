@@ -101,7 +101,7 @@ class CharacterEntry extends Component {
         <div
           className={'character ' + (character.visible ? 'disabled ' : 'enabled ') + (isSelected ? 'active' : 'inactive')}
           style={{
-            backgroundImage: 'url('+window.generateAvatarLink(character)+')'
+            backgroundImage: 'url('+window.generateAvatarLink({...character, zoom: 1, name: null, flipX: 0})+')'
           }}
           {...otherProps}>&nbsp;</div>
       </Tooltip>
@@ -115,9 +115,6 @@ class CharacterEntry extends Component {
     const hasName = character.name && character.name.length > 0
     return (<div className='character-customizeable-options-container'>
     <div className='character-customizeable-options'>
-      <div>
-        <a href="#" className='btn bg-red text-white right' onClick={this.deleteCharacter.bind(this)}>{localized.deleteCharacter}</a>
-      </div>
       <label>
         <span>{localized.name}</span>
         <input type='text' value={character.name} onChange={this.changeName.bind(this)} />
@@ -283,7 +280,11 @@ class CharacterEntry extends Component {
           </div>
         </a>
       </div>
-    </div></div>)
+    </div>
+    <div className="margin-top-10">
+      <a href="#" className='btn btn-large bg-red text-white right' onClick={this.deleteCharacter.bind(this)}>{localized.deleteCharacter}</a>
+    </div>
+    </div>)
   }
 
   changeIncludeBackground() {
@@ -307,7 +308,12 @@ class CharacterEntry extends Component {
   }
 
   deleteCharacter() {
-    this.props.onDeleteCharacter(this.props.character)
+    const { localized } = this.props;
+    const confirmation = window.confirm(localized.deleteCharacterConfirm);
+    
+    if(confirmation) {
+      this.props.onDeleteCharacter(this.props.character)
+    }
   }
 
   onClone() {

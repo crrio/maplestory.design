@@ -36,6 +36,7 @@ const all = {
     downloadLayeredSpriteSheet: 'Download Layered Spritesheet',
     requiresPDNPlugin: 'Requires PDN Plugin',
     deleteCharacter: 'Delete Character',
+    deleteCharacterConfirm: 'Are you sure you wish to delete this character?',
     petType: 'Pet Type',
     deletePet: 'Delete Pet',
     accessory: "Accessory",

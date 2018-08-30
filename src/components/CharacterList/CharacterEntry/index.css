@@ -111,3 +111,12 @@
   display: flex;
   align-items: center;
 }
+
+.margin-top-10 {
+  margin-top: 10px;
+}
+
+.btn-large {
+  padding: 10px 12px;
+  width: 100%;
+}
