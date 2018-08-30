@@ -291,11 +291,15 @@ class App extends Component {
           renderables={renderables}
           selectedRenderable={selectedIndex}
           focusRenderable={focusRenderable === undefined ? selectedIndex : focusRenderable}
-          onItemSelected={this.userSelectedItem.bind(this)}
           onUpdateRenderable={this.updateRenderable.bind(this)}
           onClick={this.clickCanvas.bind(this)}
           localized={localized}
           onClickRenderable={this.userUpdateSelectedRenderable.bind(this)}/>
+        { (selectedIndex !== false) ?
+          <ItemListing
+            target={renderables[selectedIndex]}
+            onItemSelected={this.userSelectedItem.bind(this)}
+            localized={localized} /> : '' }
         <CharacterList
           renderables={renderables}
           selectedIndex={selectedIndex}
@@ -612,7 +616,6 @@ class App extends Component {
       selectedIndex = this.state.pets.indexOf(renderable)
       if (selectedIndex != -1) selectedIndex += this.state.characters.length
     }
-    if (selectedIndex == this.state.selectedIndex) return
     this.setState({
       selectedIndex,
       zoom: 1

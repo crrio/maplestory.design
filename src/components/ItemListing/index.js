@@ -114,15 +114,10 @@ class ItemListing extends Component {
     })
   }
 
-  handleMouse(e) {
-    e.stopPropagation()
-  }
-
   render() {
     const { categoryNames, categoryNamesKeys, selectedCategory, items, categoryNameSelected, cashItemsOnly, selectedGender, similarItems } = this.state
     const search = this.state.search.toLowerCase()
     const { localized } = this.props
-    const { x, y } = (this.props.target.position || {})
 
     if (search) console.log(`Searching for ${search}`)
 
@@ -145,11 +140,8 @@ class ItemListing extends Component {
 
     this.showIcons = this.showIcons.filter(item => item && item.id)
 
-    const targetImage = document.getElementById(this.props.target.id)
-    const offsetY = (targetImage && targetImage.dataset ? targetImage.dataset.offsetY : null) || (targetImage || {height: 0}).height
-
     return (
-      <div className='item-listing' style={{transform: `translate(${x}px, ${y - offsetY - 16}px)`}} onClick={this.handleMouse.bind(this)} onMouseDown={this.handleMouse.bind(this)} onMouseUp={this.handleMouse.bind(this)}>
+      <div className='item-listing'>
         <div className='item-listing-header'>
           <input type="search" value={search} onChange={this.search.bind(this)} placeholder="Search.." className="item-search"/>
         </div>

@@ -1,15 +1,18 @@
 import React, { Component } from 'react'
 import './index.css'
 import _ from 'lodash'
+import Toggle from 'react-toggle'
+import { Tooltip } from 'react-tippy'
 import axios from 'axios'
 import 'rc-slider/assets/index.css'
 import 'rc-tooltip/assets/bootstrap.css'
 import 'react-tippy/dist/tippy.css';
+import RcTooltip from 'rc-tooltip'
+import Slider from 'rc-slider'
 import GenericCanvasElement from './GenericCanvasElement'
 import CharacterCanvasElement from './CharacterCanvasElement'
 import Draggable, { DraggableCore } from 'react-draggable'
 import { NotificationManager } from 'react-notifications'
-import ItemListing from '../ItemListing'
 
 const renderFootholds = JSON.parse(localStorage['isDebugMode'] || 'false') === true
 
@@ -80,7 +83,7 @@ class RenderCanvas extends Component {
   }
 
   render() {
-    const { renderables, mapId, zoom, backgroundColor, localized, selectedRenderable } = this.props
+    const { renderables, mapId, zoom, backgroundColor, localized } = this.props
     const { mapData } = this.state
     const mapOrigin = {}
 
@@ -117,14 +120,6 @@ class RenderCanvas extends Component {
               }</svg> : ''
             }
               <div style={mapOrigin} className='character-container'>
-                { 
-                  selectedRenderable || selectedRenderable === 0 ? (
-                    <ItemListing 
-                      target={renderables[selectedRenderable]}
-                      onItemSelected={this.props.onItemSelected}
-                      localized={localized} />
-                  ) : ''
-                }
                 {
                   renderables
                     .filter(renderable => renderable.visible)
