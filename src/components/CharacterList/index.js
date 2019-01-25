@@ -35,7 +35,7 @@ class CharacterList extends Component {
                 />);
             }
           })}
-          <Tooltip html={this.renderAddList()} position='bottom' theme='light' interactive={true} >
+          <Tooltip html={this.renderAddList()} position='top' theme='light' title="Create a new.." interactive={true}>
             <div className='add'><span>+</span>
           </div></Tooltip>
           <input type='file' id='importFile' style={{display: 'none'}} onChange={this.props.onImportCharacter.bind(this)} multiple />
@@ -46,10 +46,10 @@ class CharacterList extends Component {
 
   renderAddList() {
     return (<ul className='add-possible'>
-      <li>Add:</li>
-      <li className='clickable' onClick={this.props.onAddPet}>{this.props.localized.pet}</li>
+      <li className='add-title'>Create a new..</li>
       <li className='clickable' onClick={this.props.onAddCharacter}>{this.props.localized.character}</li>
-      <li className='clickable' onClick={this.onOpenImportCharacter}>{this.props.localized.importCharacter}</li>
+      <li className='clickable' onClick={this.props.onAddPet}>{this.props.localized.pet}</li>
+      <li className='clickable bold' onClick={this.onOpenImportCharacter}>{this.props.localized.importCharacter}</li>
     </ul>);
   }
 

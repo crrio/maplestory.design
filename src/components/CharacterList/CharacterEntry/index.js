@@ -115,16 +115,9 @@ class CharacterEntry extends Component {
     const hasName = character.name && character.name.length > 0
     return (<div className='character-customizeable-options-container'>
     <div className='character-customizeable-options'>
-      <label>
+      <label className='name'>
         <span>{localized.name}</span>
         <input type='text' value={character.name} onChange={this.changeName.bind(this)} />
-      </label>
-      <label>
-        {
-          isGMSRegion && hasName ? <a href={`https://henesys.chat/#${character.skin};${_.values(character.selectedItems).map(item => item.id).join(',')};${character.name}`} target='_blank'>Play on Henesys.Chat</a>
-          : isGMSRegion ? <span>Give your character a name to play on Henesys.Chat!</span>
-          : <span>Customize your character on GMS to play on Henesys.Chat!</span>
-        }
       </label>
       <label>
         <span>{localized.expression}</span>
@@ -163,6 +156,13 @@ class CharacterEntry extends Component {
           </select>
       </label>
       <label>
+        <span>{localized.visible}</span>
+        <Toggle onChange={this.toggleVisibility.bind(this)} checked={character.visible} />
+      </label>
+      <label className="section-title">
+        <span>Ears</span>
+      </label>
+      <label>
         <span>{localized.illiumEars}</span>
         <Toggle
           onChange={this.changeIlliumEars.bind(this)}
@@ -179,6 +179,9 @@ class CharacterEntry extends Component {
         <Toggle
           onChange={this.changeMercEars.bind(this)}
           checked={character.mercEars} />
+      </label>
+      <label className="section-title">
+        <span>Additional Options</span>
       </label>
       <label>
         <span>{localized.frame}</span>
@@ -212,10 +215,6 @@ class CharacterEntry extends Component {
           checked={character.includeBackground} />
       </label>
       <label>
-        <span>{localized.visible}</span>
-        <Toggle onChange={this.toggleVisibility.bind(this)} checked={character.visible} />
-      </label>
-      <label>
         <span>{localized.flipHorizontal}</span>
         <Toggle onChange={this.toggleFlipX.bind(this)} checked={character.flipX} />
       </label>
@@ -232,6 +231,9 @@ class CharacterEntry extends Component {
         <div className='clone-btn' onClick={this.onClone.bind(this)}>{localized.clone}</div>
         <div className='clone-btn' onClick={this.onExport.bind(this)}>{localized.export}</div>
       </div>
+      <label className="section-title">
+        <span>Spritesheets</span>
+      </label>
       <a href={`${window.generateAvatarLink(character, 'download')}`} target='_blank'  rel="noopener noreferrer">
         <div className='download-bar bg-blue'>
           <div className='equipped-items-item-meta'>
@@ -254,13 +256,8 @@ class CharacterEntry extends Component {
             <div className='equipped-items-item-meta'>
               <div className='equipped-items-item-meta-name text-white'>{localized.downloadLayeredSpriteSheet}</div>
               <div className='equipped-items-item-meta-category text-white'>({localized.willDownloadZip})</div>
-              <div className='equipped-items-item-meta-category text-white'>{localized.requiresPDNPlugin} &gt;</div>
+              <div className='equipped-items-item-meta-category text-white bold'>{localized.requiresPDNPlugin}</div>
             </div>
-          </div>
-        </a>
-        <a href="https://forums.getpaint.net/topic/31996-zip-archive-filetype-plugin-zip/" className='flex-column pdn-button'  target='_blank'  rel="noopener noreferrer">
-          <div className='download-bar bg-red text-white pdn-link'>
-            PDN
           </div>
         </a>
       </div>
@@ -270,13 +267,8 @@ class CharacterEntry extends Component {
             <div className='equipped-items-item-meta'>
               <div className='equipped-items-item-meta-name text-white'>{localized.downloadMinimalLayeredSpriteSheet}</div>
               <div className='equipped-items-item-meta-category text-white'>({localized.willDownloadZip})</div>
-              <div className='equipped-items-item-meta-category text-white'>{localized.requiresPDNPlugin} &gt;</div>
+              <div className='equipped-items-item-meta-category text-white bold'>{localized.requiresPDNPlugin}</div>
             </div>
-          </div>
-        </a>
-        <a href="https://forums.getpaint.net/topic/31996-zip-archive-filetype-plugin-zip/" className='flex-column pdn-button'  target='_blank'  rel="noopener noreferrer">
-          <div className='download-bar bg-red text-white pdn-link'>
-            PDN
           </div>
         </a>
       </div>

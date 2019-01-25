@@ -2,17 +2,21 @@
   list-style: none;
   padding: 0;
   margin: 0;
+  position: relative;
+}
+
+.add-title {
+  border-bottom: 2px solid rgba(0,0,0,0.2);
 }
 
 .add-possible li {
   padding: 4px;
-  border-radius: 4px;
   user-select: none;
 }
 
 .add-possible li.clickable {
-  text-decoration: underline;
   cursor: pointer;
+  border-radius: 4px;
 }
 
 .add-possible li.clickable:hover {
@@ -24,7 +28,7 @@
     position: fixed;
     right: 0;
     bottom: 0px;
-    height: 128px;
+    height: 100px;
     width: 100%;
     background: rgba(255,255,255,0.75);
     z-index: 2;
@@ -37,17 +41,17 @@
   overflow-x: scroll;
   white-space: nowrap;
   overflow-y: hidden;
-  height: 128px;
+  height: 100px;
 }
 
 .character-list > div > div {
-  width: 128px;
-  height: 128px;
+  width: 100px;
+  height: 100px;
 }
 
 .character-list div.character, .character-list div.pet, .character-list .add {
-    width: 128px;
-    height: 128px;
+    width: 100px;
+    height: 100px;
     background-position: center;
     background-repeat: no-repeat;
     display: inline-flex;
@@ -217,4 +221,8 @@
     -webkit-box-shadow: 0px 0px 5px 5px #0099E0;
     -moz-box-shadow: 0px 0px 5px 5px #0099E0;
     box-shadow: 0px 0px 5px 5px #0099E0;
+  }
+
+  .bold {
+    font-weight: bold;
   }

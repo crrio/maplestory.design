@@ -7,7 +7,23 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 4px 0;
+  padding: 6px 0;
+}
+
+.character-customizeable-options > .name {
+  font-weight: bold;
+  border-bottom: 2px solid #488AC7;
+  background: #488AC7;
+  color: #FFF;
+  padding: 6px 10px;
+}
+
+.character-customizeable-options > .section-title {
+  background: #488AC7;
+  color: #FFF;
+  padding-left: 6px;
+  border-radius: 4px;
+  margin: 6px 0px;
 }
 
 .character-customizeable-options > label > *:first-child {
@@ -16,8 +32,7 @@
 
 .character-customizeable-options input {
   border: 0px none transparent;
-  box-shadow: 0 0 2px rgb(72, 138, 199);
-  padding: 4px;
+  padding: 8px;
   font-size: 14px;
   border-radius: 2px;
 }
@@ -26,6 +41,7 @@
   border: 0px none transparent;
   box-shadow: 0 0 2px rgb(72, 138, 199);
   padding: 4px;
+  height: 30px;
   border-radius: 2px;
 }
 
@@ -46,7 +62,7 @@
 
 .clone-btn {
   line-height: 16px;
-  margin: 4px 0 8px auto;
+  margin: 4px 8px;
   padding: 4px;
   box-shadow: 0 0 1px rgba(0, 0, 0, 0.2);
   width: 100px;

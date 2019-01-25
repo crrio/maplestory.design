@@ -1,6 +1,6 @@
 .equipped-items {
   position: fixed;
-  right: 24px;
+  right: 0px;
   top: 165px;
   width: 15%;
   background: rgba(255,255,255,0.75);
@@ -50,7 +50,7 @@
 
 .download-bar.bg-red:hover {
   opacity: 0.8;
-  background: ##fb6d6d;
+  background: #fb6d6d;
 }
 
 .equipped-items-item {

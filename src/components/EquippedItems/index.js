@@ -27,14 +27,6 @@ class EquippedItems extends Component {
           <span className="equipped-items-title">{localized.quickView}</span> <span onClick={this.removeItems.bind(this)} className="btn bg-red text-white right">Remove All</span>
         </div>
         <div className='equipped-items-listing'>
-          { !isGMSRegion ? <p>Change to GMS to play on Henesys.Chat!</p> : !hasName ? <p>Give your character a name to play on Henesys.Chat!</p> : <a href={`https://henesys.chat/#${skinId};${_.map(equippedItems, i => i.id).join(',')};${name}`} target='_blank'  rel="noopener noreferrer">
-            <div className='download-bar bg-blue'>
-              <div className='equipped-items-item-meta'>
-                <div className='equipped-items-item-meta-name text-white'>Play on Henesys.Chat</div>
-              </div>
-            </div>
-          </a>
-          }
           {
             _.map(equippedItems, item => {
               return (<Tooltip html={this.customizeItem(item)} position='right' interactive={true} theme='light' distance={250} arrow={true} key={item.id}>
