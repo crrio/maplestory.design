@@ -17,7 +17,7 @@ class IntroModal extends Component {
           base: 'intro-modal-overlay',
           afterOpen: 'intro-modal-overlay-opened'
         }}>
-        <img src="/finalicon.svg" className="intro-logo"/><span onClick={this.closeModal.bind(this)} className="btn bg-green text-white right intro-dismiss"><i className="fa fa-check"></i> I understand</span>
+        <img src="/finalicon.svg" className="intro-logo"/>
         <h1>
           <b>MapleStory:</b> Design
           <br/>
@@ -30,6 +30,7 @@ class IntroModal extends Component {
         <h3>Disclaimer</h3><span className="avatar-box">{this.getRandomAvatar()}</span>
         <p>All assets and resources regarding MapleStory thereof are the sole property of <a href="//nexon.net">Nexon</a> and applies to their Terms of Use. By using this service, you agree to respect all copyrights and to not use any assets commercially without permission from Nexon.</p>
         <p>We are not an official MapleStory server nor fansite; <i>we provide this service for free in the spirit of free-to-play gaming.</i></p>
+        <span onClick={this.closeModal.bind(this)} className="btn bg-green text-white intro-dismiss"><i className="fa fa-check"></i> I understand</span>
       </Modal>
     )
   }
@@ -44,13 +45,10 @@ class IntroModal extends Component {
       '2000/1052923,1052923,1002186,33515,21136', // Andy (Pink Bean's developer)
       '2001/20305,30130,1050118', // Dray86 (Maple Kombat)
       '2000/1004776,21645,35707,1042245,1062232', // Paul (Artist and Logo designer)
-      '2001/23855,1010004,1042046,33040,1062040,1072234,1102059,1082162,1402010' // Austin (Character API help + developer)
     ].map(avatar => `https://maplestory.io/api/gms/latest/character/center/${avatar}/sit/0`).concat(
       [
-        // Senpai
-        'https://maplestory.io/api/character/%7B%22itemId%22%3A38595%2C%22hue%22%3A%2240%22%2C%22saturation%22%3A3%7D%2C%7B%22itemId%22%3A24159%2C%22animationName%22%3A%22blink%22%7D%2C%7B%22itemId%22%3A1053351%2C%22region%22%3A%22KMS%22%7D%2C%7B%22itemId%22%3A1072258%7D%2C%7B%22itemId%22%3A1702045%2C%22hue%22%3A4%7D%2C%7B%22itemId%22%3A2010%2C%22region%22%3A%22GMS%22%2C%22version%22%3A%22latest%22%7D%2C%7B%22itemId%22%3A12010%2C%22region%22%3A%22GMS%22%2C%22version%22%3A%22latest%22%7D/sit/0',
-        // Nozzy
-        'https://maplestory.io/api/character/%7B%22itemId%22%3A1003404%7D%2C%7B%22itemId%22%3A23417%2C%22animationName%22%3A%22default%22%7D%2C%7B%22itemId%22%3A33140%7D%2C%7B%22itemId%22%3A1042151%2C%22hue%22%3A340%7D%2C%7B%22itemId%22%3A1062157%2C%22saturation%22%3A0%7D%2C%7B%22itemId%22%3A2000%2C%22region%22%3A%22GMS%22%2C%22version%22%3A%22latest%22%7D%2C%7B%22itemId%22%3A12000%2C%22region%22%3A%22GMS%22%2C%22version%22%3A%22latest%22%7D/sit/0'
+        // Extra characters using the new horrid URL format.
+        ''
       ]
     )
 

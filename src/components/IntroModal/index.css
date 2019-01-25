@@ -11,7 +11,7 @@
 }
 
 .intro-modal {
-  border: 1px solid rgb(204, 204, 204);
+  border: 3px solid #488AC7;
   background: #FFF;
   background-size: cover;
   overflow: visible;
@@ -36,7 +36,8 @@
   border-bottom: 1px solid rgba(0,0,0,0.2);
   padding:20px 20px 20px 200px;
   margin: 0px -20px;
-  background: #F5F5F5;
+  background: #488AC7;
+  color: #FFF;
   text-align: right;
 }
 
@@ -45,6 +46,7 @@
   margin-bottom: 0px;
   line-height: 24px;
   font-size: 24px;
+  color: #488AC7;
 }
 
 .intro-modal p {
@@ -69,15 +71,13 @@
 }
 
 .intro-logo {
-    position: absolute;
-    top: -225px;
-    width: 500px;
-    left: -230px;
+  position: absolute;
+  top: -225px;
+  width: 500px;
+  left: -230px;
 }
 
 .intro-dismiss {
-    position: absolute;
-    right: 0;
-    top: -40px;
-    cursor: pointer;
+  cursor: pointer;
+  text-align: left;
 }
