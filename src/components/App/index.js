@@ -274,8 +274,7 @@ class App extends Component {
       <div className={"App" + (isModalOpen ? ' modal-blur' : '')}>
         <div className="App-header">
           <span className="logo">
-            <b>{localized.maplestory}:</b> {localized.design}<br/>
-            <span className="desc"><span className="alpha">{localized.alpha}</span></span>
+            <b>{localized.maplestory}:</b> {localized.design}
           </span>
           <ul className="Nav-right">
             <li className='settings-cog'><Tooltip html={this.renderSettings()} delay={[100, 300]} position={'top'} interactive={true} theme='light' arrow={true}><FontAwesome name='cog' /></Tooltip></li>
