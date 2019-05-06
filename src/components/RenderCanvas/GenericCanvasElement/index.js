@@ -44,10 +44,8 @@ class GenericCanvasElement extends Component {
   }
 
   showError() {
-    NotificationManager.warning(`There was an error rendering your ${this.props.renderable.type}`, '', 7000)
     setTimeout(function () {
       if (this.state.tryCount < 10) {
-        NotificationManager.warning(`Retrying to render your ${this.props.renderable.type}`, '', 2000)
         setTimeout(function () {
           this.setState({ tryCount: this.state.tryCount + 1 })
         }.bind(this), 2500)
