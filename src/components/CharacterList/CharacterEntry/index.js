@@ -188,11 +188,39 @@ class CharacterEntry extends Component {
       <label>
         <span>{localized.action}</span>
         <select onChange={this.changeAction.bind(this)} value={character.action}>
-          {
-            actions.map(a => (
-              <option value={a} key={a}>{a}</option>
-            ))
-          }
+        <option value="stand1">Standing (1-Handed)</option>
+        <option value="stand2">Standing (2-Handed)</option>
+        <option value="walk1">Walking (1-Handed)</option>
+        <option value="walk2">Walking (2-Handed)</option>
+        <option value="alert">Alert</option>
+        <option value="fly">Flying</option>
+        <option value="heal">Healing</option>
+        <option value="jump">Jumping</option>
+        <option value="ladder">Ladder</option>
+        <option value="rope">Rope</option>
+        <option value="prone">Prone</option>
+        <option value="proneStab">Prone + Stab</option>
+        <option value="shoot1">Shoot (1-Handed)</option>
+        <option value="shoot2">Shoot (2-Handed)</option>
+        <option value="shootF">Shoot (0F)</option>
+        <option value="sit">Sitting</option>
+        <option value="stabO1">Stab (01)</option>
+        <option value="stabO2">Stab (02)</option>
+        <option value="stabOF">Stab (0F)</option>
+        <option value="stabT1">Stab (T1)</option>
+        <option value="stabT2">Stab (T2)</option>
+        <option value="stabTF">Stab (TF)</option>
+        <option value="swingO1">Swing (01)</option>
+        <option value="swingO2">Swing (02)</option>
+        <option value="swingO3">Swing (03)</option>
+        <option value="swingOF">Swing (0F)</option>
+        <option value="swingP1">Swing (P1)</option>
+        <option value="swingP2">Swing (P2)</option>
+        <option value="swingPF">Swing (PF)</option>
+        <option value="swingT1">Swing (T1)</option>
+        <option value="swingT2">Swing (T2)</option>
+        <option value="swingT3">Swing (T3)</option>
+        <option value="swingTF">Swing (TF)</option>
         </select>
       </label>
       <label>
