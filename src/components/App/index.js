@@ -43,15 +43,13 @@ var creatingId = null
 const throttledErrorNotification = _.throttle(NotificationManager.error.bind(NotificationManager), 1500, { leading:true })
 let mapsIndexed = null
 let versions = {
-  GMS: [{region: 0, MapleVersionId: "latest", IsReady: true}], 
-  KMS: [{region: 0, MapleVersionId: "latest", IsReady: true}], 
-  TMS: [{region: 0, MapleVersionId: "latest", IsReady: true}], 
-  CMS: [{region: 0, MapleVersionId: "latest", IsReady: true}], 
-  JMS: [{region: 0, MapleVersionId: "latest", IsReady: true}], 
-  SEA: [{region: 0, MapleVersionId: "latest", IsReady: true}]
+  GMS: [{region: "GMS", MapleVersionId: "latest", IsReady: true}], 
+  KMS: [{region: "KMS", MapleVersionId: "latest", IsReady: true}], 
+  TMS: [{region: "TMS", MapleVersionId: "latest", IsReady: true}], 
+  CMS: [{region: "CMS", MapleVersionId: "latest", IsReady: true}], 
+  JMS: [{region: "JMS", MapleVersionId: "latest", IsReady: true}], 
+  SEA: [{region: "SEA", MapleVersionId: "latest", IsReady: true}]
 }
-
-const regionCodeToName = ['GMS', 'JMS', 'KMS', 'TMS', 'CMS', 'SEA'];
 
 function toCamel(o) {
   var newO, origKey, newKey, value
@@ -83,7 +81,7 @@ let wzPromise = axios.get(`https://maplestory.io/api/wz`)
   let WZs = _.map(response.data.filter(wzEntry => wzEntry.isReady), wzEntry => {
     return {
       ...wzEntry,
-      region: regionCodeToName[wzEntry.region]
+      region: wzEntry.region
     }
   })
   versions = _.groupBy(WZs, 'region')
