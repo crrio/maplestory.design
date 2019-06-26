@@ -73,24 +73,18 @@ class CharacterCanvasElement extends Component {
       axios.get(link).then(function(res) {
         if (this.state.linkUsed == link) {
           this.setState({
-            details: res.data,
-            actions: _.keys(res.data.item3),
-            frames: res.data.item3,
-            frameDelay: res.data.item4 || 1000
+            details: res.data
           })
         }
-      }.bind(this))
+      }.bind(this), this.showError.bind(this))
     } else this.setState({ linkUsed: link }, () => {
       axios.get(link).then(function(res) {
         if (this.state.linkUsed == link) {
           this.setState({
-            details: res.data,
-            actions: _.keys(res.data.item3),
-            frames: res.data.item3,
-            frameDelay: res.data.item4 || 1000
+            details: res.data
           })
         }
-      }.bind(this))
+      }.bind(this), this.showError.bind(this))
     })
   }
 
