@@ -76,7 +76,7 @@ function toCamel(o) {
   return newO
 }
 
-let wzPromise = axios.get(`https://maplestory.io/api/wz`)
+let wzPromise = axios.get(`https://maplestory.io/api/wz?cache=false`)
 .then(response => {
   let WZs = _.map(response.data.filter(wzEntry => wzEntry.isReady), wzEntry => {
     return {
