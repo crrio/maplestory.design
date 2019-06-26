@@ -237,6 +237,8 @@ class CharacterEntry extends Component {
             <option value='2011'>Clay</option>
             <option value='2009'>White</option>
             <option value='2012'>Mercedes</option>
+            <option value="2015">Soft Petal</option>
+            <option value="2016">Blushing Petal</option>
           </select>
       </label>
       <label>
