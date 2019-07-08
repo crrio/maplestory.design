@@ -10,6 +10,11 @@ To properly set up MapleStory: Design, you will need to run the following comman
 1. ```npm install```
 2. ```npm start```
 
+### Building
+To build MapleStory: Design, you will need to run the following commands.
+
+1. ```npm run-script build```
+
 ### Contributing
 Please take a moment to read through our [Contribution Guide](CONTRIBUTING.md) before making an issue, creating a feature request, or contributing pull requests.
 
