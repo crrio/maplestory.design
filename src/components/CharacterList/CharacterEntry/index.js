@@ -96,7 +96,7 @@ class CharacterEntry extends Component {
     ])
     itemEntriesPayload = encodeURIComponent(itemEntriesPayload.substr(1, itemEntriesPayload.length - 2))
 
-    const link = `https://maplestory.io/api/character/${itemEntriesPayload}/${character.action}/${character.frame}}?showears=${character.mercEars}&showLefEars=${character.illiumEars}&showHighLefEars=${character.highFloraEars}&resize=${character.zoom}&name=${encodeURI(character.name || '')}&flipX=${character.flipX}` + (character.includeBackground ? `&bgColor=${bgColorText}` : '')
+    const link = `https://maplestory.io/api/character/${itemEntriesPayload}/${character.action}/${character.animating ? 'animated' : character.frame}?showears=${character.mercEars}&showLefEars=${character.illiumEars}&showHighLefEars=${character.highFloraEars}&resize=${character.zoom}&name=${encodeURI(character.name || '')}&flipX=${character.flipX}` + (character.includeBackground ? `&bgColor=${bgColorText}` : '')
 
     if (isSync) {
       this.state.linkUsed = link
@@ -150,7 +150,7 @@ class CharacterEntry extends Component {
     ])
     itemEntriesPayload = encodeURIComponent(itemEntriesPayload.substr(1, itemEntriesPayload.length - 2))
 
-    const link = `https://maplestory.io/api/character/${itemEntriesPayload}/${character.action}/${character.frame}}?showears=${character.mercEars}&showLefEars=${character.illiumEars}&showHighLefEars=${character.highFloraEars}&resize=${character.zoom}&name=${encodeURI(character.name || '')}&flipX=${character.flipX}` + (character.includeBackground ? `&bgColor=${bgColorText}` : '')
+    const link = `https://maplestory.io/api/character/${itemEntriesPayload}/${character.action}/${character.animating ? 'animated' : character.frame}?showears=${character.mercEars}&showLefEars=${character.illiumEars}&showHighLefEars=${character.highFloraEars}&resize=${character.zoom}&name=${encodeURI(character.name || '')}&flipX=${character.flipX}` + (character.includeBackground ? `&bgColor=${bgColorText}` : '')
 
     return (
       <Tooltip html={this.customizeCharacter(character)} delay={[100, 300]} position={canvasMode ? undefined : 'bottom'} interactive={true} theme='light' distance={400} arrow={true}>

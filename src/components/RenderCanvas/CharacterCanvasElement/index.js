@@ -66,7 +66,7 @@ class CharacterCanvasElement extends Component {
     ])
     itemEntriesPayload = encodeURIComponent(itemEntriesPayload.substr(1, itemEntriesPayload.length - 2))
 
-    const link = `https://maplestory.io/api/character/${itemEntriesPayload}/${character.action}/${character.frame}}?showears=${character.mercEars}&showLefEars=${character.illiumEars}&showHighLefEars=${character.highFloraEars}&resize=${character.zoom}&name=${encodeURI(character.name || '')}&flipX=${character.flipX}` + (character.includeBackground ? `&bgColor=${bgColorText}` : '')
+    const link = `https://maplestory.io/api/character/${itemEntriesPayload}/${character.action}/${character.animating ? 'animated' : character.frame}?showears=${character.mercEars}&showLefEars=${character.illiumEars}&showHighLefEars=${character.highFloraEars}&resize=${character.zoom}&name=${encodeURI(character.name || '')}&flipX=${character.flipX}` + (character.includeBackground ? `&bgColor=${bgColorText}` : '')
 
     if (isSync) {
       this.state.linkUsed = link
@@ -130,7 +130,7 @@ class CharacterCanvasElement extends Component {
     ])
     itemEntriesPayload = encodeURIComponent(itemEntriesPayload.substr(1, itemEntriesPayload.length - 2))
 
-    const link = `https://maplestory.io/api/character/${itemEntriesPayload}/${character.action}/${character.frame}}?showears=${character.mercEars}&showLefEars=${character.illiumEars}&showHighLefEars=${character.highFloraEars}&resize=${character.zoom}&name=${encodeURI(character.name || '')}&flipX=${character.flipX}` + (character.includeBackground ? `&bgColor=${bgColorText}` : '')
+    const link = `https://maplestory.io/api/character/${itemEntriesPayload}/${character.action}/${character.animating ? 'animated' : character.frame}?showears=${character.mercEars}&showLefEars=${character.illiumEars}&showHighLefEars=${character.highFloraEars}&resize=${character.zoom}&name=${encodeURI(character.name || '')}&flipX=${character.flipX}` + (character.includeBackground ? `&bgColor=${bgColorText}` : '')
 
     return (
       <DraggableCore
