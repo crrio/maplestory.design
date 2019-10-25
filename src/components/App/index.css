@@ -9,6 +9,19 @@
   height: 80px;
 }
 
+::-webkit-scrollbar {
+  width: 0.5em !important;
+}
+
+::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.2) !important;
+}
+
+::-webkit-scrollbar-thumb {
+background-color: #488AC7 !important;
+outline: 1px solid #FFF !important;
+}
+
 .disclaimer {
   position: fixed;
   bottom: 102px;
