@@ -2,6 +2,7 @@
   "name": "maplestory.design",
   "version": "0.1.0",
   "private": true,
+  "homepage": "./",
   "devDependencies": {
     "react-scripts": "^3.1.2"
   },

@@ -34,7 +34,7 @@ outline: 1px solid #FFF !important;
 }
 
 .App-header {
-  background: #488AC7 url('/finalicon.svg') left no-repeat;
+  background: #488AC7 url('./finalicon.svg') left no-repeat;
   background-size: contain;
   height: 48px;
   font-size: 24px;

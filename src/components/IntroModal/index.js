@@ -17,7 +17,7 @@ class IntroModal extends Component {
           base: 'intro-modal-overlay',
           afterOpen: 'intro-modal-overlay-opened'
         }}>
-        <img src="/finalicon.svg" className="intro-logo"/>
+        <img src="finalicon.svg" className="intro-logo"/>
         <h1>
           <b>MapleStory:</b> Design (v1.0)
           <br/>
